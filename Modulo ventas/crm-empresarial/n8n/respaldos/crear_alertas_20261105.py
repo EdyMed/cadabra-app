@@ -60,7 +60,44 @@ def todos_workflows():
             return out
 
 
+# Plantilla utility para que el aviso llegue aunque no haya ventana de 24 h abierta.
+# Cuerpo aprobado en Meta: "Aviso del sistema Cadabra: {{1}}. Detalle: {{2}}. Revisa n8n para más información."
+TEMPLATE = "alerta_sistema"
+TEMPLATE_LANG = "es"
+LIMPIA = "String(x).replace(/\\*/g,'').replace(/[\\r\\n\\t]+/g,' · ').replace(/\\s{2,}/g,' ').trim()"
+
+
 # ---------- nodos de envío (compartidos) ----------
+def nodos_whatsapp(origen, pos):
+    """Plantilla primero; si Meta la rechaza (no existe / no aprobada) cae a texto libre."""
+    x, y = pos
+    plantilla = {
+        "name": "WhatsApp (plantilla)", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2,
+        "position": [x, y], "credentials": CRED_META, "onError": "continueRegularOutput",
+        "parameters": {
+            "method": "POST", "url": f"https://graph.facebook.com/v21.0/{PHONE_ID}/messages",
+            "authentication": "genericCredentialType", "genericAuthType": "httpHeaderAuth",
+            "sendBody": True, "specifyBody": "json",
+            "jsonBody": "={{ (() => { const L = (x) => " + LIMPIA + "; return JSON.stringify({ messaging_product:'whatsapp', to:'"
+                        + ADMIN_WA + "', type:'template', template:{ name:'" + TEMPLATE + "', language:{ code:'" + TEMPLATE_LANG
+                        + "' }, components:[{ type:'body', parameters:[ { type:'text', text: L($json.asunto).slice(0,200) }, "
+                          "{ type:'text', text: L($json.texto).slice(0,900) } ] }] } }); })() }}",
+            "options": {}}}
+    fallo = {
+        "name": "¿Plantilla falló?", "type": "n8n-nodes-base.if", "typeVersion": 2, "position": [x + 220, y],
+        "parameters": {"conditions": {
+            "options": {"caseSensitive": True, "leftValue": "", "typeValidation": "loose"},
+            "conditions": [{"id": "pf", "leftValue": "={{ !($json.messages && $json.messages.length) }}",
+                            "rightValue": True,
+                            "operator": {"type": "boolean", "operation": "true", "singleValue": True}}],
+            "combinator": "and"}, "options": {}}}
+    texto = nodo_whatsapp([x + 440, y])
+    texto["parameters"]["jsonBody"] = texto["parameters"]["jsonBody"].replace("$json.texto", f"$('{origen}').first().json.texto")
+    con = {"WhatsApp (plantilla)": {"main": [[{"node": "¿Plantilla falló?", "type": "main", "index": 0}]]},
+           "¿Plantilla falló?": {"main": [[{"node": "Avisar por WhatsApp", "type": "main", "index": 0}], []]}}
+    return [plantilla, fallo, texto], con
+
+
 def nodo_whatsapp(pos):
     return {
         "name": "Avisar por WhatsApp", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2,
@@ -127,12 +164,13 @@ def wf_errores(cred_resend):
          "position": [0, 0], "parameters": {}},
         {"name": "Armar alerta", "type": "n8n-nodes-base.code", "typeVersion": 2,
          "position": [240, 0], "parameters": {"jsCode": CODE_ERROR.strip()}},
-        nodo_whatsapp([500, -100]),
-        nodo_correo(cred_resend, [500, 100]),
+        nodo_correo(cred_resend, [500, 150]),
     ]
+    wa, wa_con = nodos_whatsapp("Armar alerta", [500, -100])
+    nodes += wa
     con = {"Error Trigger": {"main": [[{"node": "Armar alerta", "type": "main", "index": 0}]]},
-           "Armar alerta": {"main": [[{"node": "Avisar por WhatsApp", "type": "main", "index": 0},
-                                      {"node": "Avisar por correo", "type": "main", "index": 0}]]}}
+           "Armar alerta": {"main": [[{"node": "WhatsApp (plantilla)", "type": "main", "index": 0},
+                                      {"node": "Avisar por correo", "type": "main", "index": 0}]]}, **wa_con}
     return {"name": "Alertas Cadabra (errores)", "nodes": nodes, "connections": con,
             "settings": {"executionOrder": "v1", "timezone": "America/Santiago"}}
 
@@ -239,15 +277,16 @@ def wf_health(cred_resend):
                         "options": {"timeout": 20000, "response": {"response": {"responseFormat": "text"}}}}},
         {"name": "Evaluar", "type": "n8n-nodes-base.code", "typeVersion": 2, "position": [1340, 100],
          "parameters": {"jsCode": CODE_HEALTH.strip()}},
-        nodo_whatsapp([1580, 0]),
-        nodo_correo(cred_resend, [1580, 200]),
+        nodo_correo(cred_resend, [1580, 250]),
     ]
+    wa, wa_con = nodos_whatsapp("Evaluar", [1580, 0])
+    nodes += wa
     nxt = lambda n: {"main": [[{"node": n, "type": "main", "index": 0}]]}
     con = {"Cada 15 min": nxt("Check Supabase"), "Probar ahora": nxt("Check Supabase"),
            "Check Supabase": nxt("Check Google Calendar"), "Check Google Calendar": nxt("Check OpenAI"),
            "Check OpenAI": nxt("Check Meta"), "Check Meta": nxt("Check Panel"), "Check Panel": nxt("Evaluar"),
-           "Evaluar": {"main": [[{"node": "Avisar por WhatsApp", "type": "main", "index": 0},
-                                 {"node": "Avisar por correo", "type": "main", "index": 0}]]}}
+           "Evaluar": {"main": [[{"node": "WhatsApp (plantilla)", "type": "main", "index": 0},
+                                 {"node": "Avisar por correo", "type": "main", "index": 0}]]}, **wa_con}
     return {"name": "Health check Cadabra", "nodes": nodes, "connections": con,
             "settings": {"executionOrder": "v1", "timezone": "America/Santiago"}}
 

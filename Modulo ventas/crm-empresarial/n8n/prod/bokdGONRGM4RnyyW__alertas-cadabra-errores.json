@@ -6,7 +6,7 @@
         [
           {
             "index": 0,
-            "node": "Avisar por WhatsApp",
+            "node": "WhatsApp (plantilla)",
             "type": "main"
           },
           {
@@ -27,6 +27,29 @@
           }
         ]
       ]
+    },
+    "WhatsApp (plantilla)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "¿Plantilla falló?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "¿Plantilla falló?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Avisar por WhatsApp",
+            "type": "main"
+          }
+        ],
+        []
+      ]
     }
   },
   "description": null,
@@ -36,7 +59,7 @@
   "nodeGroups": [],
   "nodes": [
     {
-      "id": "81adec30-ae84-40c7-bc73-d1146044cc89",
+      "id": "c552db74-d470-4ade-9fa9-77287c90732e",
       "name": "Armar alerta",
       "parameters": {
         "jsCode": "// Arma la alerta y evita avalanchas: el mismo error (workflow+nodo+mensaje) se avisa 1 vez cada 30 min.\nconst d = $input.first().json;\nconst ex = d.execution || {};\nconst wf = d.workflow || {};\nconst err = ex.error || (d.trigger && d.trigger.error) || {};\nconst partes = [err.description, err.message].filter(Boolean).map(String);\nconst msg = partes.length ? [...new Set(partes)].join(': ') : 'Error sin mensaje';\nconst nodo = ex.lastNodeExecuted || (err.node && err.node.name) || '(trigger)';\nconst clave = [wf.id, nodo, msg.slice(0, 80)].join('|');\n\nconst s = $getWorkflowStaticData('global');\ns.vistos = s.vistos || {};\nconst ahora = Date.now();\nfor (const k of Object.keys(s.vistos)) if (ahora - s.vistos[k].t > 6 * 3600e3) delete s.vistos[k];\nconst v = s.vistos[clave];\nif (v && ahora - v.t < 30 * 60e3) { v.omitidos = (v.omitidos || 0) + 1; return []; }\nconst omitidos = v ? (v.omitidos || 0) : 0;\ns.vistos[clave] = { t: ahora, omitidos: 0 };\n\nconst hora = new Date().toLocaleString('es-CL', { timeZone: 'America/Santiago' });\nconst texto = '🚨 *Falla en n8n*\\n'\n  + 'Workflow: ' + (wf.name || wf.id || '?') + '\\n'\n  + 'Nodo: ' + nodo + '\\n'\n  + 'Error: ' + msg.slice(0, 300) + '\\n'\n  + 'Ejecución: ' + (ex.id || '-') + ' (' + (ex.mode || '-') + ')\\n'\n  + (ex.url ? 'Ver: ' + ex.url + '\\n' : '')\n  + (omitidos ? 'Repeticiones omitidas en los últimos 30 min: ' + omitidos + '\\n' : '')\n  + 'Hora: ' + hora;\nreturn [{ json: { texto, asunto: '🚨 Falla n8n · ' + (wf.name || '') + ' · ' + nodo } }];"
@@ -55,13 +78,13 @@
           "name": "Header Auth account"
         }
       },
-      "id": "bd8ec518-57af-4280-8913-0ee9c5c6acf5",
+      "id": "60c8033d-1f01-4f32-801a-f2de1e66f1d5",
       "name": "Avisar por WhatsApp",
       "onError": "continueRegularOutput",
       "parameters": {
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
-        "jsonBody": "={{ JSON.stringify({ messaging_product:'whatsapp', to:'56995649108', type:'text', text:{ body: $json.texto } }) }}",
+        "jsonBody": "={{ JSON.stringify({ messaging_product:'whatsapp', to:'56995649108', type:'text', text:{ body: $('Armar alerta').first().json.texto } }) }}",
         "method": "POST",
         "options": {},
         "sendBody": true,
@@ -69,7 +92,7 @@
         "url": "https://graph.facebook.com/v21.0/1168256669712210/messages"
       },
       "position": [
-        500,
+        940,
         -100
       ],
       "type": "n8n-nodes-base.httpRequest",
@@ -82,7 +105,7 @@
           "name": "Resend API"
         }
       },
-      "id": "7a2b0b88-e9ac-43fa-9068-5644f78ec570",
+      "id": "d0a31447-fe3f-47af-a19c-49701837410e",
       "name": "Avisar por correo",
       "onError": "continueRegularOutput",
       "parameters": {
@@ -97,13 +120,13 @@
       },
       "position": [
         500,
-        100
+        150
       ],
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2
     },
     {
-      "id": "cec35c3b-5d82-482f-b9a3-a27c7fdc8a94",
+      "id": "6ddd0c48-6777-4229-955a-b87a0f704a19",
       "name": "Error Trigger",
       "parameters": {},
       "position": [
@@ -112,6 +135,66 @@
       ],
       "type": "n8n-nodes-base.errorTrigger",
       "typeVersion": 1
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "AkIBFXVUDXwvv1ta",
+          "name": "Header Auth account"
+        }
+      },
+      "id": "021da7e1-d774-4947-af1e-5303261426fd",
+      "name": "WhatsApp (plantilla)",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "jsonBody": "={{ (() => { const L = (x) => String(x).replace(/\\*/g,'').replace(/[\\r\\n\\t]+/g,' · ').replace(/\\s{2,}/g,' ').trim(); return JSON.stringify({ messaging_product:'whatsapp', to:'56995649108', type:'template', template:{ name:'alerta_sistema', language:{ code:'es' }, components:[{ type:'body', parameters:[ { type:'text', text: L($json.asunto).slice(0,200) }, { type:'text', text: L($json.texto).slice(0,900) } ] }] } }); })() }}",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "specifyBody": "json",
+        "url": "https://graph.facebook.com/v21.0/1168256669712210/messages"
+      },
+      "position": [
+        500,
+        -100
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "ff1d269b-6cae-4322-8465-3a2b1bcc7f42",
+      "name": "¿Plantilla falló?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "pf",
+              "leftValue": "={{ !($json.messages && $json.messages.length) }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": true
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        720,
+        -100
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2
     }
   ],
   "settings": {

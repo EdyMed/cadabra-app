@@ -72,7 +72,7 @@
         [
           {
             "index": 0,
-            "node": "Avisar por WhatsApp",
+            "node": "WhatsApp (plantilla)",
             "type": "main"
           },
           {
@@ -93,6 +93,29 @@
           }
         ]
       ]
+    },
+    "WhatsApp (plantilla)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "¿Plantilla falló?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "¿Plantilla falló?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Avisar por WhatsApp",
+            "type": "main"
+          }
+        ],
+        []
+      ]
     }
   },
   "description": null,
@@ -108,13 +131,13 @@
           "name": "Header Auth account"
         }
       },
-      "id": "8d358a63-cb1d-4b77-ba33-925813a1bfb8",
+      "id": "0945a622-81eb-4a7b-a98f-f698ee756192",
       "name": "Avisar por WhatsApp",
       "onError": "continueRegularOutput",
       "parameters": {
         "authentication": "genericCredentialType",
         "genericAuthType": "httpHeaderAuth",
-        "jsonBody": "={{ JSON.stringify({ messaging_product:'whatsapp', to:'56995649108', type:'text', text:{ body: $json.texto } }) }}",
+        "jsonBody": "={{ JSON.stringify({ messaging_product:'whatsapp', to:'56995649108', type:'text', text:{ body: $('Evaluar').first().json.texto } }) }}",
         "method": "POST",
         "options": {},
         "sendBody": true,
@@ -122,7 +145,7 @@
         "url": "https://graph.facebook.com/v21.0/1168256669712210/messages"
       },
       "position": [
-        1580,
+        2020,
         0
       ],
       "type": "n8n-nodes-base.httpRequest",
@@ -135,7 +158,7 @@
           "name": "Resend API"
         }
       },
-      "id": "37d2e557-7241-450e-b98f-bcf8bca9fe21",
+      "id": "6df563c2-00b2-49af-9462-0c7bd094c37e",
       "name": "Avisar por correo",
       "onError": "continueRegularOutput",
       "parameters": {
@@ -150,13 +173,13 @@
       },
       "position": [
         1580,
-        200
+        250
       ],
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2
     },
     {
-      "id": "0f5703c7-c6c5-4e41-ad81-2a718f5403d0",
+      "id": "071bc7ed-fdc6-4dea-ae95-8f65d712c612",
       "name": "Cada 15 min",
       "parameters": {
         "rule": {
@@ -183,7 +206,7 @@
           "name": "Google Calendar account"
         }
       },
-      "id": "a8c79219-0740-4146-b35a-cf5f279e7825",
+      "id": "cd53c3e1-55db-46f3-9511-d6d19ea08b52",
       "name": "Check Google Calendar",
       "onError": "continueRegularOutput",
       "parameters": {
@@ -211,7 +234,7 @@
           "name": "Header Auth account"
         }
       },
-      "id": "f98c4cec-895f-46a9-b0ca-1ce31c0ad47a",
+      "id": "17847717-3dae-4548-82cb-9e705c76e7d5",
       "name": "Check Meta",
       "onError": "continueRegularOutput",
       "parameters": {
@@ -238,7 +261,7 @@
           "name": "OpenAI account"
         }
       },
-      "id": "4ddaa308-56a6-461e-9588-79ca4ac2faf4",
+      "id": "3cd3da47-9171-484f-831d-e4bc7e7dd28e",
       "name": "Check OpenAI",
       "onError": "continueRegularOutput",
       "parameters": {
@@ -262,7 +285,7 @@
     },
     {
       "alwaysOutputData": true,
-      "id": "a5a12b39-7dc8-4e58-9530-74f890f01c99",
+      "id": "e8d69f20-9a1b-40df-a9c2-8a7444ec75fc",
       "name": "Check Panel",
       "onError": "continueRegularOutput",
       "parameters": {
@@ -292,7 +315,7 @@
           "name": "Supabase Ventas (RW)"
         }
       },
-      "id": "4ce15047-af2e-493f-b87f-4021beb35002",
+      "id": "09e35173-9561-4e37-8ed8-9241bab83b24",
       "name": "Check Supabase",
       "onError": "continueRegularOutput",
       "parameters": {
@@ -308,7 +331,7 @@
       "typeVersion": 2.6
     },
     {
-      "id": "17fc6fd6-341a-4180-8163-3c56416d7f4a",
+      "id": "6d3e797d-0b3f-4c56-bb4a-27ac51bc6d0b",
       "name": "Evaluar",
       "parameters": {
         "jsCode": "// Evalúa cada chequeo. Avisa cuando algo CAE, recuerda cada 2 h si sigue caído y avisa cuando se RECUPERA.\nconst leer = (n) => { try { return $(n).first().json || {}; } catch (e) { return { error: 'nodo no ejecutado' }; } };\nconst errTxt = (j) => {\n  const e = j.error;\n  if (!e) return '';\n  return typeof e === 'string' ? e : (e.message || e.description || JSON.stringify(e)).toString();\n};\nconst checks = [\n  { k: 'supabase', nombre: 'Supabase (base de datos del bot)', nodo: 'Check Supabase',\n    ok: (j) => !j.error && Number(j.ok) === 1,\n    ayuda: 'Revisar si el proyecto está PAUSADO en supabase.com → Resume.' },\n  { k: 'calendar', nombre: 'Google Calendar (agenda)', nodo: 'Check Google Calendar',\n    ok: (j) => !j.error,\n    ayuda: 'n8n → Credentials → \"Google Calendar account\" → Reconnect.' },\n  { k: 'openai', nombre: 'OpenAI (cerebro del bot)', nodo: 'Check OpenAI',\n    ok: (j) => !j.error && Array.isArray(j.choices),\n    ayuda: 'Revisar saldo en platform.openai.com → Billing.' },\n  { k: 'meta', nombre: 'Meta WhatsApp API (token del número)', nodo: 'Check Meta',\n    ok: (j) => !j.error && !!j.id && j.quality_rating !== 'RED',\n    ayuda: 'Revisar token/System User y calidad del número en WhatsApp Manager.' },\n  { k: 'panel', nombre: 'Panel CRM (agente.appcadabra.cl)', nodo: 'Check Panel',\n    ok: (j) => !j.error,\n    ayuda: 'Revisar el servicio crm-panel en EasyPanel.' },\n];\n\nconst s = $getWorkflowStaticData('global');\ns.estado = s.estado || {};\nconst ahora = Date.now();\nlet forzar = false;\ntry { forzar = !!$('Probar ahora').first(); } catch (e) {}\n\nconst caidos = [], recuperados = [], resumen = [];\nfor (const c of checks) {\n  const j = leer(c.nodo);\n  const ok = c.ok(j);\n  const det = ok ? '' : (errTxt(j) || (j.quality_rating === 'RED' ? 'calidad del número en ROJO' : 'respuesta inesperada')).slice(0, 200);\n  const prev = s.estado[c.k] || { fail: false };\n  resumen.push((ok ? '✅ ' : '❌ ') + c.nombre + (ok ? '' : ': ' + det));\n  if (!ok) {\n    const nuevo = !prev.fail;\n    const recordar = prev.fail && (ahora - (prev.ultimoAviso || 0) > 2 * 3600e3);\n    if (nuevo || recordar) {\n      caidos.push({ c, det, desde: nuevo ? ahora : prev.desde });\n      s.estado[c.k] = { fail: true, desde: nuevo ? ahora : prev.desde, ultimoAviso: ahora };\n    } else s.estado[c.k] = prev;\n  } else {\n    if (prev.fail) recuperados.push({ c, desde: prev.desde });\n    s.estado[c.k] = { fail: false };\n  }\n}\n\nconst hora = new Date().toLocaleString('es-CL', { timeZone: 'America/Santiago' });\nconst min = (t) => Math.round((ahora - t) / 60000);\nif (!caidos.length && !recuperados.length) {\n  if (!forzar) return [];\n  return [{ json: { asunto: 'Health check Cadabra · prueba manual', texto: '🩺 *Health check (prueba)*\\n' + resumen.join('\\n') + '\\nHora: ' + hora } }];\n}\nlet texto = '';\nif (caidos.length) texto += '🔴 *Servicio caído*\\n' + caidos.map(x => '• ' + x.c.nombre + ' (hace ' + min(x.desde) + ' min)\\n  ' + x.det + '\\n  👉 ' + x.c.ayuda).join('\\n') + '\\n';\nif (recuperados.length) texto += (texto ? '\\n' : '') + '🟢 *Recuperado*\\n' + recuperados.map(x => '• ' + x.c.nombre + ' (estuvo caído ' + min(x.desde) + ' min)').join('\\n') + '\\n';\ntexto += 'Hora: ' + hora;\nconst asunto = caidos.length ? '🔴 Cadabra: ' + caidos.map(x => x.c.nombre).join(', ') : '🟢 Cadabra: servicio recuperado';\nreturn [{ json: { texto, asunto } }];"
@@ -321,7 +344,7 @@
       "typeVersion": 2
     },
     {
-      "id": "49e941e5-07c0-483d-bc56-4461136e3539",
+      "id": "94d3ae4f-3417-4357-a376-153d0c99c202",
       "name": "Probar ahora",
       "parameters": {
         "httpMethod": "POST",
@@ -336,6 +359,66 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "webhookId": "health-check-cadabra"
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "AkIBFXVUDXwvv1ta",
+          "name": "Header Auth account"
+        }
+      },
+      "id": "d5099664-edbf-4f97-a331-ccb453088f38",
+      "name": "WhatsApp (plantilla)",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "jsonBody": "={{ (() => { const L = (x) => String(x).replace(/\\*/g,'').replace(/[\\r\\n\\t]+/g,' · ').replace(/\\s{2,}/g,' ').trim(); return JSON.stringify({ messaging_product:'whatsapp', to:'56995649108', type:'template', template:{ name:'alerta_sistema', language:{ code:'es' }, components:[{ type:'body', parameters:[ { type:'text', text: L($json.asunto).slice(0,200) }, { type:'text', text: L($json.texto).slice(0,900) } ] }] } }); })() }}",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "specifyBody": "json",
+        "url": "https://graph.facebook.com/v21.0/1168256669712210/messages"
+      },
+      "position": [
+        1580,
+        0
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "194492b5-c6ab-444b-951a-6bc39b31e607",
+      "name": "¿Plantilla falló?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "pf",
+              "leftValue": "={{ !($json.messages && $json.messages.length) }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": true
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        1800,
+        0
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2
     }
   ],
   "settings": {
