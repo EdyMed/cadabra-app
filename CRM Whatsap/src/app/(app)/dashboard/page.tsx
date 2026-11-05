@@ -10,6 +10,7 @@ import {
   getClientesFrios,
   getConsumoPlan,
   getValorAgente,
+  getResumenMes,
   getPrimerMes,
   mesValido,
   mesActual,
@@ -41,18 +42,22 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
   const tenant = await getTenant();
   if (!tenant) redirect("/login");
 
-  // Mes de la sección "Valor de tu agente" (?mes=YYYY-MM). El resto del dashboard es siempre el estado actual.
+  // Mes elegido (?mes=YYYY-MM): mueve el "Resumen del mes", el consumo y "Quién atiende".
+  // Lo de "Estado de hoy" (oportunidades, cotizaciones, embudo, alertas) es siempre la foto actual:
+  // la base guarda la etapa actual de cada lead, no la que tenía a fin de cada mes.
   const mes = mesValido(searchParams?.mes);
   const esMesActual = mes === mesActual();
+  const mesTxt = nombreMes(mes);
 
   // Dashboard básico (KPIs + Consumo) es de los 3 planes. El resto (Actividad,
   // Embudo, Vendedores, Alertas) es exclusivo Convierte+ — solo se consulta si
   // el plan lo incluye, para no gastar queries de más en Conversa.
   const dashboardCompleto = puedeVer(tenant, "dashboard_completo");
 
-  const [kpis, consumo, valor, valorPrev, primerMes, embudo, vendedores, actividad, atencion, cotizaciones, frios] = await Promise.all([
+  const [kpis, consumo, resumen, valor, valorPrev, primerMes, embudo, vendedores, actividad, atencion, cotizaciones, frios] = await Promise.all([
     getKpis(tenant.empresa),
-    getConsumoPlan(tenant.empresa),
+    getConsumoPlan(tenant.empresa, mes),
+    getResumenMes(tenant.empresa, mes),
     // Si la función SQL fallara, el resto del dashboard sigue cargando.
     getValorAgente(tenant.empresa, mes).catch(() => null),
     getValorAgente(tenant.empresa, mesAnterior(mes)).catch(() => null),
@@ -67,62 +72,69 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
 
   const pendientes = atencion.length + cotizaciones.length + frios.length;
 
-  // Sin mes anterior con datos no hay porcentaje que mostrar (dividir por cero
-  // daría "∞%" y comparar contra 0 siempre sería +100%, que no informa nada).
-  const variacionConversaciones =
-    kpis.conversacionesMesAnterior > 0
-      ? Math.round(
-          ((kpis.conversaciones - kpis.conversacionesMesAnterior) / kpis.conversacionesMesAnterior) * 100
-        )
-      : null;
-
   const totalSemana = actividad.reduce((s, a) => s + a.cantidad, 0);
   const promedioDiario = actividad.length ? Math.round(totalSemana / actividad.length) : 0;
   const maxLeads = Math.max(1, ...vendedores.map((v) => v.leads));
+  const navBtn = "px-2 py-1 rounded text-tinta-2 hover:text-tinta";
 
   return (
     <main className="px-5 py-5 max-w-[1400px] aparecer">
-      {/* Encabezado / contexto */}
+      {/* Encabezado: saludo + selector de mes */}
       <header className="flex items-center justify-between gap-4 flex-wrap mb-4">
         <div className="flex items-baseline gap-2.5">
           <h1 className="titulo-pagina">
             {saludo()}, {tenant.nombreEmpresa}
           </h1>
-          <span className="text-tinta-3 text-[12px]">Resumen de tu negocio</span>
+          <span className="pildora" style={{ background: "var(--verde-claro)", color: "var(--verde)" }}>
+            <span className="punto" style={{ background: "var(--verde)" }} />
+            Agente en línea
+          </span>
         </div>
-        <span className="pildora" style={{ background: "var(--verde-claro)", color: "var(--verde)" }}>
-          <span className="punto" style={{ background: "var(--verde)" }} />
-          Agente en línea
-        </span>
+        <div className="flex items-center gap-2 text-[12px]">
+          {mes > primerMes ? (
+            <Link href={`/dashboard?mes=${mesAnterior(mes)}`} className={navBtn} style={{ background: "var(--card-3)" }} aria-label="Mes anterior">‹</Link>
+          ) : (
+            <span className="px-2 py-1 text-tinta-3 opacity-40">‹</span>
+          )}
+          <span className="font-semibold text-tinta min-w-[150px] text-center">
+            {mesTxt}{esMesActual ? " (en curso)" : ""}
+          </span>
+          {!esMesActual ? (
+            <Link href={`/dashboard?mes=${mesSiguiente(mes)}`} className={navBtn} style={{ background: "var(--card-3)" }} aria-label="Mes siguiente">›</Link>
+          ) : (
+            <span className="px-2 py-1 text-tinta-3 opacity-40">›</span>
+          )}
+          <Link href={`/informe?mes=${mes}`} className="ml-2 px-2.5 py-1 rounded font-medium" style={{ background: "var(--verde-claro)", color: "var(--verde)" }}>
+            Ver informe
+          </Link>
+        </div>
       </header>
 
-      {/* Cifras del mes: una sola superficie, separadores finos */}
-      {/* Sin overflow-hidden: recortaría los tooltips de los títulos. */}
+      {/* Resumen del mes: lo que hizo el agente (sigue al selector de mes) */}
+      <div className="flex items-baseline gap-2.5 mb-2.5">
+        <h2 className="text-[13px] font-semibold text-tinta">Resumen de {mesTxt.toLowerCase()}</h2>
+        <span className="text-tinta-3 text-[12px]">Lo que tu agente hizo por tu negocio</span>
+      </div>
+      {valor ? (
+        <ValorAgente v={valor} prev={valorPrev} r={resumen} esMesActual={esMesActual} />
+      ) : (
+        <p className="text-tinta-3 text-[12px]">No fue posible calcular el resumen del mes.</p>
+      )}
+
+      {/* Consumo del plan del mes elegido — visible en los 3 planes */}
+      <div className="mt-3">
+        <Panel title="Consumo de tu plan" sub={`Mensajes que envió el agente en ${mesTxt.toLowerCase()}`}>
+          <GaugeConsumo consumo={consumo} />
+        </Panel>
+      </div>
+
+      {/* Estado de hoy: foto actual del CRM (no depende del mes elegido) */}
+      <div className="flex items-baseline gap-2.5 mt-6 mb-2.5">
+        <h2 className="text-[13px] font-semibold text-tinta">Estado de hoy</h2>
+        <span className="text-tinta-3 text-[12px]">Cómo está tu CRM en este momento</span>
+      </div>
       <section className="panel">
-        <div className="grid grilla-kpi" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))" }}>
-          <KpiTile
-            label="Conversaciones"
-            value={kpis.conversaciones}
-            sub={variacionConversaciones == null ? "este mes" : "vs. mes anterior"}
-            icono="conversaciones"
-            variacion={variacionConversaciones}
-            destacado
-            ayuda="Mensajes que tu agente envió este mes. Es la misma cifra que consume tu plan."
-          />
-          <KpiTile
-            label="Resueltas por IA"
-            value={kpis.resueltasIA}
-            sub="sin pasar por un vendedor"
-            icono="ia"
-            ayuda="Contactos que el agente atiende solo, sin que tu equipo haya tenido que entrar."
-          />
-          <KpiTile
-            label="Derivadas a vendedor"
-            value={kpis.derivadas}
-            sub="las tomó tu equipo"
-            icono="vendedor"
-            ayuda="Contactos que pasaron a manos de una persona de tu equipo, porque lo pidieron o porque apagaste el bot."
-          />
+        <div className="grid grilla-kpi" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))" }}>
           <KpiTile
             label="Oportunidades activas"
             value={kpis.oportunidades}
@@ -131,9 +143,9 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
             ayuda="Contactos en etapa Nuevo Lead, En Conversación o Cotización Enviada: ventas todavía abiertas."
           />
           <KpiTile
-            label="Cotizaciones enviadas"
+            label="Cotizaciones esperando"
             value={kpis.cotizaciones}
-            sub="esperando respuesta"
+            sub="ya saben el precio"
             icono="cotizacion"
             ayuda="Contactos en etapa Cotización Enviada. Ya saben el precio y falta que respondan."
           />
@@ -143,48 +155,10 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
             sub={pendientes > 0 ? "necesitan acción hoy" : "todo al día"}
             icono="atencion"
             alerta={pendientes > 0}
-            ayuda="Contactos esperando a un vendedor. Mientras antes respondas, más alta la conversión."
+            ayuda="Contactos esperando a un vendedor, cotizaciones sin cierre y clientes que se enfriaron."
           />
         </div>
       </section>
-
-      {/* Valor del agente — visible en los 3 planes */}
-      {valor && (
-        <>
-          <div className="flex items-center justify-between gap-3 flex-wrap mt-5 mb-2.5">
-            <div className="flex items-baseline gap-2.5">
-              <h2 className="text-[13px] font-semibold text-tinta">Valor de tu agente</h2>
-              <span className="text-tinta-3 text-[12px]">Lo que el agente hizo por tu negocio</span>
-            </div>
-            <div className="flex items-center gap-2 text-[12px]">
-              {mes > primerMes ? (
-                <Link href={`/dashboard?mes=${mesAnterior(mes)}`} className="px-2 py-1 rounded text-tinta-2 hover:text-tinta" style={{ background: "var(--card-3)" }} aria-label="Mes anterior">‹</Link>
-              ) : (
-                <span className="px-2 py-1 text-tinta-3 opacity-40">‹</span>
-              )}
-              <span className="font-semibold text-tinta min-w-[120px] text-center">
-                {nombreMes(mes)}{esMesActual ? " (en curso)" : ""}
-              </span>
-              {!esMesActual ? (
-                <Link href={`/dashboard?mes=${mesSiguiente(mes)}`} className="px-2 py-1 rounded text-tinta-2 hover:text-tinta" style={{ background: "var(--card-3)" }} aria-label="Mes siguiente">›</Link>
-              ) : (
-                <span className="px-2 py-1 text-tinta-3 opacity-40">›</span>
-              )}
-              <Link href={`/informe?mes=${mes}`} className="ml-2 px-2.5 py-1 rounded font-medium" style={{ background: "var(--verde-claro)", color: "var(--verde)" }}>
-                Ver informe
-              </Link>
-            </div>
-          </div>
-          <ValorAgente v={valor} prev={valorPrev} esMesActual={esMesActual} />
-        </>
-      )}
-
-      {/* Consumo del plan — visible en los 3 planes */}
-      <div className="mt-3">
-        <Panel title="Consumo de tu plan" sub="Mensajes que envió el agente este mes">
-          <GaugeConsumo consumo={consumo} />
-        </Panel>
-      </div>
 
       {dashboardCompleto && (
         <>
@@ -215,8 +189,8 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
           </div>
 
           <div className="grid gap-3 mt-3" style={{ gridTemplateColumns: "minmax(0,1fr) minmax(0,1fr)" }}>
-            <Panel title="Quién atiende" sub="Reparto del trabajo entre la IA y tu equipo">
-              <Eficiencia resueltas={kpis.resueltasIA} derivadas={kpis.derivadas} total={kpis.clientes} />
+            <Panel title="Quién atiende" sub={`Reparto del trabajo en ${mesTxt.toLowerCase()}`}>
+              <Eficiencia resueltas={valor?.resueltas_ia ?? 0} derivadas={valor?.con_humano ?? 0} total={valor?.conversaciones ?? 0} />
             </Panel>
             <Panel title="Vendedores" sub="Quién está tomando más leads">
               {vendedores.length ? (

@@ -330,12 +330,12 @@ export type ConsumoPlan = {
 };
 
 // Consumo del plan del mes actual (gauge "Consumo Plan" del dashboard).
-export async function getConsumoPlan(empresa: number): Promise<ConsumoPlan | null> {
+export async function getConsumoPlan(empresa: number, mes?: string): Promise<ConsumoPlan | null> {
   const rows = await q<{ plan: string; usadas: number; limite: number }>(
     `SELECT plan, usadas, limite
        FROM ${tbl("contador_conversaciones")}
-      WHERE empresa = $1 AND mes = to_char(CURRENT_DATE,'YYYY-MM')`,
-    [empresa]
+      WHERE empresa = $1 AND mes = COALESCE($2, to_char(now() AT TIME ZONE 'America/Santiago','YYYY-MM'))`,
+    [empresa, mes ?? null]
   );
   const r = rows[0];
   if (!r) return null;
@@ -405,6 +405,29 @@ export async function getValorAgente(empresa: number, mes: string = mesActual())
     [empresa, mes]
   );
   return rows[0]?.m ?? null;
+}
+
+// Mensajes del agente (contador del plan) y leads nuevos del mes y del mes anterior.
+export async function getResumenMes(empresa: number, mes: string) {
+  if (!MES_RE.test(mes)) return { mensajes: 0, mensajesPrev: 0, leadsNuevos: 0, leadsNuevosPrev: 0 };
+  const prev = mesAnterior(mes);
+  const rows = await q<{ mensajes: number; mensajes_prev: number; leads: number; leads_prev: number }>(
+    `SELECT
+        (SELECT COALESCE(SUM(usadas),0)::int FROM ${tbl("contador_conversaciones")} WHERE empresa = $1 AND mes = $2) AS mensajes,
+        (SELECT COALESCE(SUM(usadas),0)::int FROM ${tbl("contador_conversaciones")} WHERE empresa = $1 AND mes = $3) AS mensajes_prev,
+        (SELECT COUNT(*)::int FROM ${tbl("crm_leads")}
+          WHERE empresa = $1 AND to_char(created_at AT TIME ZONE 'America/Santiago','YYYY-MM') = $2) AS leads,
+        (SELECT COUNT(*)::int FROM ${tbl("crm_leads")}
+          WHERE empresa = $1 AND to_char(created_at AT TIME ZONE 'America/Santiago','YYYY-MM') = $3) AS leads_prev`,
+    [empresa, mes, prev]
+  );
+  const r = rows[0];
+  return {
+    mensajes: r?.mensajes ?? 0,
+    mensajesPrev: r?.mensajes_prev ?? 0,
+    leadsNuevos: r?.leads ?? 0,
+    leadsNuevosPrev: r?.leads_prev ?? 0,
+  };
 }
 
 // Primer mes con conversaciones de la empresa (límite del selector hacia atrás).

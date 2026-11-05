@@ -37,17 +37,64 @@ export function variacion(actual: number, anterior: number | undefined): number 
   return Math.round(((actual - anterior) / anterior) * 100);
 }
 
-export default function ValorAgente({ v, prev, esMesActual = true }: { v: Valor; prev?: Valor | null; esMesActual?: boolean }) {
+export type ResumenMes = { mensajes: number; mensajesPrev: number; leadsNuevos: number; leadsNuevosPrev: number };
+
+export default function ValorAgente({
+  v,
+  prev,
+  r,
+  esMesActual = true,
+}: {
+  v: Valor;
+  prev?: Valor | null;
+  r: ResumenMes;
+  esMesActual?: boolean;
+}) {
   const desde = !esMesActual
     ? "sin medición ese mes"
     : v.medicion_desde ? `midiendo desde el ${fmtFecha(v.medicion_desde)}` : "se mide desde el próximo mensaje";
   const pctIA = v.conversaciones > 0 ? Math.round((v.resueltas_ia / v.conversaciones) * 100) : 0;
   const horario = `${fmtDias(v.horario.dias)} ${v.horario.inicio}–${v.horario.fin}`;
   const horas = new Intl.NumberFormat("es-CL", { maximumFractionDigits: 1 }).format(v.horas_liberadas);
+  const vsPrev = (x: number | null) => (x == null ? (esMesActual ? "este mes" : "en el mes") : "vs. mes anterior");
 
   return (
     <section className="panel">
-      <div className="grid grilla-kpi" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(170px, 1fr))" }}>
+      {/* 8 indicadores del mes en 2 filas de 4. Sin overflow-hidden: recortaría los tooltips. */}
+      <div className="grid grilla-kpi" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))" }}>
+        <KpiTile
+          label="Mensajes del agente"
+          value={r.mensajes}
+          sub={vsPrev(variacion(r.mensajes, r.mensajesPrev))}
+          icono="conversaciones"
+          variacion={variacion(r.mensajes, r.mensajesPrev)}
+          destacado
+          ayuda="Mensajes que tu agente envió en el mes. Es la misma cifra que consume tu plan."
+        />
+        <KpiTile
+          label="Leads nuevos"
+          value={r.leadsNuevos}
+          sub={vsPrev(variacion(r.leadsNuevos, r.leadsNuevosPrev))}
+          icono="oportunidad"
+          variacion={variacion(r.leadsNuevos, r.leadsNuevosPrev)}
+          ayuda="Contactos que el agente registró en tu CRM por primera vez en el mes, al detectar interés de compra."
+        />
+        <KpiTile
+          label="Resueltas sin tu equipo"
+          value={v.resueltas_ia}
+          sub={v.conversaciones > 0 ? `${pctIA}% de ${v.conversaciones} conversaciones` : "aún sin conversaciones"}
+          icono="ia"
+          variacion={variacion(v.resueltas_ia, prev?.resueltas_ia)}
+          ayuda="Conversaciones (un contacto en un día) que el agente atendió solo: nadie de tu equipo escribió ni se pidió un vendedor."
+        />
+        <KpiTile
+          label="Derivadas a tu equipo"
+          value={v.con_humano}
+          sub="intervino una persona"
+          icono="vendedor"
+          variacion={variacion(v.con_humano, prev?.con_humano)}
+          ayuda="Conversaciones en que el cliente pidió un vendedor, alguien de tu equipo escribió desde el CRM o apagaste el bot."
+        />
         <KpiTile
           label="Tiempo de respuesta"
           value={v.respuesta_mediana_seg != null ? fmtSeg(v.respuesta_mediana_seg) : "—"}
@@ -57,7 +104,6 @@ export default function ValorAgente({ v, prev, esMesActual = true }: { v: Valor;
               : desde
           }
           icono="reloj"
-          destacado
           ayuda="Tiempo típico (mediana) entre que llega el mensaje del cliente y responde tu agente, a cualquier hora."
         />
         <KpiTile
