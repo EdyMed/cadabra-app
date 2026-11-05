@@ -6,7 +6,18 @@
         [
           {
             "index": 0,
-            "node": "Avisar al vendedor (WhatsApp)",
+            "node": "Aviso (plantilla)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Aviso (plantilla)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "¿Plantilla falló?",
             "type": "main"
           }
         ]
@@ -44,6 +55,18 @@
           }
         ]
       ]
+    },
+    "¿Plantilla falló?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Avisar al vendedor (WhatsApp)",
+            "type": "main"
+          }
+        ],
+        []
+      ]
     }
   },
   "description": null,
@@ -56,7 +79,7 @@
       "id": "armar-items-vendedor-code",
       "name": "Armar items por vendedor",
       "parameters": {
-        "jsCode": "const prev = $('Reabrir+etiquetar CRM').first().json;\nconst vends = $input.all().map(i => String(i.json.whatsapp || '').replace(/[^0-9]/g,'')).filter(Boolean);\nif (vends.length === 0) return [{ json: { sin_vendedores: true, convId: prev.convId } }];\nreturn vends.map(v => ({ json: { convId: prev.convId, texto: prev.texto, vendedor: v } }));"
+        "jsCode": "const prev = $('Reabrir+etiquetar CRM').first().json;\nconst b = $('Webhook Alerta').first().json.body || {};\n// Variables de la plantilla: sin saltos de línea (Meta los rechaza en parámetros).\nconst limpia = (x) => String(x || '').replace(/[\\r\\n\\t]+/g, ' ').replace(/\\s{2,}/g, ' ').trim();\nlet quien = limpia(b.nombre) || 'sin nombre';\nif (limpia(b.negocio)) quien += ' de ' + limpia(b.negocio);\nconst vends = $input.all().map(i => String(i.json.whatsapp || '').replace(/[^0-9]/g,'')).filter(Boolean);\nif (vends.length === 0) return [];   // sin vendedores activos: no hay a quién avisar\nreturn vends.map(v => ({ json: { convId: prev.convId, texto: prev.texto, vendedor: v, quien, wa: prev.wa } }));"
       },
       "position": [
         800,
@@ -86,11 +109,38 @@
             }
           ]
         },
-        "jsonBody": "={{ JSON.stringify({ messaging_product:'whatsapp', to: $json.vendedor, type:'text', text:{ body: $json.texto } }) }}",
+        "jsonBody": "={{ JSON.stringify({ messaging_product:'whatsapp', to: $('Armar items por vendedor').item.json.vendedor, type:'text', text:{ body: $('Armar items por vendedor').item.json.texto } }) }}",
         "method": "POST",
         "options": {},
         "sendBody": true,
         "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "=https://graph.facebook.com/v21.0/{{ $('Webhook Alerta').first().json.body.phone_number_id || '1168256669712210' }}/messages"
+      },
+      "position": [
+        1480,
+        304
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "AkIBFXVUDXwvv1ta",
+          "name": "Header Auth account"
+        }
+      },
+      "id": "5bd5c710-2352-4284-b468-255626740267",
+      "name": "Aviso (plantilla)",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "jsonBody": "={{ JSON.stringify({ messaging_product:'whatsapp', to: $json.vendedor, type:'template', template:{ name:'aviso_vendedor', language:{ code:'es' }, components:[{ type:'body', parameters:[ { type:'text', text: $json.quien.slice(0,200) }, { type:'text', text: String($json.wa) } ] }] } }) }}",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
         "specifyBody": "json",
         "url": "=https://graph.facebook.com/v21.0/{{ $('Webhook Alerta').first().json.body.phone_number_id || '1168256669712210' }}/messages"
       },
@@ -153,6 +203,39 @@
       "type": "n8n-nodes-base.webhook",
       "typeVersion": 2,
       "webhookId": "alerta-vendedor-cadabra"
+    },
+    {
+      "id": "039fca2f-40a3-4d08-a80b-4ad2eabaacae",
+      "name": "¿Plantilla falló?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "pf",
+              "leftValue": "={{ !($json.messages && $json.messages.length) }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": true
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        1260,
+        304
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2
     }
   ],
   "settings": {

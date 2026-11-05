@@ -16,5 +16,5 @@ Generado por `../exportar_n8n.py`. No editar a mano: los cambios se hacen en n8n
 | 🟢 | `bokdGONRGM4RnyyW` | Alertas Cadabra (errores) | 6 |
 | 🟢 | `cH5tw8gqrSPQCuB4` | Enviar desde CRM (vendedor) | 6 |
 | ⚪ | `nI1fEpupB3WKHgZ2` | Cadabra · Agente WhatsApp Multimodal | 38 |
-| 🟢 | `rImoJOhAKuxQrS59` | Alerta Vendedor | 5 |
+| 🟢 | `rImoJOhAKuxQrS59` | Alerta Vendedor | 7 |
 | ⚪ | `s3rtqAowJhIXvBUU` | Cadabra · Agente WhatsApp Ventas | 26 |
