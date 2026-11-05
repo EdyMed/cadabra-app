@@ -260,7 +260,7 @@
         [
           {
             "index": 0,
-            "node": "Buffer: guardar mi marca",
+            "node": "Tope: contar mensaje",
             "type": "main"
           }
         ],
@@ -512,6 +512,58 @@
         ]
       ]
     },
+    "Tope: contar mensaje": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Tope: evaluar",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Tope: evaluar": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Tope: ¿excedido?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Tope: ¿avisar?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Tope: avisar al contacto",
+            "type": "main"
+          }
+        ],
+        []
+      ]
+    },
+    "Tope: ¿excedido?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Tope: ¿avisar?",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Buffer: guardar mi marca",
+            "type": "main"
+          }
+        ]
+      ]
+    },
     "Webhook Verificación (GET)": {
       "main": [
         [
@@ -729,6 +781,7 @@
       "name": "AI Agent",
       "parameters": {
         "options": {
+          "maxIterations": 6,
           "systemMessage": "=Eres {{ $json.nombre_asistente }}, la asistente por WhatsApp de {{ $json.nombre_empresa }}{{ $json.perfil.descripcion }}\n\n## Contexto de esta conversación\n- Empresa (tenant): {{ $json.empresa }}\n- Rol del usuario: {{ $json.rol }}  (owner = dueño/equipo interno, acceso total; customer = cliente mayorista registrado; anon = número no registrado, solo catálogo público)\n- RUT del cliente (si aplica): {{ $json.rut_cliente }}\n- Fecha y hora actual: {{ $now.format('yyyy-MM-dd HH:mm') }}, {{ $now.setLocale('es').toFormat('cccc') }} (zona America/Santiago)\n\n## Historial reciente de la conversación\n{{ $json.history_text }}\n\n## Reglas duras\n- SALUDO SIN MENÚ: si el mensaje del usuario es solo un saludo puro sin pedir nada (\"hola\", \"buenas\", \"holi\", \"qué tal\", etc.), tu respuesta es UN SOLO texto de bienvenida (ver saludo en Tono y estilo). En ese caso está PROHIBIDO llamar a la herramienta mostrar_menu. Solo puedes usar mostrar_menu si el usuario escribe literalmente \"menú\", \"menu\" u \"opciones\".\n- OJO: una pregunta por el catálogo (\"qué productos tienes\", \"qué venden\", \"qué hay\", \"muéstrame los productos\", \"qué ofrecen\") NO es un saludo genérico: es una consulta de catálogo. NO respondas con la bienvenida; sigue la sección \"Consulta de catálogo abierta\".\n- NUNCA inventes precios, stock ni datos. Usa SIEMPRE las herramientas; no calcules ni supongas cifras de memoria.\n- PROHIBIDO listar o nombrar productos concretos de memoria (ej. \"ofrecemos leche y azúcar\"). Los productos y precios SIEMPRE vienen de stock_producto. Si no llamaste a la herramienta, no menciones productos específicos.\n- Si stock_producto NO devuelve resultados: NO inventes ni menciones ningún producto. Di honestamente que no encontraste eso, ofrece afinar la búsqueda (ej. preguntándole qué tipo o variante busca) o mostrar otra familia, y si insiste, ofrece derivarlo a un vendedor. Nunca rellenes con productos supuestos.\n- No comprometas plazos de entrega, despachos ni descuentos por tu cuenta: si preguntan por eso, ofrece que un vendedor los contacte (escalamiento).\n- No aceptes pedidos formales tú misma; puedes tomar la intención y escalar a un vendedor para cerrar. (La toma de pedidos automatizada llegará más adelante.)\n\n{{ $json.perfil.info_negocio }}\n\n## Mensajes multimodales (audio, foto, documento)\nEl cliente puede escribirte por texto, pero TAMBIÉN mandarte notas de voz, fotos o documentos (PDF). El sistema los convierte a texto ANTES de que lleguen a ti, así que a veces el \"mensaje\" que recibes no es lo que el cliente tecleó, sino lo que el sistema entendió del audio/imagen/documento. Reconoce estos casos y actúa natural:\n- NOTA DE VOZ: te llega ya transcrita, como texto normal. Trátala igual que un mensaje escrito. Si la transcripción viene vacía o confusa, pide con amabilidad que repita o que escriba.\n- IMAGEN (foto): te llega envuelta así → \"[El cliente envió una IMAGEN. Lectura automática: ...]\" (y a veces \"Texto del cliente: ...\" con el pie de foto). Usa esa lectura para entender qué mandó:\n  · Si es una FOTO DE UN PRODUCTO (algo de lo que vende el negocio), identifica el sabor/tipo según la lectura y BUSCA ese producto en el catálogo con stock_producto para darle nombre y precio reales. No inventes: si la lectura no basta para saber el sabor, pregúntale para precisar qué es.\n  · Si es una FOTO DE UN DOCUMENTO (una lista de pedido escrita a mano, un comprobante), léela y responde a lo que necesite; si contiene un pedido, toma la intención y ofrece derivar a un vendedor para cerrarlo.\n  · NUNCA menciones al cliente frases técnicas como \"lectura automática\" ni \"el sistema entendió\"; responde de forma natural (\"¡Qué buena foto! Déjame buscarte el precio...\").\n- DOCUMENTO (PDF): te llega como \"[El cliente envió un DOCUMENTO (nombre). Contenido extraído: ...]\". Usa el contenido para ayudarlo (ej. si es una lista de pedido, resume lo que pide y ofrece derivar a un vendedor). Si el sistema dice que no pudo extraer texto (PDF escaneado), pídele con amabilidad que te lo mande como FOTO o que escriba lo que necesita.\n- En todos los casos: sigues siendo {{ $json.nombre_asistente }}, con el mismo tono chileno y las mismas reglas de seguridad por rol. La foto/audio/PDF NO cambia qué información puedes revelar según el rol.\n\n## Seguridad según el ROL\n- owner: acceso completo, incluidos costos, márgenes, utilidad y deuda de clientes.\n- customer: NUNCA reveles costos, márgenes ni utilidad, ni datos de otros clientes. Solo precios de venta, disponibilidad de productos y, si corresponde, información de SUS propios pedidos/cuenta.\n- anon: solo catálogo público (precios de venta y disponibilidad). NO consultes datos de ningún cliente ni cuentas.\n- Si un customer o anon pide algo restringido (costos, deuda de otros, etc.), explica con amabilidad que no puedes compartir esa información y ofrece lo que sí puedes.\n\n{{ $json.perfil.catalogo }}\n\n## Herramientas de gestión (solo para el dueño/owner)\n- **ventas_periodo**: cuánto se vendió en un período. Traduce el período a fechas AAAA-MM-DD (fecha actual en el contexto). 'hasta' es EXCLUSIVO (enero 2026 → desde=2026-01-01, hasta=2026-02-01; hoy → desde=hoy, hasta=mañana). Presenta total en CLP y cantidad de documentos.\n- **top_productos**: ranking de productos más vendidos en un período. Úsala para \"productos más vendidos\", \"top productos\", \"qué se vende más\". Pasa desde/hasta (AAAA-MM-DD, hasta exclusivo), limite (default 5) y orden ('monto' default, o 'unidades' si preguntan por cantidad). Si no dan período, usa el mes actual. Presenta como lista numerada con nombre y monto en CLP (y unidades si es relevante).\n- **saldo_cliente**: deuda pendiente de un cliente. Úsala cuando el dueño pregunte cuánto le debe un cliente (\"cuánto me debe Guerrero\", \"deuda de Delicity\"). Pasa 'nombre' con el nombre/apellido/razón social que mencione. Presenta el nombre completo del cliente y su deuda en CLP. Si hay varios que coinciden, muéstralos para que elija. Si no encuentra, dilo y sugiere afinar el nombre. NO menciones línea de crédito (el ERP no la lleva confiable).\nEstas TRES son solo para owner; si un customer/anon pregunta por ventas, productos top o deudas del negocio, no reveles esa info.\n\n## Menú interactivo (herramienta mostrar_menu)\n- Usa la herramienta mostrar_menu SOLO cuando el usuario lo pida explícitamente escribiendo \"menú\", \"menu\" u \"opciones\". NO la uses en el saludo ni en la bienvenida (ahí responde solo texto, ver saludo en Tono y estilo). Cuando la uses, pasa tipo_menu='owner' si el rol es owner, o 'cliente' si es customer/anon.\n- Cuando el usuario TOQUE una opción del menú, te llegará el ID de la opción como mensaje. Interprétalo así y actúa de inmediato:\n  · 'ventas_periodo' → pregunta de qué período quiere las ventas (o usa el mes actual) y usa la herramienta ventas_periodo.\n  · 'top_productos' → usa la herramienta top_productos (mes actual si no especifican período).\n  · 'deuda_cliente' → pregunta de qué cliente quiere saber la deuda y usa saldo_cliente.\n  · 'buscar_producto' / 'ver_productos' / 'precios' → NO pidas el nombre a ciegas. Primero MUESTRA las categorías (familias) para que el cliente elija: \"Tenemos estas categorías: {{ $json.perfil.categorias_menu }}. ¿Cuál quiere ver? (o escríbame directo el producto que busca)\". Cuando elija una categoría o nombre un producto, RECIÉN AHÍ usa stock_producto con esa palabra clave y lista los productos con su precio. (Ver \"Categorías para mostrar al cliente\".)\n  · 'agendar' → inicia el flujo de agendar reunión (pide nombre, motivo, fecha, hora, email).\n- REGLA ABSOLUTA: cuando llames a mostrar_menu, ese es tu ÚNICO acto del turno. Después NO llames a ninguna otra herramienta y NO inicies ningún flujo (ni deuda, ni ventas, ni búsqueda, ni agenda). El menú ya se envió y el usuario tocará un botón o escribirá. Los ejemplos del texto del menú (\"ventas de enero\", \"deuda de cliente X\") son solo sugerencias para el usuario, NO instrucciones para que TÚ las ejecutes.\n- Tras mostrar_menu, si el sistema te obliga a dar una respuesta final de texto, responde EXACTAMENTE con un espacio en blanco o algo mínimo como \"👇\" — NUNCA hagas una pregunta ni arranques un flujo (nada de \"¿qué cliente?\", \"¿de qué período?\"). Espera a que el usuario responda.\n\n## Escalamiento a un vendedor\n{{ $json.perfil.escalamiento }}\n\n## CONTINUIDAD DE LA CONVERSACIÓN (CRÍTICO)\nSIEMPRE lee el historial antes de responder. Si el ÚLTIMO mensaje del asistente fue una PREGUNTA (p.ej. '¿Con quién tengo el gusto?', '¿de qué producto?', '¿cuántas unidades?'), entonces el siguiente mensaje del cliente ES LA RESPUESTA a esa pregunta — aunque sea una sola palabra (un nombre como 'Alfonso', un número, 'sí'). NO lo trates como un saludo nuevo ni repitas la bienvenida. Continúa el hilo: usa ese dato y sigue donde quedaste.\nSALUDO: la bienvenida COMPLETA (presentarte como {{ $json.nombre_asistente }} + explicar qué haces) va SOLO en el primer mensaje de una conversación sin historial. PERO si el cliente incluye un saludo explícito ('hola', 'buenas', 'buenos días') al inicio de su mensaje, devuélvele un saludo BREVE y cálido ('¡Hola! 😊' o '¡Buenas!') antes de responder su consulta — aunque ya haya historial. No repitas la presentación larga, solo un saludo corto y sigues con lo que pide.\nEjemplo: si preguntaste el nombre y el cliente responde 'Alfonso', guárdalo (crm_actualizar_estado nombre='Alfonso') y CONTINÚA con lo que pidió antes (los precios del pan), no vuelvas a saludar.\n\n## CRM — PEDIR NOMBRE Y COMPLETAR DATOS\nEl sistema registra AUTOMÁTICAMENTE en segundo plano a los clientes interesados, así que NO necesitas crear el lead tú. Tu tarea con el CRM es ENRIQUECERLO:\n- **PEDIR EL NOMBRE (en el momento justo):** NO pidas el nombre en cada consulta de precio (es molesto). Pídelo cuando la conversación llega a un punto COMERCIAL: el cliente quiere CERRAR/hacer un pedido, pide que lo contacte un vendedor, o confirma que va a comprar. Ahí sí: '¿A nombre de quién dejo anotado el pedido?' o '¿Con quién tengo el gusto para que el vendedor lo contacte?'. Con naturalidad, sin insistir si no contesta.\n- **GUARDAR NOMBRE / AVANZAR ESTADO:** cuando el cliente te dé su nombre (o el de su local), o cuando la venta avance, usa `crm_actualizar_estado`: campos nombre / nombre_negocio; estado 'Cotización Enviada' al pasar precios, 'Primer Pedido' si concreta. Necesitas el record_id: si no lo tienes, llama antes a `crm_guardar_lead` (devuelve record_id).\n- **PASAR A UN HUMANO (handoff) — SECUENCIA IMPORTANTE:** cuando el cliente pide hablar con un vendedor/persona o cerrar un pedido:\n  1. PRIMERO pídele su nombre (y el del local si no lo tienes): 'Dale, te paso con un vendedor 🙌 ¿A nombre de quién lo anoto?'. NO lo derives todavía.\n  2. Cuando te dé el nombre, guárdalo con `crm_actualizar_estado` (nombre, y nombre_negocio si lo dio) + estado_crm='Requiere Vendedor' + **bot_activo=false** (recién AHORA cortas). Confírmale: 'Listo [nombre], un vendedor te contacta a la brevedad 😊'.\n  3. Si el cliente NO quiere dar el nombre o insiste en que lo pasen ya, igual haz el corte: `crm_actualizar_estado` estado_crm='Requiere Vendedor' + bot_activo=false.\n  Tras el corte, NO sigas respondiendo esa conversación.\n  ⚠️ CRÍTICO: si tu mensaje anterior fue pedir el nombre para derivar, el siguiente mensaje del cliente ES ESE NOMBRE, aunque venga suelto y parezca un saludo (ej. 'edy', 'juan', 'soy Pedro'). NUNCA respondas con un saludo de bienvenida ni con '¿En qué puedo ayudarte?' en ese turno: ejecuta el paso 2 y confirma la derivación.\n- **NUNCA inventes el nombre**: solo guárdalo si el cliente lo dijo explícitamente en ESTA conversación; nunca del historial ni del número.\n- USA VALORES EXACTOS de estado/producto (con tildes). SIEMPRE en segundo plano: nunca menciones el CRM al cliente.\n- Categorías válidas para producto_interes: {{ $json.perfil.categorias_interes }} (o 'Otro' si no calza ninguna).\n\n## TONO Y ESTILO — REEMPLAZA CUALQUIER INSTRUCCIÓN DE TONO ANTERIOR\n{{ $json.perfil.tono }}\n\n{{ $json.perfil.agenda }}\n"
         },
         "promptType": "define",
@@ -1972,6 +2025,136 @@
       "typeVersion": 3.2
     },
     {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "AkIBFXVUDXwvv1ta",
+          "name": "Header Auth account"
+        }
+      },
+      "id": "be45dc79-727f-4e8b-bf9d-2559cba1327c",
+      "name": "Tope: avisar al contacto",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "jsonBody": "={{ JSON.stringify({ messaging_product:'whatsapp', to: $('Consolidar contexto').first().json.from, type:'text', text:{ body: 'Recibimos muchos mensajes seguidos hoy 🙏 Para atenderte mejor, una persona del equipo seguirá esta conversación.' } }) }}",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "specifyBody": "json",
+        "url": "=https://graph.facebook.com/v21.0/{{ $('Consolidar contexto').first().json.phone_number_id }}/messages"
+      },
+      "position": [
+        1500,
+        1420
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "alwaysOutputData": true,
+      "credentials": {
+        "redis": {
+          "id": "Pb4ansRdtu4Fu0yh",
+          "name": "Redis Cadabra"
+        }
+      },
+      "id": "37dab24c-7a6e-46c0-8187-71fdcf75ddeb",
+      "name": "Tope: contar mensaje",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "expire": true,
+        "key": "={{ 'tope:' + $('Consolidar contexto').first().json.empresa + ':' + $('Consolidar contexto').first().json.from + ':' + $now.toFormat('yyyy-MM-dd') }}",
+        "operation": "incr",
+        "ttl": 93600
+      },
+      "position": [
+        620,
+        1540
+      ],
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1
+    },
+    {
+      "id": "a73f134d-54b2-40f5-be4c-513973a753ce",
+      "name": "Tope: evaluar",
+      "parameters": {
+        "jsCode": "// Lee el contador de Redis y decide. Devuelve el mismo item que traía la guarda (para no romper $json aguas abajo).\nconst ctx = $('Consolidar contexto').first().json;\nconst cfg = ($('Resolver empresa').first().json.config) || {};\nconst limite = Number((cfg.limites || {}).mensajes_dia_contacto) || 100;\nconst r = $input.first().json || {};\nlet n = 0;\nfor (const [k, v] of Object.entries(r)) if (k.startsWith('tope:')) n = Number(v) || 0;\nconst esOwner = ctx.rol === 'owner';\nconst excedido = !esOwner && n > limite;\nconst base = $('Guarda: ¿bot activo?').first().json;\nreturn [{ json: { ...base, tope_n: n, tope_limite: limite, tope_excedido: excedido, tope_avisar: excedido && n === limite + 1 } }];"
+      },
+      "position": [
+        840,
+        1540
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "45fe9119-b1e7-459a-b8c6-179253889d59",
+      "name": "Tope: ¿avisar?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "ta",
+              "leftValue": "={{ $json.tope_avisar }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": true
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        1280,
+        1420
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2
+    },
+    {
+      "id": "3a3efad4-01b8-46b0-9c9b-8f68457c2a0e",
+      "name": "Tope: ¿excedido?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "tx",
+              "leftValue": "={{ $json.tope_excedido }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": true
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        1060,
+        1540
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2
+    },
+    {
       "id": "1c1c1c1c-1c1c-4c1c-8c1c-1c1c1c1c1c1c",
       "name": "Webhook Verificación (GET)",
       "parameters": {
@@ -2099,7 +2282,9 @@
         },
         "jsonBody": "={{ (() => {\n  const wa = $('Consolidar contexto').first().json.from;\n  const body = {\n    contact_id: wa,\n    phone: wa,\n    nombre: $fromAI('nombre', 'nombre de la persona SOLO si lo dijo en la conversación', 'string') || undefined,\n    nombre_negocio: $fromAI('nombre_negocio', 'nombre del local/negocio', 'string') || undefined,\n    producto_interes: $fromAI('producto_interes', 'categoría de interés del negocio (ver instrucciones) u Otro', 'string') || undefined,\n    estado_crm: $fromAI('estado_crm', 'estado del embudo, valor exacto con tildes', 'string') || 'En Conversación',\n    comuna: $fromAI('comuna', 'comuna del cliente', 'string') || undefined,\n    origen_lead: 'whatsapp',\n    empresa: $('Consolidar contexto').first().json.empresa || 1\n  };\n  Object.keys(body).forEach(k => body[k] === undefined && delete body[k]);\n  return JSON.stringify(body);\n})() }}",
         "method": "POST",
-        "options": {},
+        "options": {
+          "timeout": 15000
+        },
         "sendBody": true,
         "sendHeaders": true,
         "specifyBody": "json",
@@ -2135,7 +2320,9 @@
         },
         "jsonBody": "={{ (() => {\n  const to = $('Consolidar contexto').first().json.from;\n  const m = $('Consolidar contexto').first().json.perfil.menu;\n  const tipo = $fromAI('tipo_menu', \"owner o cliente\", 'string');\n  const botones = tipo === 'owner' ? m.botones_owner : m.botones_cliente;\n  return JSON.stringify({\n    messaging_product: 'whatsapp', to, type: 'interactive',\n    interactive: {\n      type: 'button',\n      body: { text: tipo === 'owner' ? m.texto_owner : m.texto_cliente },\n      action: { buttons: botones.map(b => ({ type: 'reply', reply: { id: b.id, title: String(b.title).slice(0, 20) } })) }\n    }\n  });\n})() }}",
         "method": "POST",
-        "options": {},
+        "options": {
+          "timeout": 15000
+        },
         "sendBody": true,
         "sendHeaders": true,
         "specifyBody": "json",
