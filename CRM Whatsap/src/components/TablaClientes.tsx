@@ -39,43 +39,53 @@ export default function TablaClientes({ leads }: { leads: LeadRow[] }) {
     return orden === "calientes" ? [...res].sort((a, b) => (b.score ?? -1) - (a.score ?? -1)) : res;
   }, [leads, q, estado, vendedor, temp, orden]);
 
-  const selectCls = "campo w-auto cursor-pointer";
+  const hayFiltros = !!(q || estado || vendedor || temp || orden !== "recientes");
+  const sel = (activo: boolean) => `campo filtro${activo ? " activo" : ""}`;
+  const limpiar = () => { setQ(""); setEstado(""); setVendedor(""); setTemp(""); setOrden("recientes"); };
 
   return (
     <div>
-      {/* Filtros: una sola fila arriba de la tabla */}
-      <div className="flex flex-wrap items-center gap-2 mb-3">
-        <input
-          id="buscar"
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder="Buscar negocio, nombre o teléfono…"
-          className="campo flex-1 min-w-[220px]"
-        />
-        <select id="f-estado" value={estado} onChange={(e) => setEstado(e.target.value)} className={selectCls}>
-          <option value="">Todos los estados</option>
+      {/* Filtros: una sola fila compacta arriba de la tabla (ver .filtros en globals.css) */}
+      <div className="filtros mb-3">
+        <div className="filtro-buscar">
+          <svg viewBox="0 0 20 20" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+            <circle cx="9" cy="9" r="5.5" /><path d="m13.5 13.5 3 3" />
+          </svg>
+          <input
+            id="buscar"
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="Buscar negocio, nombre o teléfono…"
+            className="campo"
+          />
+        </div>
+        <select id="f-estado" value={estado} onChange={(e) => setEstado(e.target.value)} className={sel(!!estado)} aria-label="Estado">
+          <option value="">Estado: todos</option>
           {estados.map((e) => (
             <option key={e} value={e}>{e}</option>
           ))}
         </select>
-        <select id="f-vendedor" value={vendedor} onChange={(e) => setVendedor(e.target.value)} className={selectCls}>
-          <option value="">Todos los vendedores</option>
+        <select id="f-vendedor" value={vendedor} onChange={(e) => setVendedor(e.target.value)} className={sel(!!vendedor)} aria-label="Vendedor">
+          <option value="">Vendedor: todos</option>
           {vendedores.map((v) => (
             <option key={v} value={v}>{v}</option>
           ))}
         </select>
-        <select id="f-temp" value={temp} onChange={(e) => setTemp(e.target.value)} className={selectCls}>
-          <option value="">Toda temperatura</option>
+        <select id="f-temp" value={temp} onChange={(e) => setTemp(e.target.value)} className={sel(!!temp)} aria-label="Temperatura">
+          <option value="">Temperatura: todas</option>
           <option value="caliente">🔥 Calientes</option>
           <option value="tibio">Tibios</option>
           <option value="frio">Fríos</option>
           <option value="sin">Sin puntaje</option>
         </select>
-        <select id="f-orden" value={orden} onChange={(e) => setOrden(e.target.value as "recientes" | "calientes")} className={selectCls}>
-          <option value="recientes">Más recientes</option>
-          <option value="calientes">Más calientes primero</option>
+        <select id="f-orden" value={orden} onChange={(e) => setOrden(e.target.value as "recientes" | "calientes")} className={sel(orden !== "recientes")} aria-label="Orden">
+          <option value="recientes">Orden: más recientes</option>
+          <option value="calientes">Orden: más calientes</option>
         </select>
-        <span className="text-[11.5px] text-tinta-3 tnum whitespace-nowrap">
+        {hayFiltros && (
+          <button type="button" onClick={limpiar} className="filtro-limpiar">Limpiar</button>
+        )}
+        <span className="ml-auto text-[11.5px] text-tinta-3 tnum whitespace-nowrap">
           {filtrados.length} de {leads.length}
         </span>
       </div>

@@ -380,3 +380,15 @@ select.campo option { background: var(--card-3); color: var(--tinta); }
   .imprimir-fondo, .hoja-informe * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   main { padding: 0 !important; max-width: none !important; }
 }
+
+/* ---- Barra de filtros compacta (Leads, Oportunidades) ----
+   .campo trae width:100% y va después de las utilidades de Tailwind (le gana a w-auto);
+   estas clases lo anulan para que los filtros queden en una sola fila. */
+.filtros { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.filtro-buscar { position: relative; flex: 1 1 240px; max-width: 340px; }
+.filtro-buscar .campo { padding-left: 30px; }
+.filtro-buscar svg { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--tinta-3); pointer-events: none; }
+select.campo.filtro { width: auto; min-width: 0; padding-top: 6px; padding-bottom: 6px; cursor: pointer; }
+select.campo.filtro.activo { border-color: var(--verde-borde); color: var(--verde); background-color: var(--verde-claro); }
+.filtro-limpiar { font-size: 12px; color: var(--tinta-3); padding: 4px 6px; border-radius: 5px; }
+.filtro-limpiar:hover { color: var(--tinta); background: var(--card-3); }

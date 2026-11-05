@@ -106,19 +106,20 @@ export default function TableroOportunidades({
 
   return (
     <div>
-      <div className="flex flex-wrap items-center gap-2.5 mb-5">
-        <input
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder="Buscar negocio…"
-          className="campo text-[13.5px] py-2 w-[220px]"
-        />
+      <div className="filtros mb-5">
+        <div className="filtro-buscar">
+          <svg viewBox="0 0 20 20" width="13" height="13" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+            <circle cx="9" cy="9" r="5.5" /><path d="m13.5 13.5 3 3" />
+          </svg>
+          <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Buscar negocio…" className="campo" />
+        </div>
         <select
           value={vendedor}
           onChange={(e) => setVendedor(e.target.value)}
-          className="campo text-[13.5px] py-2 w-auto cursor-pointer"
+          className={`campo filtro${vendedor ? " activo" : ""}`}
+          aria-label="Vendedor"
         >
-          <option value="">Todos los vendedores</option>
+          <option value="">Vendedor: todos</option>
           {vendedores.map((v) => (
             <option key={v} value={v}>{v}</option>
           ))}
