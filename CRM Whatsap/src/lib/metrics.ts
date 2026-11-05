@@ -350,6 +350,7 @@ export type ValorAgente = {
   resueltas_ia: number;
   con_humano: number;
   fuera_horario: number;
+  mensajes_clientes: number;
   horas_liberadas: number;
   minutos_por_conversacion: number;
   respuesta_mediana_seg: number | null;
@@ -362,15 +363,58 @@ export type ValorAgente = {
   horario: { dias: number[]; inicio: string; fin: string };
 };
 
-export async function getValorAgente(empresa: number): Promise<ValorAgente | null> {
+const MES_RE = /^\d{4}-(0[1-9]|1[0-2])$/;
+
+// Mes actual en hora Chile, formato 'YYYY-MM'.
+export function mesActual(): string {
+  const p = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Santiago", year: "numeric", month: "2-digit" })
+    .formatToParts(new Date());
+  return `${p.find((x) => x.type === "year")!.value}-${p.find((x) => x.type === "month")!.value}`;
+}
+
+export function mesAnterior(mes: string): string {
+  const [y, m] = mes.split("-").map(Number);
+  return m === 1 ? `${y - 1}-12` : `${y}-${String(m - 1).padStart(2, "0")}`;
+}
+
+export function mesSiguiente(mes: string): string {
+  const [y, m] = mes.split("-").map(Number);
+  return m === 12 ? `${y + 1}-01` : `${y}-${String(m + 1).padStart(2, "0")}`;
+}
+
+export function nombreMes(mes: string): string {
+  const [y, m] = mes.split("-").map(Number);
+  const n = new Date(Date.UTC(y, m - 1, 15)).toLocaleDateString("es-CL", { month: "long", year: "numeric", timeZone: "UTC" });
+  return n.charAt(0).toUpperCase() + n.slice(1);
+}
+
+// Normaliza el ?mes= de la URL: si no es válido o es futuro, usa el mes actual.
+export function mesValido(mes: string | string[] | undefined): string {
+  const actual = mesActual();
+  return typeof mes === "string" && MES_RE.test(mes) && mes <= actual ? mes : actual;
+}
+
+// Métricas de un mes calendario (hora Chile). Si es el mes en curso, corta en "ahora".
+export async function getValorAgente(empresa: number, mes: string = mesActual()): Promise<ValorAgente | null> {
+  if (!MES_RE.test(mes)) return null;
   const rows = await q<{ m: ValorAgente }>(
     `SELECT crm.metricas_valor(
         $1,
-        date_trunc('month', now() AT TIME ZONE 'America/Santiago') AT TIME ZONE 'America/Santiago',
-        now()) AS m`,
-    [empresa]
+        ($2 || '-01')::timestamp AT TIME ZONE 'America/Santiago',
+        LEAST((($2 || '-01')::date + INTERVAL '1 month')::timestamp AT TIME ZONE 'America/Santiago', now())) AS m`,
+    [empresa, mes]
   );
   return rows[0]?.m ?? null;
+}
+
+// Primer mes con conversaciones de la empresa (límite del selector hacia atrás).
+export async function getPrimerMes(empresa: number): Promise<string> {
+  const rows = await q<{ mes: string | null }>(
+    `SELECT to_char(min(created_at) AT TIME ZONE 'America/Santiago', 'YYYY-MM') AS mes
+       FROM public.conversation_history WHERE empresa = $1`,
+    [empresa]
+  );
+  return rows[0]?.mes ?? mesActual();
 }
 
 export async function getActividad(empresa: number): Promise<ActividadRow[]> {

@@ -370,3 +370,13 @@ select.campo option { background: var(--card-3); color: var(--tinta); }
   .aparecer, .esqueleto { animation: none; }
   .barra > span { transition: none; }
 }
+
+/* ---- Impresión (informe mensual → "Guardar como PDF") ---- */
+@media print {
+  @page { size: A4; margin: 12mm; }
+  .no-print { display: none !important; }
+  html, body { background: #fff !important; }
+  .hoja-informe { padding: 0 !important; border-radius: 0 !important; }
+  .imprimir-fondo, .hoja-informe * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  main { padding: 0 !important; max-width: none !important; }
+}

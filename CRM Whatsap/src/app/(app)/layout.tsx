@@ -9,9 +9,14 @@ export default async function AppLayout({ children }: { children: React.ReactNod
 
   return (
     <div className="flex min-h-screen">
-      <Sidebar isAdmin={tenant.isAdmin} plan={tenant.plan} />
+      {/* display:contents mantiene el layout; .no-print los oculta al imprimir el informe */}
+      <div className="no-print contents">
+        <Sidebar isAdmin={tenant.isAdmin} plan={tenant.plan} />
+      </div>
       <div className="flex-1 min-w-0 flex flex-col">
-        <TopBar nombreEmpresa={tenant.nombreEmpresa} />
+        <div className="no-print contents">
+          <TopBar nombreEmpresa={tenant.nombreEmpresa} />
+        </div>
         <div className="flex-1 min-w-0">{children}</div>
       </div>
     </div>

@@ -10,7 +10,14 @@ import {
   getClientesFrios,
   getConsumoPlan,
   getValorAgente,
+  getPrimerMes,
+  mesValido,
+  mesActual,
+  mesAnterior,
+  mesSiguiente,
+  nombreMes,
 } from "@/lib/metrics";
+import Link from "next/link";
 import ValorAgente from "@/components/ValorAgente";
 import { puedeVer } from "@/lib/plan";
 import KpiTile from "@/components/KpiTile";
@@ -30,20 +37,26 @@ function saludo() {
   return "Buenas noches";
 }
 
-export default async function DashboardPage() {
+export default async function DashboardPage({ searchParams }: { searchParams: { mes?: string | string[] } }) {
   const tenant = await getTenant();
   if (!tenant) redirect("/login");
+
+  // Mes de la sección "Valor de tu agente" (?mes=YYYY-MM). El resto del dashboard es siempre el estado actual.
+  const mes = mesValido(searchParams?.mes);
+  const esMesActual = mes === mesActual();
 
   // Dashboard básico (KPIs + Consumo) es de los 3 planes. El resto (Actividad,
   // Embudo, Vendedores, Alertas) es exclusivo Convierte+ — solo se consulta si
   // el plan lo incluye, para no gastar queries de más en Conversa.
   const dashboardCompleto = puedeVer(tenant, "dashboard_completo");
 
-  const [kpis, consumo, valor, embudo, vendedores, actividad, atencion, cotizaciones, frios] = await Promise.all([
+  const [kpis, consumo, valor, valorPrev, primerMes, embudo, vendedores, actividad, atencion, cotizaciones, frios] = await Promise.all([
     getKpis(tenant.empresa),
     getConsumoPlan(tenant.empresa),
     // Si la función SQL fallara, el resto del dashboard sigue cargando.
-    getValorAgente(tenant.empresa).catch(() => null),
+    getValorAgente(tenant.empresa, mes).catch(() => null),
+    getValorAgente(tenant.empresa, mesAnterior(mes)).catch(() => null),
+    getPrimerMes(tenant.empresa).catch(() => mesActual()),
     dashboardCompleto ? getEmbudo(tenant.empresa) : Promise.resolve([]),
     dashboardCompleto ? getVendedores(tenant.empresa) : Promise.resolve([]),
     dashboardCompleto ? getActividad(tenant.empresa) : Promise.resolve([]),
@@ -138,11 +151,31 @@ export default async function DashboardPage() {
       {/* Valor del agente — visible en los 3 planes */}
       {valor && (
         <>
-          <div className="flex items-baseline gap-2.5 mt-5 mb-2.5">
-            <h2 className="text-[13px] font-semibold text-tinta">Valor de tu agente este mes</h2>
-            <span className="text-tinta-3 text-[12px]">Lo que el agente hizo por tu negocio</span>
+          <div className="flex items-center justify-between gap-3 flex-wrap mt-5 mb-2.5">
+            <div className="flex items-baseline gap-2.5">
+              <h2 className="text-[13px] font-semibold text-tinta">Valor de tu agente</h2>
+              <span className="text-tinta-3 text-[12px]">Lo que el agente hizo por tu negocio</span>
+            </div>
+            <div className="flex items-center gap-2 text-[12px]">
+              {mes > primerMes ? (
+                <Link href={`/dashboard?mes=${mesAnterior(mes)}`} className="px-2 py-1 rounded text-tinta-2 hover:text-tinta" style={{ background: "var(--card-3)" }} aria-label="Mes anterior">‹</Link>
+              ) : (
+                <span className="px-2 py-1 text-tinta-3 opacity-40">‹</span>
+              )}
+              <span className="font-semibold text-tinta min-w-[120px] text-center">
+                {nombreMes(mes)}{esMesActual ? " (en curso)" : ""}
+              </span>
+              {!esMesActual ? (
+                <Link href={`/dashboard?mes=${mesSiguiente(mes)}`} className="px-2 py-1 rounded text-tinta-2 hover:text-tinta" style={{ background: "var(--card-3)" }} aria-label="Mes siguiente">›</Link>
+              ) : (
+                <span className="px-2 py-1 text-tinta-3 opacity-40">›</span>
+              )}
+              <Link href={`/informe?mes=${mes}`} className="ml-2 px-2.5 py-1 rounded font-medium" style={{ background: "var(--verde-claro)", color: "var(--verde)" }}>
+                Ver informe
+              </Link>
+            </div>
           </div>
-          <ValorAgente v={valor} />
+          <ValorAgente v={valor} prev={valorPrev} esMesActual={esMesActual} />
         </>
       )}
 

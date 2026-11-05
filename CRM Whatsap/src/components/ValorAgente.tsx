@@ -6,21 +6,21 @@ import type { ValorAgente as Valor } from "@/lib/metrics";
 
 const LETRA = ["D", "L", "M", "X", "J", "V", "S"];
 
-function fmtDias(dias: number[]) {
+export function fmtDias(dias: number[]) {
   const d = [...dias].sort();
   if (d.join() === "1,2,3,4,5") return "L–V";
   if (d.join() === "1,2,3,4,5,6") return "L–S";
   return d.map((x) => LETRA[x] ?? "?").join(" ");
 }
 
-function fmtSeg(s: number) {
+export function fmtSeg(s: number) {
   if (s < 60) return `${s} s`;
   const m = Math.floor(s / 60);
   const r = s % 60;
   return r ? `${m} min ${r} s` : `${m} min`;
 }
 
-function fmtMin(m: number) {
+export function fmtMin(m: number) {
   if (m < 60) return `${m} min`;
   const h = Math.floor(m / 60);
   const r = m % 60;
@@ -31,8 +31,16 @@ function fmtFecha(iso: string) {
   return new Date(iso).toLocaleDateString("es-CL", { day: "2-digit", month: "2-digit", timeZone: "America/Santiago" });
 }
 
-export default function ValorAgente({ v }: { v: Valor }) {
-  const desde = v.medicion_desde ? `midiendo desde el ${fmtFecha(v.medicion_desde)}` : "se mide desde el próximo mensaje";
+// Variación % contra el mes anterior; null si no hay base para comparar.
+export function variacion(actual: number, anterior: number | undefined): number | null {
+  if (anterior == null || anterior <= 0) return null;
+  return Math.round(((actual - anterior) / anterior) * 100);
+}
+
+export default function ValorAgente({ v, prev, esMesActual = true }: { v: Valor; prev?: Valor | null; esMesActual?: boolean }) {
+  const desde = !esMesActual
+    ? "sin medición ese mes"
+    : v.medicion_desde ? `midiendo desde el ${fmtFecha(v.medicion_desde)}` : "se mide desde el próximo mensaje";
   const pctIA = v.conversaciones > 0 ? Math.round((v.resueltas_ia / v.conversaciones) * 100) : 0;
   const horario = `${fmtDias(v.horario.dias)} ${v.horario.inicio}–${v.horario.fin}`;
   const horas = new Intl.NumberFormat("es-CL", { maximumFractionDigits: 1 }).format(v.horas_liberadas);
@@ -57,6 +65,7 @@ export default function ValorAgente({ v }: { v: Valor }) {
           value={v.resueltas_ia}
           sub={v.conversaciones > 0 ? `${pctIA}% de ${v.conversaciones} conversaciones` : "aún sin conversaciones"}
           icono="ia"
+          variacion={variacion(v.resueltas_ia, prev?.resueltas_ia)}
           ayuda="Conversaciones (un contacto en un día) que el agente atendió solo: nadie de tu equipo escribió ni se pidió un vendedor."
         />
         <KpiTile
@@ -64,6 +73,7 @@ export default function ValorAgente({ v }: { v: Valor }) {
           value={v.fuera_horario}
           sub={`atendidas fuera de ${horario}`}
           icono="luna"
+          variacion={variacion(v.fuera_horario, prev?.fuera_horario)}
           ayuda="Conversaciones con mensajes fuera de tu horario de atención. Sin el agente, esos clientes habrían esperado al día siguiente."
         />
         <KpiTile
@@ -71,6 +81,7 @@ export default function ValorAgente({ v }: { v: Valor }) {
           value={`${horas} h`}
           sub={`≈ ${v.minutos_por_conversacion} min por conversación`}
           icono="horas"
+          variacion={variacion(v.horas_liberadas, prev?.horas_liberadas)}
           ayuda="Tiempo que tu equipo no tuvo que dedicar a responder: conversaciones resueltas por el agente × minutos promedio por conversación."
         />
         <KpiTile
