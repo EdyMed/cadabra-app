@@ -1,0 +1,59 @@
+{
+  "active": false,
+  "connections": {
+    "Webhook Espejo": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Espejar en Chatwoot",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "description": null,
+  "id": "7z8yqBfUp8NTAkqk",
+  "isArchived": false,
+  "name": "Chatwoot Espejo",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "f0000000-0000-4000-8000-000000000002",
+      "name": "Espejar en Chatwoot",
+      "parameters": {
+        "jsCode": "const CW = 'https://appcadabra-chatwoot.jmyxxj.easypanel.host';\nconst ACC = '2';\nconst INBOX = 1;\nconst TOKEN = '8vCuVj2MnkufoQCuS4gmWXVr';\nconst H = { 'api_access_token': TOKEN, 'Content-Type': 'application/json' };\nconst b = $input.first().json.body || {};\nconst wa = String(b.wa_id || '').replace(/[^0-9]/g,'');\nif (!wa) return [{ json: { ok:false, motivo:'sin wa_id' } }];\nconst nombre = b.nombre || ('Cliente ' + wa);\nconst msgCliente = b.mensaje_cliente || '';\nconst msgBot = b.respuesta_bot || '';\n\n// Helper HTTP con el cliente de n8n (fetch no existe en Code node)\nconst req = async (method, url, body) => {\n  try {\n    const opt = { method, url, headers: H, json: true };\n    if (body) opt.body = body;\n    const d = await this.helpers.httpRequest(opt);\n    return d;\n  } catch (e) { return (e.response && e.response.body) ? e.response.body : { __err: String(e.message||e) }; }\n};\n\n// 1) Buscar contacto por identifier (wa)\nlet contactId=null, sourceId=null;\nconst s = await req('GET', `${CW}/api/v1/accounts/${ACC}/contacts/search?q=${wa}`);\nif (s && s.payload && s.payload.length) {\n  const c = s.payload.find(x => x.identifier===wa || (x.phone_number||'').includes(wa)) || s.payload[0];\n  contactId = c.id;\n  const ci = await req('GET', `${CW}/api/v1/accounts/${ACC}/contacts/${contactId}`);\n  const inboxes = (ci && ci.payload && ci.payload.contact_inboxes) || [];\n  const mine = inboxes.find(x => x.inbox && x.inbox.id===INBOX);\n  sourceId = mine ? mine.source_id : null;\n}\n// 2) Crear contacto si no existe\nif (!contactId) {\n  const cr = await req('POST', `${CW}/api/v1/accounts/${ACC}/contacts`, { inbox_id: INBOX, name: nombre, phone_number: '+'+wa, identifier: wa });\n  contactId = cr && cr.payload && cr.payload.contact && cr.payload.contact.id;\n  sourceId = cr && cr.payload && cr.payload.contact_inbox && cr.payload.contact_inbox.source_id;\n}\n// 3) Si no tengo source_id aún, crear el contact_inbox\nif (contactId && !sourceId) {\n  const cib = await req('POST', `${CW}/api/v1/accounts/${ACC}/contacts/${contactId}/contact_inboxes`, { inbox_id: INBOX });\n  sourceId = cib && cib.source_id;\n}\n// 4) Buscar conversación abierta del contacto, o crear una\nlet convId=null;\nconst cv = await req('GET', `${CW}/api/v1/accounts/${ACC}/contacts/${contactId}/conversations`);\nconst convs = (cv && cv.payload) || [];\nconst abierta = convs.find(x => x.status==='open' || x.status==='pending') || convs[0];\nif (abierta) convId = abierta.id;\nif (!convId) {\n  const nc = await req('POST', `${CW}/api/v1/accounts/${ACC}/conversations`, { source_id: sourceId, inbox_id: INBOX, contact_id: contactId });\n  convId = nc && nc.id;\n}\nif (!convId) return [{ json: { ok:false, motivo:'sin conversacion', contactId, sourceId } }];\n// 5) Push mensajes: cliente (incoming) y bot (outgoing).\n//    Marcamos con content_attributes.espejo=true para que el webhook los IGNORE\n//    (si no, el reenvío vendedor→WhatsApp entraría en bucle con nuestros propios mensajes).\nif (msgCliente) await req('POST', `${CW}/api/v1/accounts/${ACC}/conversations/${convId}/messages`, { content: msgCliente, message_type: 'incoming', content_attributes: { espejo: true } });\nif (msgBot) await req('POST', `${CW}/api/v1/accounts/${ACC}/conversations/${convId}/messages`, { content: msgBot, message_type: 'outgoing', content_attributes: { espejo: true } });\nreturn [{ json: { ok:true, contactId, convId } }];\n",
+        "options": {}
+      },
+      "position": [
+        440,
+        400
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "f0000000-0000-4000-8000-000000000001",
+      "name": "Webhook Espejo",
+      "parameters": {
+        "httpMethod": "POST",
+        "options": {},
+        "path": "chatwoot-espejo",
+        "responseMode": "lastNode"
+      },
+      "position": [
+        220,
+        400
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "webhookId": "chatwoot-espejo-cadabra"
+    }
+  ],
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "sourceWorkflowId": null,
+  "tags": []
+}

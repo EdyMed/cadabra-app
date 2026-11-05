@@ -1,0 +1,372 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Tema oscuro único (no hay modo claro): centro de operaciones comercial.
+   Los nombres de token se conservan del tema anterior para no reescribir cada
+   componente — lo que cambió son los valores, no la semántica. */
+:root {
+  --font-inter: "Instrument Sans", system-ui, sans-serif;
+  --font-sora: "Instrument Sans", system-ui, sans-serif;
+
+  /* Superficies: profundidad por capas, nunca por sombras */
+  --fondo: #080a0d;
+  --crema: #080a0d;        /* alias del fondo base */
+  --card: #0e1116;         /* superficie principal */
+  --card-2: #12161c;       /* superficie secundaria */
+  --card-3: #151a21;       /* superficie elevada (hover, modal) */
+  --sidebar-bg: #0b0e12;
+
+  /* Bordes apenas perceptibles */
+  --linea: rgba(255, 255, 255, .055);
+  --linea-fuerte: rgba(255, 255, 255, .1);
+
+  /* Texto */
+  --tinta: #e8edf2;
+  --tinta-2: #9aa3ad;
+  /* Sobre el fondo oscuro, #555e68 quedaba en ~3.5:1 — bajo el mínimo legible. */
+  --tinta-3: #7b8591;
+
+  /* Cyan/teal = identidad y acción. Reemplaza al verde en todo el sistema. */
+  --verde: #42d6d0;
+  --verde-hover: #5ee3dd;
+  --verde-claro: rgba(66, 214, 208, .1);
+  --verde-borde: rgba(66, 214, 208, .28);
+  --acento-tinta: #06231f;  /* texto sobre fondo cyan sólido */
+
+  /* Semánticos: apagados, solo para comunicar estado */
+  --alerta: #c6a24a;
+  --alerta-bg: rgba(198, 162, 74, .12);
+  --rojo: #c76d78;
+  --rojo-bg: rgba(199, 109, 120, .12);
+  --info: #3de0c8;
+  --info-bg: rgba(61, 224, 200, .12);
+  --exito: #6fa88c;
+  --exito-bg: rgba(111, 168, 140, .12);
+  --morado: #9b7bb8;
+
+  /* Profundidad mínima: la dan las superficies, no el relieve */
+  --shadow: none;
+  --shadow-alta: 0 8px 28px rgba(0, 0, 0, .5);
+
+  --transicion: 160ms cubic-bezier(.4, 0, .2, 1);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--fondo);
+  color: var(--tinta);
+  font-family: var(--font-inter), "Instrument Sans", system-ui, sans-serif;
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: rgba(66, 214, 208, .25); }
+
+/* Scrollbars discretas, acordes al tema oscuro */
+* { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.12) transparent; }
+*::-webkit-scrollbar { width: 9px; height: 9px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, .1);
+  border-radius: 99px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+*::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,.18); background-clip: content-box; }
+
+/* Foco visible en todo elemento interactivo (accesibilidad) */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--verde);
+  outline-offset: 1px;
+  border-radius: 4px;
+}
+
+/* utilidades sobre tokens */
+.bg-card { background: var(--card); }
+.bg-crema { background: var(--card-2); }
+.bg-verde { background: var(--verde); }
+.bg-verde-claro { background: var(--verde-claro); }
+.bg-sidebar { background: var(--sidebar-bg); }
+.text-tinta { color: var(--tinta); }
+.text-tinta-2 { color: var(--tinta-2); }
+.text-tinta-3 { color: var(--tinta-3); }
+.text-verde { color: var(--verde); }
+.border-linea { border-color: var(--linea); }
+.shadow-card { box-shadow: var(--shadow); }
+.font-display { font-family: var(--font-sora), system-ui, sans-serif; }
+
+.tnum { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
+
+/* ---- Sistema tipográfico: compacto, sin títulos gigantes ---- */
+.titulo-pagina {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  color: var(--tinta);
+}
+
+.cifra {
+  font-weight: 600;
+  font-size: 25px;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.05;
+  color: var(--tinta);
+}
+
+/* Label de sección: 10px, espaciado, en mayúsculas */
+.eyebrow {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .085em;
+  text-transform: uppercase;
+  color: var(--tinta-3);
+}
+
+/* ---- Superficies: profundidad por capas ---- */
+.panel {
+  background: var(--card);
+  border: 1px solid var(--linea);
+  border-radius: 8px;
+}
+
+.panel-2 {
+  background: var(--card-2);
+  border: 1px solid var(--linea);
+  border-radius: 8px;
+}
+
+.divisor { border-top: 1px solid var(--linea); }
+
+/* Grilla de métricas: separadores finos, sin una card por KPI.
+   El redondeo lo llevan las celdas de los extremos porque el panel no puede
+   usar overflow:hidden (recortaría los tooltips). */
+.grilla-kpi { border-radius: inherit; }
+.grilla-kpi > *:first-child { border-radius: 8px 0 0 8px; }
+.grilla-kpi > *:last-child { border-radius: 0 8px 8px 0; }
+.grilla-kpi > * {
+  box-shadow: 1px 0 0 var(--linea), 0 1px 0 var(--linea);
+  position: relative;
+  background: transparent;
+  transition: background var(--transicion);
+}
+/* Las celdas comparten una sola superficie, así que el hover realza el fondo
+   en vez de levantar la tarjeta. */
+.grilla-kpi > *:hover { background: var(--card-2); }
+.grilla-kpi > *::after {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 2px;
+  background: var(--verde);
+  opacity: 0;
+  transition: opacity var(--transicion);
+}
+.grilla-kpi > *:hover::after { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .grilla-kpi > *, .grilla-kpi > *::after { transition: none; }
+}
+
+/* Tooltip propio: el `title` del navegador tarda ~1s y no sigue la paleta.
+   Se muestra también con foco, para quien navega por teclado.
+   Ojo: el ancestro no puede tener overflow:hidden o lo recorta. */
+.tip { position: relative; cursor: help; outline: none; }
+.tip::after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 7px);
+  left: 0;
+  z-index: 30;
+  width: max-content;
+  max-width: 240px;
+  padding: 7px 10px;
+  border-radius: 6px;
+  background: var(--card-3);
+  border: 1px solid var(--linea-fuerte);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .45);
+  color: var(--tinta);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  line-height: 1.45;
+  white-space: normal;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(3px);
+  transition: opacity var(--transicion), transform var(--transicion), visibility var(--transicion);
+}
+.tip:hover::after,
+.tip:focus-visible::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .tip::after { transition: none; }
+}
+
+/* Campo de formulario: compacto, con foco cyan */
+.campo {
+  width: 100%;
+  background: var(--card-2);
+  border: 1px solid var(--linea-fuerte);
+  border-radius: 6px;
+  padding: 7px 10px;
+  font-size: 12.5px;
+  color: var(--tinta);
+  outline: none;
+  transition: border-color var(--transicion), box-shadow var(--transicion);
+}
+.campo::placeholder { color: var(--tinta-3); }
+.campo:focus {
+  border-color: var(--verde-borde);
+  box-shadow: 0 0 0 3px var(--verde-claro);
+}
+.campo:disabled { opacity: .45; cursor: not-allowed; }
+.campo-error { border-color: var(--rojo); }
+.campo-error:focus { border-color: var(--rojo); box-shadow: 0 0 0 3px var(--rojo-bg); }
+
+select.campo {
+  appearance: none;
+  padding-right: 26px;
+  background-image: linear-gradient(45deg, transparent 50%, var(--tinta-2) 50%),
+                    linear-gradient(135deg, var(--tinta-2) 50%, transparent 50%);
+  background-position: calc(100% - 14px) 50%, calc(100% - 9px) 50%;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
+select.campo option { background: var(--card-3); color: var(--tinta); }
+
+/* Acción principal: cyan sólido, alto contraste, compacto */
+.btn-primario {
+  background: var(--verde);
+  color: var(--acento-tinta);
+  border-radius: 6px;
+  padding: 7px 14px;
+  font-size: 12.5px;
+  font-weight: 600;
+  transition: background-color var(--transicion), opacity var(--transicion);
+}
+.btn-primario:hover:not(:disabled) { background: var(--verde-hover); }
+.btn-primario:disabled { opacity: .4; cursor: not-allowed; }
+
+/* Acción secundaria */
+.btn-secundario {
+  background: var(--card-3);
+  color: var(--tinta-2);
+  border: 1px solid var(--linea-fuerte);
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 12.5px;
+  font-weight: 500;
+  transition: color var(--transicion), border-color var(--transicion);
+}
+.btn-secundario:hover:not(:disabled) { color: var(--tinta); border-color: var(--verde-borde); }
+
+/* Tabla compacta: separadores finos, sin bordes por celda */
+.tabla { width: 100%; font-size: 12.5px; border-collapse: collapse; }
+.tabla thead th {
+  text-align: left;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .085em;
+  text-transform: uppercase;
+  color: var(--tinta-3);
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--linea);
+  white-space: nowrap;
+}
+.tabla tbody td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--linea);
+  color: var(--tinta-2);
+  vertical-align: middle;
+}
+.tabla tbody tr:last-child td { border-bottom: none; }
+.tabla tbody tr { transition: background-color var(--transicion); }
+.tabla tbody tr:hover { background: var(--card-2); }
+
+/* Badge de estado: pequeño y discreto */
+.pildora {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 2.5px 8px;
+  border-radius: 5px;
+  white-space: nowrap;
+  letter-spacing: .01em;
+}
+.punto { width: 5px; height: 5px; border-radius: 99px; flex-shrink: 0; }
+
+/* Modal */
+.overlay {
+  position: fixed;
+  inset: 0;
+  /* El overlay cuelga de un contenedor flex, y ahí `inset:0` no basta: la
+     altura se resolvía por el contenido del padre y el modal quedaba cortado. */
+  height: 100vh;
+  height: 100dvh;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  overflow-y: auto;
+  background: rgba(4, 6, 8, .7);
+  animation: aparecer .16s ease both;
+}
+.modal {
+  background: var(--card-3);
+  border: 1px solid var(--linea-fuerte);
+  border-radius: 10px;
+  box-shadow: var(--shadow-alta);
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* Esqueleto de carga */
+@keyframes pulso { 0%, 100% { opacity: .5; } 50% { opacity: .85; } }
+.esqueleto {
+  background: var(--card-2);
+  border-radius: 5px;
+  animation: pulso 1.5s ease-in-out infinite;
+}
+
+/* Barra de progreso sobria, reutilizable */
+.barra {
+  height: 4px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, .07);
+  overflow: hidden;
+}
+.barra > span {
+  display: block;
+  height: 100%;
+  border-radius: 99px;
+  background: var(--verde);
+  transition: width .4s cubic-bezier(.4, 0, .2, 1);
+}
+
+/* ---- Microinteracciones: 120–220ms ---- */
+.transicion {
+  transition: background-color var(--transicion), border-color var(--transicion),
+              color var(--transicion), opacity var(--transicion);
+}
+
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(3px); }
+  to { opacity: 1; transform: none; }
+}
+.aparecer { animation: aparecer .2s cubic-bezier(.4, 0, .2, 1) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .aparecer, .esqueleto { animation: none; }
+  .barra > span { transition: none; }
+}

@@ -1,0 +1,854 @@
+{
+  "name": "Cadabra · Agente WhatsApp Multimodal (Plantilla base)",
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "wa-multimodal",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "wh000000-0000-4000-8000-000000000001",
+      "name": "Webhook WhatsApp",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -1400,
+        400
+      ],
+      "webhookId": "wa-multimodal"
+    },
+    {
+      "parameters": {
+        "httpMethod": "GET",
+        "path": "wa-multimodal",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "wh000000-0000-4000-8000-000000000002",
+      "name": "Webhook Verificación (GET)",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -1400,
+        100
+      ],
+      "webhookId": "wa-multimodal-verify"
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "={{ $json.query['hub.challenge'] }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "wh000000-0000-4000-8000-000000000003",
+      "name": "Responder challenge Meta",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        -1180,
+        100
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0]?.type }}",
+                    "rightValue": "text|interactive",
+                    "operator": {
+                      "type": "string",
+                      "operation": "regex"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "texto"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0]?.type }}",
+                    "rightValue": "audio",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "audio"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0]?.type }}",
+                    "rightValue": "image",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "image"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0]?.type }}",
+                    "rightValue": "document",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "document"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "id": "sw000000-0000-4000-8000-000000000010",
+      "name": "Switch tipo mensaje",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -1120,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "OK",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "tx000000-0000-4000-8000-000000000011",
+      "name": "Responder 200 (texto)",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        -880,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $input.first().json.body;\nconst value = body?.entry?.[0]?.changes?.[0]?.value ?? {};\nconst msg = value.messages?.[0] ?? {};\nconst metadata = value.metadata ?? {};\nlet userMessage = msg.text?.body ?? '';\nif (msg.type === 'interactive') {\n  const inter = msg.interactive ?? {};\n  userMessage = inter.button_reply?.id || inter.list_reply?.id || inter.button_reply?.title || inter.list_reply?.title || '';\n}\nreturn [{ json: { from: msg.from ?? null, phone_number_id: metadata.phone_number_id ?? null, user_message: userMessage, message_id: msg.id ?? null } }];"
+      },
+      "id": "tx000000-0000-4000-8000-000000000012",
+      "name": "Extraer campos",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -660,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "OK",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "md000000-0000-4000-8000-000000000020",
+      "name": "Responder 200 (media)",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        -880,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $input.first().json.body;\nconst value = body?.entry?.[0]?.changes?.[0]?.value ?? {};\nconst msg = value.messages?.[0] ?? {};\nconst metadata = value.metadata ?? {};\nconst type = msg.type;\nconst media = msg[type] ?? {};\nreturn [{ json: { from: msg.from ?? null, phone_number_id: metadata.phone_number_id ?? null, message_id: msg.id ?? null, msg_type: type, media_id: media.id ?? null, mime_type: media.mime_type ?? null, filename: media.filename ?? null, caption: media.caption ?? '' } }];"
+      },
+      "id": "md000000-0000-4000-8000-000000000021",
+      "name": "Extraer media",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -660,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://graph.facebook.com/v21.0/{{ $json.media_id }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {}
+      },
+      "id": "md000000-0000-4000-8000-000000000022",
+      "name": "Obtener URL media",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -440,
+        560
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REEMPLAZAR_CRED_META",
+          "name": "Meta WhatsApp Token"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.url }}",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "data"
+            }
+          }
+        }
+      },
+      "id": "md000000-0000-4000-8000-000000000023",
+      "name": "Descargar binario",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -220,
+        560
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REEMPLAZAR_CRED_META",
+          "name": "Meta WhatsApp Token"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Extraer media').first().json.msg_type }}",
+                    "rightValue": "audio",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "audio"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Extraer media').first().json.msg_type }}",
+                    "rightValue": "image",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "image"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "typeValidation": "loose",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Extraer media').first().json.msg_type }}",
+                    "rightValue": "document",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "document"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "md000000-0000-4000-8000-000000000024",
+      "name": "Switch media descargada",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        0,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "binaryPropertyName": "data",
+        "options": {
+          "language": "es"
+        }
+      },
+      "id": "au000000-0000-4000-8000-000000000030",
+      "name": "Whisper transcribir",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        240,
+        380
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "REEMPLAZAR_CRED_OPENAI",
+          "name": "OpenAI Cadabra"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const meta = $('Extraer media').first().json;\nconst texto = ($input.first().json.text || '').trim();\nreturn [{ json: { from: meta.from, phone_number_id: meta.phone_number_id, user_message: texto || '(nota de voz vacía)', message_id: meta.message_id } }];"
+      },
+      "id": "au000000-0000-4000-8000-000000000031",
+      "name": "Normalizar audio",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        460,
+        380
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/chat/completions",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "openAiApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ (() => {\n  const b64 = $binary.data.data;\n  const mime = $('Extraer media').first().json.mime_type || 'image/jpeg';\n  const caption = $('Extraer media').first().json.caption || '';\n  const instruccion = 'Describe en español de forma útil qué muestra esta imagen para poder atender al cliente por WhatsApp. Si es un producto, di qué producto parece. Si es un documento, transcribe su texto e ítems. Sé conciso.' + (caption ? (' El cliente escribió junto a la imagen: \\\"' + caption + '\\\".') : '');\n  return JSON.stringify({ model: 'gpt-4o', messages: [{ role: 'user', content: [ { type: 'text', text: instruccion }, { type: 'image_url', image_url: { url: 'data:' + mime + ';base64,' + b64 } } ] }], max_tokens: 500 });\n})() }}",
+        "options": {}
+      },
+      "id": "im000000-0000-4000-8000-000000000040",
+      "name": "GPT-4o Vision",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        240,
+        560
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "REEMPLAZAR_CRED_OPENAI",
+          "name": "OpenAI Cadabra"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const meta = $('Extraer media').first().json;\nconst lectura = $input.first().json?.choices?.[0]?.message?.content?.trim() || '(no pude leer la imagen)';\nconst caption = (meta.caption || '').trim();\nconst user_message = '[El cliente envió una IMAGEN. Lectura automática: ' + lectura + ']' + (caption ? ('\\nTexto del cliente: ' + caption) : '');\nreturn [{ json: { from: meta.from, phone_number_id: meta.phone_number_id, user_message, message_id: meta.message_id } }];"
+      },
+      "id": "im000000-0000-4000-8000-000000000041",
+      "name": "Normalizar imagen",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        460,
+        560
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "binaryPropertyName": "data",
+        "options": {}
+      },
+      "id": "do000000-0000-4000-8000-000000000050",
+      "name": "Extraer texto PDF",
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        240,
+        740
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const meta = $('Extraer media').first().json;\nconst texto = ($input.first().json.text || '').trim();\nconst nombre = meta.filename || 'documento';\nlet user_message;\nif (texto) { user_message = '[El cliente envió un DOCUMENTO (' + nombre + '). Contenido extraído: ' + texto.slice(0,4000) + ']'; }\nelse { user_message = '[El cliente envió un DOCUMENTO (' + nombre + ') pero no pude extraer texto (PDF escaneado). Pídele que lo mande como foto o que escriba lo que necesita.]'; }\nconst caption = (meta.caption || '').trim();\nif (caption) user_message += '\\nTexto del cliente: ' + caption;\nreturn [{ json: { from: meta.from, phone_number_id: meta.phone_number_id, user_message, message_id: meta.message_id } }];"
+      },
+      "id": "do000000-0000-4000-8000-000000000051",
+      "name": "Normalizar documento",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        460,
+        740
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "OK",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "ot000000-0000-4000-8000-000000000060",
+      "name": "Responder 200 (otros)",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        -880,
+        900
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.user_message }}",
+        "options": {
+          "systemMessage": "=Eres {{NOMBRE_ASISTENTE}}, la asistente virtual por WhatsApp de {{NOMBRE_NEGOCIO}}. Atiendes a clientes de forma cálida, cercana y profesional, en español. Respondes dudas, das información del negocio y ayudas en lo que necesiten.\n\n## Contexto\n- Fecha y hora actual: {{ $now.format('yyyy-MM-dd HH:mm') }} (zona America/Santiago)\n\n## Tono\n- Español natural y amable. Respuestas breves para WhatsApp (máx 4-5 frases). Puedes usar 1 emoji ocasional.\n- No inventes datos, precios ni disponibilidad que no conozcas: si no sabes algo, dilo con honestidad y ofrece derivar a una persona del equipo.\n\n## Mensajes multimodales (audio, foto, documento)\nEl cliente puede mandarte notas de voz, fotos o PDF. El sistema los convierte a texto antes de que lleguen a ti:\n- NOTA DE VOZ: te llega transcrita; trátala como un mensaje escrito normal.\n- IMAGEN: te llega como \"[El cliente envió una IMAGEN. Lectura automática: ...]\". Usa esa lectura para responder de forma natural (NO menciones \"lectura automática\" al cliente).\n- DOCUMENTO (PDF): te llega como \"[El cliente envió un DOCUMENTO (nombre). Contenido extraído: ...]\". Usa el contenido para ayudarlo. Si el sistema no pudo extraer texto (PDF escaneado), pídele que te lo mande como foto o que escriba lo que necesita.\n\n## Personalización (EDITAR por cliente)\n- Describe aquí el negocio, sus productos/servicios, horarios, formas de contacto y qué puede/no puede hacer el agente.\n- Añade \"ganchos\" para conectar herramientas (tools) por cliente: consulta de catálogo, agendamiento, etc. (ver el workflow de la panadería como referencia de tools reales)."
+        }
+      },
+      "id": "ag000000-0000-4000-8000-000000000070",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        900,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "gpt-4o"
+        },
+        "options": {
+          "temperature": 0.4
+        }
+      },
+      "id": "ag000000-0000-4000-8000-000000000071",
+      "name": "OpenAI GPT-4o",
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        820,
+        720
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "REEMPLAZAR_CRED_OPENAI",
+          "name": "OpenAI Cadabra"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $(\"Consolidar mensaje\").first().json.from }}",
+        "contextWindowLength": 10
+      },
+      "id": "ag000000-0000-4000-8000-000000000072",
+      "name": "Memoria (buffer)",
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        1020,
+        720
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v21.0/{{ $('Consolidar mensaje').first().json.phone_number_id }}/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"to\": \"{{ $('Consolidar mensaje').first().json.from }}\",\n  \"type\": \"text\",\n  \"text\": { \"body\": {{ JSON.stringify($('AI Agent').first().json.output) }} }\n}",
+        "options": {}
+      },
+      "id": "sn000000-0000-4000-8000-000000000080",
+      "name": "Enviar WhatsApp",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1240,
+        480
+      ],
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REEMPLAZAR_CRED_META",
+          "name": "Meta WhatsApp Token"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const it = $input.first().json;\nreturn [{ json: { from: it.from, phone_number_id: it.phone_number_id, user_message: it.user_message, message_id: it.message_id } }];"
+      },
+      "id": "cv000000-0000-4000-8000-000000000090",
+      "name": "Consolidar mensaje",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        680,
+        480
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook WhatsApp": {
+      "main": [
+        [
+          {
+            "node": "Switch tipo mensaje",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook Verificación (GET)": {
+      "main": [
+        [
+          {
+            "node": "Responder challenge Meta",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch tipo mensaje": {
+      "main": [
+        [
+          {
+            "node": "Responder 200 (texto)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Responder 200 (media)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Responder 200 (media)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Responder 200 (media)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Responder 200 (otros)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Responder 200 (texto)": {
+      "main": [
+        [
+          {
+            "node": "Extraer campos",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraer campos": {
+      "main": [
+        [
+          {
+            "node": "Consolidar mensaje",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Responder 200 (media)": {
+      "main": [
+        [
+          {
+            "node": "Extraer media",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraer media": {
+      "main": [
+        [
+          {
+            "node": "Obtener URL media",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Obtener URL media": {
+      "main": [
+        [
+          {
+            "node": "Descargar binario",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Descargar binario": {
+      "main": [
+        [
+          {
+            "node": "Switch media descargada",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch media descargada": {
+      "main": [
+        [
+          {
+            "node": "Whisper transcribir",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "GPT-4o Vision",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extraer texto PDF",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Whisper transcribir": {
+      "main": [
+        [
+          {
+            "node": "Normalizar audio",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalizar audio": {
+      "main": [
+        [
+          {
+            "node": "Consolidar mensaje",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "GPT-4o Vision": {
+      "main": [
+        [
+          {
+            "node": "Normalizar imagen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalizar imagen": {
+      "main": [
+        [
+          {
+            "node": "Consolidar mensaje",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extraer texto PDF": {
+      "main": [
+        [
+          {
+            "node": "Normalizar documento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalizar documento": {
+      "main": [
+        [
+          {
+            "node": "Consolidar mensaje",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consolidar mensaje": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Enviar WhatsApp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI GPT-4o": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memoria (buffer)": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  }
+}

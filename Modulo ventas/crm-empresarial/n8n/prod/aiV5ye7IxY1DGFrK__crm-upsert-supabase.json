@@ -1,0 +1,257 @@
+{
+  "active": true,
+  "connections": {
+    "Actualizar (PATCH)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Responder (actualizado)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Buscar por contact_id": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "¿Ya existe?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Crear (POST)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Responder (creado)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Webhook Upsert": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Buscar por contact_id",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "¿Ya existe?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Actualizar (PATCH)",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Crear (POST)",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "description": null,
+  "id": "aiV5ye7IxY1DGFrK",
+  "isArchived": false,
+  "name": "CRM Upsert (Supabase)",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "credentials": {
+        "postgres": {
+          "id": "BIM03WKClC8bnUc8",
+          "name": "Supabase Ventas (RW)"
+        }
+      },
+      "id": "b0000000-0000-4000-8000-000000000013",
+      "name": "Actualizar (PATCH)",
+      "parameters": {
+        "operation": "executeQuery",
+        "options": {
+          "queryReplacement": "={{ (() => {\n  const orig = $('Webhook Upsert').first().json.body || {};\n  const found = $json;\n  const campos = ['nombre','nombre_negocio','contact_id','phone','email','comuna','origen_lead','producto_interes','estado_crm','vendedor_asignado','condicion_pago','estado_agendamiento','fecha_agendamiento','hora_cita','bot_activo','notas'];\n  const vals = [];\n  for (const k of campos) { const v = orig[k]; if (v !== undefined && v !== null && v !== '') vals.push(v); }\n  vals.push(found.id);\n  return vals;\n})() }}"
+        },
+        "query": "={{ (() => {\n  const orig = $('Webhook Upsert').first().json.body || {};\n  const found = $json;\n  const campos = ['nombre','nombre_negocio','contact_id','phone','email','comuna','origen_lead','producto_interes','estado_crm','vendedor_asignado','condicion_pago','estado_agendamiento','fecha_agendamiento','hora_cita','bot_activo','notas'];\n  const sets = [];\n  for (const k of campos) { const v = orig[k]; if (v !== undefined && v !== null && v !== '') sets.push(k); }\n  const setSql = sets.map((k,i) => `${k} = $${i+1}`).join(', ');\n  return `UPDATE crm.crm_leads SET ${setSql} WHERE id = $${sets.length+1} RETURNING *`;\n})() }}"
+      },
+      "position": [
+        920,
+        280
+      ],
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6
+    },
+    {
+      "credentials": {
+        "postgres": {
+          "id": "BIM03WKClC8bnUc8",
+          "name": "Supabase Ventas (RW)"
+        }
+      },
+      "id": "b0000000-0000-4000-8000-000000000011",
+      "name": "Buscar por contact_id",
+      "parameters": {
+        "operation": "executeQuery",
+        "options": {
+          "queryReplacement": "={{ [ $json.body.empresa || 1, $json.body.contact_id ] }}"
+        },
+        "query": "SELECT l.* FROM (SELECT 1) x LEFT JOIN LATERAL (SELECT * FROM crm.crm_leads WHERE empresa = $1 AND contact_id = $2 LIMIT 1) l ON true"
+      },
+      "position": [
+        440,
+        400
+      ],
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6
+    },
+    {
+      "credentials": {
+        "postgres": {
+          "id": "BIM03WKClC8bnUc8",
+          "name": "Supabase Ventas (RW)"
+        }
+      },
+      "id": "b0000000-0000-4000-8000-000000000014",
+      "name": "Crear (POST)",
+      "parameters": {
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "bot_activo": "={{ $('Webhook Upsert').first().json.body.bot_activo === undefined ? true : $('Webhook Upsert').first().json.body.bot_activo }}",
+            "comuna": "={{ $('Webhook Upsert').first().json.body.comuna || null }}",
+            "condicion_pago": "={{ $('Webhook Upsert').first().json.body.condicion_pago || null }}",
+            "contact_id": "={{ $('Webhook Upsert').first().json.body.contact_id || null }}",
+            "email": "={{ $('Webhook Upsert').first().json.body.email || null }}",
+            "empresa": "={{ $('Webhook Upsert').first().json.body.empresa || 1 }}",
+            "estado_agendamiento": "={{ $('Webhook Upsert').first().json.body.estado_agendamiento || null }}",
+            "estado_crm": "={{ $('Webhook Upsert').first().json.body.estado_crm || 'Nuevo Lead' }}",
+            "fecha_agendamiento": "={{ $('Webhook Upsert').first().json.body.fecha_agendamiento || null }}",
+            "hora_cita": "={{ $('Webhook Upsert').first().json.body.hora_cita || null }}",
+            "nombre": "={{ $('Webhook Upsert').first().json.body.nombre || null }}",
+            "nombre_negocio": "={{ $('Webhook Upsert').first().json.body.nombre_negocio || null }}",
+            "notas": "={{ $('Webhook Upsert').first().json.body.notas || null }}",
+            "origen_lead": "={{ $('Webhook Upsert').first().json.body.origen_lead || 'whatsapp' }}",
+            "phone": "={{ $('Webhook Upsert').first().json.body.phone || $('Webhook Upsert').first().json.body.contact_id || null }}",
+            "producto_interes": "={{ $('Webhook Upsert').first().json.body.producto_interes || null }}",
+            "vendedor_asignado": "={{ $('Webhook Upsert').first().json.body.vendedor_asignado || null }}"
+          }
+        },
+        "operation": "insert",
+        "options": {},
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "crm"
+        },
+        "table": {
+          "__rl": true,
+          "mode": "list",
+          "value": "crm_leads"
+        }
+      },
+      "position": [
+        920,
+        520
+      ],
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6
+    },
+    {
+      "id": "b0000000-0000-4000-8000-000000000015",
+      "name": "Responder (actualizado)",
+      "parameters": {
+        "options": {},
+        "respondWith": "json",
+        "responseBody": "={{ { record_id: $json.id, accion: \"actualizado\" } }}"
+      },
+      "position": [
+        1160,
+        280
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1
+    },
+    {
+      "id": "b0000000-0000-4000-8000-000000000016",
+      "name": "Responder (creado)",
+      "parameters": {
+        "options": {},
+        "respondWith": "json",
+        "responseBody": "={{ { record_id: $json.id, accion: \"creado\" } }}"
+      },
+      "position": [
+        1160,
+        520
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1
+    },
+    {
+      "id": "b0000000-0000-4000-8000-000000000010",
+      "name": "Webhook Upsert",
+      "parameters": {
+        "httpMethod": "POST",
+        "options": {},
+        "path": "crm-upsert",
+        "responseMode": "responseNode"
+      },
+      "position": [
+        220,
+        400
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "webhookId": "crm-upsert-cadabra"
+    },
+    {
+      "id": "b0000000-0000-4000-8000-000000000012",
+      "name": "¿Ya existe?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "leftValue": "={{ $json.id }}",
+              "operator": {
+                "operation": "notEmpty",
+                "singleValue": true,
+                "type": "string"
+              },
+              "rightValue": ""
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        680,
+        400
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2
+    }
+  ],
+  "settings": {
+    "errorWorkflow": "bokdGONRGM4RnyyW",
+    "executionOrder": "v1"
+  },
+  "sourceWorkflowId": null,
+  "tags": []
+}

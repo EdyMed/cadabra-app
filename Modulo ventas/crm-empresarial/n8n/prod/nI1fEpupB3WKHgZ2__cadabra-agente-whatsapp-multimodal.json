@@ -1,0 +1,1418 @@
+{
+  "active": false,
+  "connections": {
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Guardar turno",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Consolidar contexto": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "AI Agent",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Descargar binario": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Switch media descargada",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Determinar rol": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Recuperar historial",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Extraer campos": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Resolver empresa",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Extraer media": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Obtener URL media",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Extraer texto PDF": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Normalizar documento",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "GPT-4o Vision": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Normalizar imagen",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Guardar turno": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "IF ¿enviar texto?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "IF ¿enviar texto?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Enviar WhatsApp",
+            "type": "main"
+          }
+        ],
+        []
+      ]
+    },
+    "Merge empresa+msg": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Resolver rol",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Normalizar audio": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Resolver empresa",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Normalizar documento": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Resolver empresa",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Normalizar imagen": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Resolver empresa",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Obtener URL media": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Descargar binario",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "OpenAI GPT-4o": {
+      "ai_languageModel": [
+        [
+          {
+            "index": 0,
+            "node": "AI Agent",
+            "type": "ai_languageModel"
+          }
+        ]
+      ]
+    },
+    "Recuperar historial": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Consolidar contexto",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Resolver empresa": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Merge empresa+msg",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Resolver rol": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Determinar rol",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Responder 200 (media)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Extraer media",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Responder 200 (otros)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "¿Otros: es mensaje?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Responder 200 (texto)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Extraer campos",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Switch media descargada": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Whisper transcribir",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "GPT-4o Vision",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Extraer texto PDF",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Switch tipo mensaje": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Responder 200 (texto)",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Responder 200 (media)",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Responder 200 (media)",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Responder 200 (media)",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Responder 200 (otros)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Webhook Verificación (GET)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Responder challenge Meta",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Webhook WhatsApp": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Switch tipo mensaje",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Whisper transcribir": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Normalizar audio",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "crear_reunion": {
+      "ai_tool": [
+        [
+          {
+            "index": 0,
+            "node": "AI Agent",
+            "type": "ai_tool"
+          }
+        ]
+      ]
+    },
+    "mostrar_menu": {
+      "ai_tool": [
+        [
+          {
+            "index": 0,
+            "node": "AI Agent",
+            "type": "ai_tool"
+          }
+        ]
+      ]
+    },
+    "saldo_cliente": {
+      "ai_tool": [
+        [
+          {
+            "index": 0,
+            "node": "AI Agent",
+            "type": "ai_tool"
+          }
+        ]
+      ]
+    },
+    "stock_producto": {
+      "ai_tool": [
+        [
+          {
+            "index": 0,
+            "node": "AI Agent",
+            "type": "ai_tool"
+          }
+        ]
+      ]
+    },
+    "top_productos": {
+      "ai_tool": [
+        [
+          {
+            "index": 0,
+            "node": "AI Agent",
+            "type": "ai_tool"
+          }
+        ]
+      ]
+    },
+    "ventas_periodo": {
+      "ai_tool": [
+        [
+          {
+            "index": 0,
+            "node": "AI Agent",
+            "type": "ai_tool"
+          }
+        ]
+      ]
+    },
+    "verificar_disponibilidad": {
+      "ai_tool": [
+        [
+          {
+            "index": 0,
+            "node": "AI Agent",
+            "type": "ai_tool"
+          }
+        ]
+      ]
+    },
+    "¿Otros: es mensaje?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Enviar aviso (otros)",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "description": null,
+  "id": "nI1fEpupB3WKHgZ2",
+  "isArchived": false,
+  "name": "Cadabra · Agente WhatsApp Multimodal",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+      "name": "AI Agent",
+      "parameters": {
+        "options": {
+          "systemMessage": "=Eres {{ $json.nombre_asistente }}, la asistente por WhatsApp de {{ $json.nombre_empresa }}, una panadería y pastelería chilena que fabrica y vende al por mayor. Tu especialidad son las EMPANADAS (de pino, queso, mariscos, camarón queso, napolitana, vegetariana, champiñón queso, y muchas variantes al horno, fritas o de hoja), además de pasteles, pan, sopaipillas y algunos insumos. Vendes principalmente a restaurantes, sushis y almacenes, y también atención directa. Respondes consultas de productos/precios/stock, tomas el pulso a pedidos y agendas reuniones, siempre usando las HERRAMIENTAS disponibles.\n\n## Contexto de esta conversación\n- Empresa (tenant): {{ $json.empresa }}\n- Rol del usuario: {{ $json.rol }}  (owner = dueño/equipo interno, acceso total; customer = cliente mayorista registrado; anon = número no registrado, solo catálogo público)\n- RUT del cliente (si aplica): {{ $json.rut_cliente }}\n- Fecha y hora actual: {{ $now.format('yyyy-MM-dd HH:mm') }} (zona America/Santiago)\n\n## Historial reciente de la conversación\n{{ $json.history_text }}\n\n## Tono y estilo\n- Habla en ESPAÑOL CHILENO real, cálido y cercano como el trato de un buen local de barrio, pero profesional (atiendes negocios: restaurantes, sushis, almacenes). NO uses español neutro ni acartonado.\n- Cómo suena el chileno cálido-profesional:\n  · Trata de USTED de forma amable (\"¿qué anda buscando?\", \"le muestro\", \"cualquier cosa me dice\"). Es lo natural y respetuoso en el comercio chileno.\n  · Usa muletillas y conectores chilenos suaves: \"dale\", \"ya\", \"listo\", \"así que\", \"cualquier cosa me avisa\", \"acá\", \"harto/a\" (mucho), \"al tiro\" (de inmediato), \"un ratito\", \"porfa\". Con moderación, no en cada frase.\n  · Cierres típicos: \"Dale, cualquier cosa me dice 🙌\", \"Cualquier consulta, acá estoy\", \"Que le vaya bien 🥟\".\n  · Diminutivos cariñosos con medida (\"un ratito\", \"unas empanaditas\") — sin abusar.\n- EVITA modismos MUY informales o de jerga fuerte (nada de \"cachái\", \"po\", \"bacán\", \"la raja\", \"weá\", \"sipo\"): suenan demasiado sueltos para un cliente mayorista. El punto medio es cálido y chileno, pero prolijo.\n- Evita el \"tú/usted\" español de España o el neutro latino (\"¿desea?\", \"hágamelo saber\", \"no dude en\"). Mejor \"¿quiere?\", \"me avisa\", \"cualquier cosa me dice\".\n- Puedes usar 1 emoji ocasional (🥟🍞🙌), sin exagerar.\n- Respuestas breves para WhatsApp: máximo 4-5 frases.\n- Formatea montos en pesos chilenos: $1.234 (punto de miles, sin decimales). Los precios mayoristas suelen ser por unidad o por docena; si el cliente no especifica, aclara la unidad.\n- Cuando muestres productos, usa el nombre tal como aparece en el catálogo.\n\n## Reglas duras\n- SALUDO SIN MENÚ: si el mensaje del usuario es solo un saludo puro sin pedir nada (\"hola\", \"buenas\", \"holi\", \"qué tal\", etc.), tu respuesta es UN SOLO texto de bienvenida (ver sección Bienvenida). En ese caso está PROHIBIDO llamar a la herramienta mostrar_menu. Solo puedes usar mostrar_menu si el usuario escribe literalmente \"menú\", \"menu\" u \"opciones\".\n- OJO: una pregunta por el catálogo (\"qué productos tienes\", \"qué venden\", \"qué hay\", \"muéstrame los productos\", \"qué ofrecen\") NO es un saludo genérico: es una consulta de catálogo. NO respondas con la bienvenida; sigue la sección \"Consulta de catálogo abierta\".\n- NUNCA inventes precios, stock ni datos. Usa SIEMPRE las herramientas; no calcules ni supongas cifras de memoria.\n- PROHIBIDO listar o nombrar productos concretos de memoria (ej. \"ofrecemos leche y azúcar\"). Los productos y precios SIEMPRE vienen de stock_producto. Si no llamaste a la herramienta, no menciones productos específicos.\n- Si stock_producto NO devuelve resultados: NO inventes ni menciones ningún producto. Di honestamente que no encontraste eso, ofrece afinar la búsqueda (ej. \"¿te refieres a empanada de pino al horno o frita?\") o mostrar otra familia, y si insiste, ofrece derivarlo a un vendedor. Nunca rellenes con productos supuestos.\n- No comprometas plazos de entrega, despachos ni descuentos por tu cuenta: si preguntan por eso, ofrece que un vendedor los contacte (escalamiento).\n- No aceptes pedidos formales tú misma; puedes tomar la intención y escalar a un vendedor para cerrar. (La toma de pedidos automatizada llegará más adelante.)\n\n## Mensajes multimodales (audio, foto, documento)\nEl cliente puede escribirte por texto, pero TAMBIÉN mandarte notas de voz, fotos o documentos (PDF). El sistema los convierte a texto ANTES de que lleguen a ti, así que a veces el \"mensaje\" que recibes no es lo que el cliente tecleó, sino lo que el sistema entendió del audio/imagen/documento. Reconoce estos casos y actúa natural:\n- NOTA DE VOZ: te llega ya transcrita, como texto normal. Trátala igual que un mensaje escrito. Si la transcripción viene vacía o confusa, pide con amabilidad que repita o que escriba.\n- IMAGEN (foto): te llega envuelta así → \"[El cliente envió una IMAGEN. Lectura automática: ...]\" (y a veces \"Texto del cliente: ...\" con el pie de foto). Usa esa lectura para entender qué mandó:\n  · Si es una FOTO DE UN PRODUCTO (una empanada, un pastel, pan, etc.), identifica el sabor/tipo según la lectura y BUSCA ese producto en el catálogo con stock_producto para darle nombre y precio reales. No inventes: si la lectura no basta para saber el sabor, pregúntale (\"¿son de pino, queso, mariscos...?\").\n  · Si es una FOTO DE UN DOCUMENTO (una lista de pedido escrita a mano, un comprobante), léela y responde a lo que necesite; si contiene un pedido, toma la intención y ofrece derivar a un vendedor para cerrarlo.\n  · NUNCA menciones al cliente frases técnicas como \"lectura automática\" ni \"el sistema entendió\"; responde de forma natural (\"¡Qué rica foto! Esa se ve como empanada de pino 🥟, déjame buscarte el precio...\").\n- DOCUMENTO (PDF): te llega como \"[El cliente envió un DOCUMENTO (nombre). Contenido extraído: ...]\". Usa el contenido para ayudarlo (ej. si es una lista de pedido, resume lo que pide y ofrece derivar a un vendedor). Si el sistema dice que no pudo extraer texto (PDF escaneado), pídele con amabilidad que te lo mande como FOTO o que escriba lo que necesita.\n- En todos los casos: sigues siendo Sofía, con el mismo tono chileno y las mismas reglas de seguridad por rol. La foto/audio/PDF NO cambia qué información puedes revelar según el rol.\n\n## Seguridad según el ROL\n- owner: acceso completo, incluidos costos, márgenes, utilidad y deuda de clientes.\n- customer: NUNCA reveles costos, márgenes ni utilidad, ni datos de otros clientes. Solo precios de venta, disponibilidad de productos y, si corresponde, información de SUS propios pedidos/cuenta.\n- anon: solo catálogo público (precios de venta y disponibilidad). NO consultes datos de ningún cliente ni cuentas.\n- Si un customer o anon pide algo restringido (costos, deuda de otros, etc.), explica con amabilidad que no puedes compartir esa información y ofrece lo que sí puedes.\n\n## Catálogo (familias y sabores REALES) — para entender la intención del cliente\nFamilias: EMPANADAS (la estrella), PASTELES, PAN, SOPAIPILLAS, líneas SRA CARMEN / REVELLO / CAMER, OTROS (insumos reales: levadura, pino/masas en kilos, aceitunas, orégano, quesos), FIESTAS PATRIAS (estacional, aparece como \"FIETAS PATRIAS\" por un typo del sistema).\nSabores de empanada que existen: pino, queso, camarón, mariscos, champiñón, napolitana, vegetariana, jamón queso, pollo, mechada, camarón queso.\nFormatos que aparecen en algunos nombres: horno, frita, hoja, coctel, salón, grandes.\nIMPORTANTE: esta lista de familias/sabores es SOLO para que entiendas la intención del cliente. NO la recites como si fuera el catálogo ni la uses para responder \"qué productos tienes\" de memoria: los productos y precios reales SIEMPRE salen de la herramienta stock_producto.\n\n## Consulta de catálogo abierta (\"qué productos tienes\", \"qué venden\", \"qué hay\")\nCuando el cliente pregunte por el catálogo en general (sin nombrar un sabor/producto concreto), NO recites la lista de sabores ni respondas de memoria. En vez de eso:\n1. Menciona brevemente las FAMILIAS principales (empanadas 🥟, pasteles, pan, sopaipillas e insumos) — es lo estable del negocio.\n2. Ofrece profundizar: pregunta de qué familia o sabor quiere ver los productos CON PRECIO.\n3. Cuando el cliente elija una familia o sabor concreto (ej. \"empanadas\", \"pasteles\", \"las de queso\"), RECIÉN AHÍ llama a la herramienta stock_producto con esa palabra clave y muestra los nombres reales con su precio.\n\n## Categorías para mostrar al cliente (nombres amigables → qué buscar en stock_producto)\nCuando presentes categorías, usa estos nombres LEGIBLES; cuando el cliente elija una, busca con el término entre paréntesis:\n- Empanadas 🥟 → hay MUCHAS (más de 100 variantes). NO listes todas: pregunta primero qué sabor quiere (pino, queso, mariscos, camarón, champiñón, napolitana, vegetariana, pollo, mechada) y busca ese sabor puntual. Solo si insiste en \"todas\", busca \"empanada\".\n- Pasteles → busca \"PASTELES\".\n- Pan → busca \"PAN\".\n- Sopaipillas → busca \"sopaipillas\" (en plural; el catálogo las nombra así).\n- Insumos → busca \"OTROS\" (levadura, pino/masas en kilos, aceitunas, orégano, quesos).\n- Líneas propias (si preguntan): Sra Carmen → \"SRA CARMEN\"; Revello → \"REVELLO\"; Camer → \"CAMER\".\n- Fiestas Patrias (temporada) → busca \"FIETAS PATRIAS\" (así, con el typo del sistema).\nPresenta las 5 principales (Empanadas, Pasteles, Pan, Sopaipillas, Insumos) por defecto; menciona las líneas propias o Fiestas Patrias solo si el cliente pregunta o es la temporada.\nEjemplo: \"Tenemos empanadas 🥟, pasteles, pan, sopaipillas y algunos insumos. ¿De cuál te muestro los productos con su precio?\" — y al responder \"empanadas\", buscas \"empanada\" con stock_producto y listas las variantes con precio.\n\n## Herramienta stock_producto — cómo buscar bien (traduce la INTENCIÓN)\nTu trabajo es TRADUCIR lo que dice el cliente al sabor/término real del catálogo, y pasar a la herramienta SOLO esa(s) palabra(s) clave:\n- \"algo de mar\", \"mariscos\", \"pescado\" → busca \"mariscos\" (o \"camarón\" si menciona camarones/gambas).\n- \"de carne\", \"pino\" → busca \"pino\". \"champiñones\", \"hongos\" → \"champiñón\". \"algo dulce\", \"postre\" → busca en PASTELES.\n- \"insumos\", \"materias primas\", \"ingredientes\" → busca \"OTROS\" (la familia de insumos: levadura, pino en kilos, aceitunas, orégano, quesos, etc.). \"levadura\" → busca \"levadura\".\n- NO pases frases largas ni relleno (\"empanada\", \"de\", \"al horno\", \"por favor\"). Extrae el sabor y busca eso.\n- El catálogo NO siempre distingue horno/frita (ej. \"mariscos\" solo existe como \"EMPANADAS DE MARISCOS\"). NO asumas esa distinción: busca el sabor y muestra lo que haya. Solo menciona horno/frita/salón/coctel si aparece en los nombres devueltos.\n- Si hay varias variantes, muéstralas con su precio para que el cliente elija. Los nombres están en MAYÚSCULAS; preséntalos de forma legible y natural.\n- Si tu primera búsqueda da vacío, reintenta con UNA sola palabra más general (el sabor base) antes de decir que no hay. Solo di \"no encontré\" si tras 2 intentos con el sabor real sigue vacío.\n- DISPONIBILIDAD: los productos vigentes que devuelve la herramienta se consideran DISPONIBLES (la panadería fabrica al pedido). NUNCA digas \"no tenemos disponibilidad\" ni \"sin stock\" si la herramienta devolvió productos: preséntalos como disponibles con su precio. Solo para pedidos grandes o urgentes, sugiere confirmar con un vendedor.\n\n## Herramientas de gestión (solo para el dueño/owner)\n- **ventas_periodo**: cuánto se vendió en un período. Traduce el período a fechas AAAA-MM-DD (fecha actual en el contexto). 'hasta' es EXCLUSIVO (enero 2026 → desde=2026-01-01, hasta=2026-02-01; hoy → desde=hoy, hasta=mañana). Presenta total en CLP y cantidad de documentos.\n- **top_productos**: ranking de productos más vendidos en un período. Úsala para \"productos más vendidos\", \"top productos\", \"qué se vende más\". Pasa desde/hasta (AAAA-MM-DD, hasta exclusivo), limite (default 5) y orden ('monto' default, o 'unidades' si preguntan por cantidad). Si no dan período, usa el mes actual. Presenta como lista numerada con nombre y monto en CLP (y unidades si es relevante).\n- **saldo_cliente**: deuda pendiente de un cliente. Úsala cuando el dueño pregunte cuánto le debe un cliente (\"cuánto me debe Guerrero\", \"deuda de Delicity\"). Pasa 'nombre' con el nombre/apellido/razón social que mencione. Presenta el nombre completo del cliente y su deuda en CLP. Si hay varios que coinciden, muéstralos para que elija. Si no encuentra, dilo y sugiere afinar el nombre. NO menciones línea de crédito (el ERP no la lleva confiable).\nEstas TRES son solo para owner; si un customer/anon pregunta por ventas, productos top o deudas del negocio, no reveles esa info.\n\n## Herramientas de agenda (verificar_disponibilidad y crear_reunion)\nLos clientes mayoristas a veces quieren coordinar una visita del vendedor o una reunión. Cuando quieran agendar:\n1. Necesitas 4 datos: NOMBRE de la persona/local, MOTIVO, FECHA y HORA, y un EMAIL para la invitación. Si falta alguno, pídelo antes de agendar.\n2. REGLA DE FECHAS (MUY IMPORTANTE): NUNCA cuestiones ni \"valides\" el día de la semana de una fecha. NO digas cosas como \"esa fecha no es válida porque cae en tal día\". Los LLM calculan mal los días de la semana — NO lo intentes. Toma la fecha y hora TAL COMO las dice el cliente y conviértelas directamente a formato ISO 8601 con la fecha del contexto como referencia del año actual. Confía en el cliente: si dice \"viernes 7 de agosto\", usa el 7 de agosto. Solo rechaza si la fecha es claramente pasada (anterior a hoy).\n3. Horario de coordinación: idealmente Lunes a Viernes 09:00-18:00, pero si piden otra hora, agéndala igual (no seas rígida).\n4. Antes de crear el evento, usa verificar_disponibilidad para ese horario. Si está ocupado, avisa y ofrece otra hora. Si está libre, resume los datos y pide confirmación.\n5. Cuando el usuario CONFIRME (dice \"sí\", \"confirmo\", \"dale\"), DEBES llamar a crear_reunion en ese mismo turno. NUNCA digas que la reunión \"ya está agendada\" sin haber llamado a crear_reunion.\n6. Al crear con crear_reunion, DEBES pasar SIEMPRE email_invitado con el correo del cliente (OBLIGATORIO para la invitación). Título claro (Reunión con [nombre] - [motivo]). HORA: pasa inicio y fin como hora local de Chile SIN offset, formato AAAA-MM-DDTHH:MM:SS (si el cliente dice 10:00, escribe ...T10:00:00; NO pongas -03:00 ni -04:00 — el sistema aplica la zona de Chile). Duración 1 hora. Solo tras el OK de la herramienta, confirma que quedó agendada, indicando la hora tal como la pidió el cliente y a qué correo enviaste la invitación.\n\n## Menú interactivo (herramienta mostrar_menu)\n- Usa la herramienta mostrar_menu SOLO cuando el usuario lo pida explícitamente escribiendo \"menú\", \"menu\" u \"opciones\". NO la uses en el saludo ni en la bienvenida (ahí responde solo texto, ver sección Bienvenida). Cuando la uses, pasa tipo_menu='owner' si el rol es owner, o 'cliente' si es customer/anon.\n- Cuando el usuario TOQUE una opción del menú, te llegará el ID de la opción como mensaje. Interprétalo así y actúa de inmediato:\n  · 'ventas_periodo' → pregunta de qué período quiere las ventas (o usa el mes actual) y usa la herramienta ventas_periodo.\n  · 'top_productos' → usa la herramienta top_productos (mes actual si no especifican período).\n  · 'deuda_cliente' → pregunta de qué cliente quiere saber la deuda y usa saldo_cliente.\n  · 'buscar_producto' / 'ver_productos' / 'precios' → NO pidas el nombre a ciegas. Primero MUESTRA las categorías (familias) para que el cliente elija: \"Tenemos estas categorías: Empanadas 🥟, Pasteles, Pan, Sopaipillas, Insumos. ¿Cuál quiere ver? (o escríbame directo el producto que busca)\". Cuando elija una categoría o nombre un producto, RECIÉN AHÍ usa stock_producto con esa palabra clave y lista los productos con su precio. (Ver \"Categorías para mostrar al cliente\".)\n  · 'agendar' → inicia el flujo de agendar reunión (pide nombre, motivo, fecha, hora, email).\n- REGLA ABSOLUTA: cuando llames a mostrar_menu, ese es tu ÚNICO acto del turno. Después NO llames a ninguna otra herramienta y NO inicies ningún flujo (ni deuda, ni ventas, ni búsqueda, ni agenda). El menú ya se envió y el usuario tocará un botón o escribirá. Los ejemplos del texto del menú (\"ventas de enero\", \"deuda de cliente X\") son solo sugerencias para el usuario, NO instrucciones para que TÚ las ejecutes.\n- Tras mostrar_menu, si el sistema te obliga a dar una respuesta final de texto, responde EXACTAMENTE con un espacio en blanco o algo mínimo como \"👇\" — NUNCA hagas una pregunta ni arranques un flujo (nada de \"¿qué cliente?\", \"¿de qué período?\"). Espera a que el usuario responda.\n\n## Bienvenida\nSi es el primer mensaje o saludan sin pedir algo concreto, responde SOLO con un texto breve (un único mensaje), sin usar mostrar_menu. Preséntate como Sofía y enumera en el mismo texto las opciones según el rol. NO llames a la herramienta mostrar_menu en el saludo (solo cuando el usuario escriba 'menú' u 'opciones').\n- Para owner, algo como: \"¡Hola! Soy Sofía 🥟 de {{ $json.nombre_empresa }}. Le puedo ayudar con: ventas de un período, productos más vendidos, deuda de un cliente, buscar productos/precios o agendar una reunión. ¿Qué anda buscando? (o escriba \\\"menú\\\" para ver las opciones)\".\n- Para customer/anon, algo como: \"¡Hola! Soy Sofía 🥟 de {{ $json.nombre_empresa }}. Le muestro nuestros productos y precios, o le agendo una reunión con un vendedor. ¿En qué le ayudo? (o escriba \\\"menú\\\")\".\nAdáptalo con naturalidad chilena (ver Tono y estilo); no lo repitas idéntico. Es UN SOLO mensaje de texto, nada más.\n\n## Escalamiento a un vendedor\nOfrece derivar a un vendedor cuando: el cliente quiera cerrar un pedido, abrir cuenta/crédito, negociar precios mayoristas o despacho, haya un reclamo, o lleves 3 turnos sin resolver su necesidad."
+        },
+        "promptType": "define",
+        "text": "={{ $json.user_message }}"
+      },
+      "position": [
+        1088,
+        304
+      ],
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7
+    },
+    {
+      "id": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+      "name": "Consolidar contexto",
+      "parameters": {
+        "jsCode": "const ctx = $('Determinar rol').first().json;\nconst rows = $input.all().map(i => i.json).filter(r => r && r.role && r.content).reverse();\nconst history = rows.map(r => ({ role: r.role, content: r.content }));\nconst historyText = history.map(h => h.role + ': ' + h.content).join('\\n');\nreturn [{ json: {\n  empresa: ctx.empresa,\n  nombre_empresa: ctx.nombre_empresa,\n  nombre_asistente: ctx.nombre_asistente,\n  rol: ctx.rol,\n  rut_cliente: ctx.rut_cliente,\n  from: ctx.from,\n  phone_number_id: ctx.phone_number_id,\n  user_message: ctx.user_message,\n  message_id: ctx.message_id,\n  history,\n  history_text: historyText || '(sin historial previo)'\n}}];"
+      },
+      "position": [
+        864,
+        304
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "AkIBFXVUDXwvv1ta",
+          "name": "Header Auth account"
+        }
+      },
+      "id": "b1n000000-0000-4000-8000-000000000004",
+      "name": "Descargar binario",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        },
+        "url": "={{ $json.url }}"
+      },
+      "position": [
+        -16,
+        704
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "99999999-9999-4999-8999-999999999999",
+      "name": "Determinar rol",
+      "parameters": {
+        "jsCode": "const prev = $('Merge empresa+msg').first().json;\nconst rolRows = $input.all();\nconst rolRow = rolRows.length > 0 ? rolRows[0].json : {};\nreturn [{ json: {\n  ...prev,\n  rol: rolRow.rol ?? 'anon',\n  rut_cliente: rolRow.rut_cliente ?? null,\n  nombre_contacto: rolRow.nombre ?? null\n}}];"
+      },
+      "position": [
+        432,
+        304
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "AkIBFXVUDXwvv1ta",
+          "name": "Header Auth account"
+        }
+      },
+      "id": "13131313-1313-4313-8313-131313131313",
+      "name": "Enviar WhatsApp",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"to\": \"{{ $('Consolidar contexto').first().json.from }}\",\n  \"type\": \"text\",\n  \"text\": { \"body\": {{ JSON.stringify($('AI Agent').first().json.output) }} }\n}",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "=https://graph.facebook.com/v21.0/{{ $('Consolidar contexto').first().json.phone_number_id }}/messages"
+      },
+      "position": [
+        1632,
+        304
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "AkIBFXVUDXwvv1ta",
+          "name": "Header Auth account"
+        }
+      },
+      "id": "07r05000-0000-4000-8000-000000000042",
+      "name": "Enviar aviso (otros)",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"to\": \"{{ $json.from }}\",\n  \"type\": \"text\",\n  \"text\": { \"body\": \"Por ahora puedo leer texto, notas de voz, fotos y PDF 🙌. Ese tipo de mensaje no lo puedo procesar; cuéntame por texto o mándame una foto y te ayudo.\" }\n}",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "=https://graph.facebook.com/v21.0/{{ $json.phone_number_id }}/messages"
+      },
+      "position": [
+        -16,
+        1120
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "55555555-5555-4555-8555-555555555555",
+      "name": "Extraer campos",
+      "parameters": {
+        "jsCode": "const body = $input.first().json.body;\nconst value = body?.entry?.[0]?.changes?.[0]?.value ?? {};\nconst msg = value.messages?.[0] ?? {};\nconst metadata = value.metadata ?? {};\n\n// Texto normal O respuesta de un botón/lista interactiva.\nlet userMessage = msg.text?.body ?? '';\nif (msg.type === 'interactive') {\n  const inter = msg.interactive ?? {};\n  // El id que definimos en el menú (ej. 'ventas_mes') llega aquí; lo usamos como texto\n  userMessage = inter.button_reply?.id || inter.list_reply?.id\n             || inter.button_reply?.title || inter.list_reply?.title || '';\n}\n\nreturn [{ json: {\n  from: msg.from ?? null,\n  phone_number_id: metadata.phone_number_id ?? null,\n  user_message: userMessage,\n  message_id: msg.id ?? null,\n  timestamp: msg.timestamp ?? null\n}}];"
+      },
+      "position": [
+        -464,
+        304
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "med1a000-0000-4000-8000-000000000002",
+      "name": "Extraer media",
+      "parameters": {
+        "jsCode": "const body = $input.first().json.body;\nconst value = body?.entry?.[0]?.changes?.[0]?.value ?? {};\nconst msg = value.messages?.[0] ?? {};\nconst metadata = value.metadata ?? {};\nconst type = msg.type;\nconst media = msg[type] ?? {};   // msg.audio / msg.image / msg.document\nreturn [{ json: {\n  from: msg.from ?? null,\n  phone_number_id: metadata.phone_number_id ?? null,\n  message_id: msg.id ?? null,\n  timestamp: msg.timestamp ?? null,\n  msg_type: type,\n  media_id: media.id ?? null,\n  mime_type: media.mime_type ?? null,\n  filename: media.filename ?? null,\n  caption: media.caption ?? '',      // pie de foto/documento si lo hay\n  voice: media.voice ?? false\n}}];"
+      },
+      "position": [
+        -464,
+        704
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "d0c00000-0000-4000-8000-000000000030",
+      "name": "Extraer texto PDF",
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "position": [
+        448,
+        928
+      ],
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1
+    },
+    {
+      "credentials": {
+        "openAiApi": {
+          "id": "m7BC6hEy8r3b2qLs",
+          "name": "OpenAI account"
+        }
+      },
+      "id": "1mg00000-0000-4000-8000-000000000020",
+      "name": "GPT-4o Vision",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "jsonBody": "={{ (() => {\n  const b64 = $binary.data.data;\n  const mime = $('Extraer media').first().json.mime_type || 'image/jpeg';\n  const caption = $('Extraer media').first().json.caption || '';\n  const instruccion = 'Eres el lector de imágenes de una panadería/pastelería mayorista chilena (empanadas, pasteles, pan, sopaipillas, insumos). Describe en español y de forma útil qué muestra esta imagen para atender al cliente. Si es un PRODUCTO de panadería, di qué producto parece (sabor/tipo de empanada, pastel, pan, etc.) para poder buscarlo en el catálogo. Si es un DOCUMENTO (lista de pedido, comprobante, factura, cotización), transcribe su texto y los ítems/cantidades. Sé conciso.' + (caption ? (' El cliente escribió junto a la imagen: \\\"' + caption + '\\\".') : '');\n  return JSON.stringify({\n    model: 'gpt-4o',\n    messages: [{ role: 'user', content: [\n      { type: 'text', text: instruccion },\n      { type: 'image_url', image_url: { url: 'data:' + mime + ';base64,' + b64 } }\n    ]}],\n    max_tokens: 500\n  });\n})() }}",
+        "method": "POST",
+        "nodeCredentialType": "openAiApi",
+        "options": {},
+        "sendBody": true,
+        "specifyBody": "json",
+        "url": "https://api.openai.com/v1/chat/completions"
+      },
+      "position": [
+        448,
+        704
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "credentials": {
+        "postgres": {
+          "id": "BIM03WKClC8bnUc8",
+          "name": "Supabase Ventas (RW)"
+        }
+      },
+      "id": "12121212-1212-4212-8212-121212121212",
+      "name": "Guardar turno",
+      "parameters": {
+        "operation": "executeQuery",
+        "options": {},
+        "query": "insert into public.conversation_history (empresa, phone_number, role, content, message_id)\nvalues\n  ({{ $('Consolidar contexto').first().json.empresa }}, '{{ $('Consolidar contexto').first().json.from }}', 'user', '{{ String($('Consolidar contexto').first().json.user_message).replace(/'/g, \"''\") }}', '{{ $('Consolidar contexto').first().json.message_id }}'),\n  ({{ $('Consolidar contexto').first().json.empresa }}, '{{ $('Consolidar contexto').first().json.from }}', 'assistant', '{{ String($('AI Agent').first().json.output).replace(/'/g, \"''\") }}', null);"
+      },
+      "position": [
+        1408,
+        304
+      ],
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6
+    },
+    {
+      "id": "ffffffff-ffff-4fff-8fff-ffffffffffff",
+      "name": "IF ¿enviar texto?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "cond-enviar-texto",
+              "leftValue": "={{ (($('AI Agent').first().json.output || '').split('👇').join('').trim().length) > 0 }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": "true"
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 1
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        1600,
+        304
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2
+    },
+    {
+      "id": "77777777-7777-4777-8777-777777777777",
+      "name": "Merge empresa+msg",
+      "parameters": {
+        "jsCode": "const empresaRow = $input.first().json;\n// El shape de mensaje (from, user_message...) viene en el item que entró a\n// \"Resolver empresa\": en texto = \"Extraer campos\"; en multimodal = \"Normalizar *\".\n// \"Resolver empresa\" preserva el input previo vía $('...'), así que lo tomamos de\n// la primera fuente disponible.\nconst srcNames = ['Extraer campos', 'Normalizar audio', 'Normalizar imagen', 'Normalizar documento'];\nlet extra = null;\nfor (const nm of srcNames) {\n  try {\n    const it = $(nm).first();\n    if (it && it.json && it.json.from) { extra = it.json; break; }\n  } catch (e) { /* nodo no ejecutado en esta rama */ }\n}\nextra = extra || {};\nreturn [{ json: {\n  empresa: empresaRow.empresa ?? null,\n  nombre_empresa: empresaRow.nombre_empresa ?? 'la empresa',\n  nombre_asistente: empresaRow.nombre_asistente ?? 'Asistente',\n  from: extra.from,\n  phone_number_id: extra.phone_number_id,\n  user_message: extra.user_message,\n  message_id: extra.message_id\n}}];"
+      },
+      "position": [
+        -16,
+        304
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "a0d10000-0000-4000-8000-000000000011",
+      "name": "Normalizar audio",
+      "parameters": {
+        "jsCode": "const meta = $('Extraer media').first().json;\nconst texto = ($input.first().json.text || '').trim();\nreturn [{ json: {\n  from: meta.from,\n  phone_number_id: meta.phone_number_id,\n  user_message: texto || '(nota de voz vacía)',\n  message_id: meta.message_id,\n  timestamp: meta.timestamp\n}}];"
+      },
+      "position": [
+        672,
+        480
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "d0c00000-0000-4000-8000-000000000031",
+      "name": "Normalizar documento",
+      "parameters": {
+        "jsCode": "const meta = $('Extraer media').first().json;\nconst texto = ($input.first().json.text || '').trim();\nconst caption = (meta.caption || '').trim();\nconst nombre = meta.filename || 'documento';\nlet user_message;\nif (texto) {\n  user_message = '[El cliente envió un DOCUMENTO (' + nombre + '). Contenido extraído: ' + texto.slice(0, 4000) + ']';\n} else {\n  user_message = '[El cliente envió un DOCUMENTO (' + nombre + ') pero no pude extraer texto (puede ser un PDF escaneado o una imagen). Pídele amablemente que te lo mande como foto o que escriba lo que necesita.]';\n}\nif (caption) user_message += '\\nTexto del cliente: ' + caption;\nreturn [{ json: {\n  from: meta.from,\n  phone_number_id: meta.phone_number_id,\n  user_message,\n  message_id: meta.message_id,\n  timestamp: meta.timestamp\n}}];"
+      },
+      "position": [
+        672,
+        928
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "1mg00000-0000-4000-8000-000000000021",
+      "name": "Normalizar imagen",
+      "parameters": {
+        "jsCode": "const meta = $('Extraer media').first().json;\nconst resp = $input.first().json;\nconst lectura = resp?.choices?.[0]?.message?.content?.trim() || '(no pude leer la imagen)';\nconst caption = (meta.caption || '').trim();\nconst user_message = '[El cliente envió una IMAGEN. Lectura automática: ' + lectura + ']' + (caption ? ('\\nTexto del cliente: ' + caption) : '');\nreturn [{ json: {\n  from: meta.from,\n  phone_number_id: meta.phone_number_id,\n  user_message,\n  message_id: meta.message_id,\n  timestamp: meta.timestamp\n}}];"
+      },
+      "position": [
+        672,
+        704
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "AkIBFXVUDXwvv1ta",
+          "name": "Header Auth account"
+        }
+      },
+      "id": "u1r000000-0000-4000-8000-000000000003",
+      "name": "Obtener URL media",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {},
+        "url": "=https://graph.facebook.com/v21.0/{{ $json.media_id }}"
+      },
+      "position": [
+        -240,
+        704
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "credentials": {
+        "openAiApi": {
+          "id": "m7BC6hEy8r3b2qLs",
+          "name": "OpenAI account"
+        }
+      },
+      "id": "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+      "name": "OpenAI GPT-4o",
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "cachedResultName": "gpt-4o",
+          "mode": "list",
+          "value": "gpt-4o"
+        },
+        "options": {
+          "temperature": 0.3
+        }
+      },
+      "position": [
+        1008,
+        544
+      ],
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2
+    },
+    {
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "BIM03WKClC8bnUc8",
+          "name": "Supabase Ventas (RW)"
+        }
+      },
+      "id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+      "name": "Recuperar historial",
+      "parameters": {
+        "operation": "executeQuery",
+        "options": {
+          "queryReplacement": "={{ $json.empresa }},{{ $json.from }}"
+        },
+        "query": "select role, content\nfrom public.conversation_history\nwhere empresa = $1 and phone_number = $2\norder by created_at desc\nlimit 10;"
+      },
+      "position": [
+        640,
+        304
+      ],
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6
+    },
+    {
+      "credentials": {
+        "postgres": {
+          "id": "BIM03WKClC8bnUc8",
+          "name": "Supabase Ventas (RW)"
+        }
+      },
+      "id": "66666666-6666-4666-8666-666666666666",
+      "name": "Resolver empresa",
+      "parameters": {
+        "operation": "executeQuery",
+        "options": {
+          "queryReplacement": "={{ $json.phone_number_id }}"
+        },
+        "query": "select empresa, nombre_empresa, nombre_asistente\nfrom public.agente_lineas_whatsapp\nwhere phone_number_id = $1 and activo = true\nlimit 1;"
+      },
+      "position": [
+        -240,
+        304
+      ],
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6
+    },
+    {
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "BIM03WKClC8bnUc8",
+          "name": "Supabase Ventas (RW)"
+        }
+      },
+      "id": "88888888-8888-4888-8888-888888888888",
+      "name": "Resolver rol",
+      "parameters": {
+        "operation": "executeQuery",
+        "options": {
+          "queryReplacement": "={{ $json.empresa }},{{ $json.from }}"
+        },
+        "query": "select rol, rut_cliente, nombre\nfrom public.agente_contactos\nwhere empresa = $1 and phone_number = $2 and activo = true\nlimit 1;"
+      },
+      "position": [
+        208,
+        304
+      ],
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6
+    },
+    {
+      "id": "07r00000-0000-4000-8000-000000000006",
+      "name": "Responder 200 (media)",
+      "parameters": {
+        "options": {
+          "responseCode": 200
+        },
+        "respondWith": "text",
+        "responseBody": "OK"
+      },
+      "position": [
+        -688,
+        704
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1
+    },
+    {
+      "id": "07r05000-0000-4000-8000-000000000040",
+      "name": "Responder 200 (otros)",
+      "parameters": {
+        "options": {
+          "responseCode": 200
+        },
+        "respondWith": "text",
+        "responseBody": "OK"
+      },
+      "position": [
+        -464,
+        1120
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1
+    },
+    {
+      "id": "33333333-3333-4333-8333-333333333333",
+      "name": "Responder 200 (texto)",
+      "parameters": {
+        "options": {
+          "responseCode": 200
+        },
+        "respondWith": "text",
+        "responseBody": "OK"
+      },
+      "position": [
+        -688,
+        304
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1
+    },
+    {
+      "id": "1b1b1b1b-1b1b-4b1b-8b1b-1b1b1b1b1b1b",
+      "name": "Responder challenge Meta",
+      "parameters": {
+        "options": {
+          "responseCode": 200
+        },
+        "respondWith": "text",
+        "responseBody": "={{ $json.query['hub.challenge'] }}"
+      },
+      "position": [
+        -1184,
+        112
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1
+    },
+    {
+      "id": "5w1tch00-0000-4000-8000-000000000005",
+      "name": "Switch media descargada",
+      "parameters": {
+        "options": {},
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Extraer media').first().json.msg_type }}",
+                    "operator": {
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "audio"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                }
+              },
+              "outputKey": "audio",
+              "renameOutput": true
+            },
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Extraer media').first().json.msg_type }}",
+                    "operator": {
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "image"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                }
+              },
+              "outputKey": "image",
+              "renameOutput": true
+            },
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Extraer media').first().json.msg_type }}",
+                    "operator": {
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "document"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                }
+              },
+              "outputKey": "document",
+              "renameOutput": true
+            }
+          ]
+        }
+      },
+      "position": [
+        208,
+        704
+      ],
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2
+    },
+    {
+      "id": "5w1tch00-0000-4000-8000-000000000001",
+      "name": "Switch tipo mensaje",
+      "parameters": {
+        "options": {
+          "fallbackOutput": "extra"
+        },
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "97920127-b3de-4a95-ab95-12a2eece7a9d",
+                    "leftValue": "={{ $json.body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0]?.type }}",
+                    "operator": {
+                      "operation": "regex",
+                      "type": "string"
+                    },
+                    "rightValue": "text|interactive"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                }
+              },
+              "outputKey": "texto",
+              "renameOutput": true
+            },
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "b1e8e7c2-a169-4946-9ee5-6916a610c5a8",
+                    "leftValue": "={{ $json.body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0]?.type }}",
+                    "operator": {
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "audio"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                }
+              },
+              "outputKey": "audio",
+              "renameOutput": true
+            },
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "cfa34f48-0509-4b71-b22a-3af421722390",
+                    "leftValue": "={{ $json.body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0]?.type }}",
+                    "operator": {
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "image"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                }
+              },
+              "outputKey": "image",
+              "renameOutput": true
+            },
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "0aa9c5c9-c109-47c1-87f0-170a316f3a77",
+                    "leftValue": "={{ $json.body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0]?.type }}",
+                    "operator": {
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "document"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                }
+              },
+              "outputKey": "document",
+              "renameOutput": true
+            }
+          ]
+        }
+      },
+      "position": [
+        -896,
+        400
+      ],
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2
+    },
+    {
+      "id": "1c1c1c1c-1c1c-4c1c-8c1c-1c1c1c1c1c1c",
+      "name": "Webhook Verificación (GET)",
+      "parameters": {
+        "options": {},
+        "path": "whatsapp-agent",
+        "responseMode": "responseNode"
+      },
+      "position": [
+        -1408,
+        112
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "webhookId": "whatsapp-agent-verify"
+    },
+    {
+      "id": "11111111-1111-4111-8111-111111111111",
+      "name": "Webhook WhatsApp",
+      "parameters": {
+        "httpMethod": "POST",
+        "options": {},
+        "path": "whatsapp-agent",
+        "responseMode": "responseNode"
+      },
+      "position": [
+        -1408,
+        400
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "webhookId": "whatsapp-agent-cadabra"
+    },
+    {
+      "credentials": {
+        "openAiApi": {
+          "id": "m7BC6hEy8r3b2qLs",
+          "name": "OpenAI account"
+        }
+      },
+      "id": "a0d10000-0000-4000-8000-000000000010",
+      "name": "Whisper transcribir",
+      "parameters": {
+        "operation": "transcribe",
+        "options": {
+          "language": "es"
+        },
+        "resource": "audio"
+      },
+      "position": [
+        448,
+        480
+      ],
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8
+    },
+    {
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "bpCcBAeM6BGoXB2L",
+          "name": "Google Calendar account"
+        }
+      },
+      "id": "10101010-1010-4010-8010-101010101010",
+      "name": "crear_reunion",
+      "parameters": {
+        "additionalFields": {
+          "attendees": "={{ [$fromAI('email_invitado', 'correo electrónico del invitado a la reunión', 'string')] }}",
+          "description": "={{ $fromAI('descripcion', 'motivo o detalle de la reunión', 'string') }}",
+          "sendUpdates": "all",
+          "summary": "={{ $fromAI('titulo', 'título de la reunión', 'string') }}"
+        },
+        "calendar": {
+          "__rl": true,
+          "mode": "list",
+          "value": "REEMPLAZAR_CALENDAR_ID"
+        },
+        "descriptionType": "manual",
+        "end": "={{ $fromAI('fin', 'fecha y hora de fin, formato AAAA-MM-DDTHH:MM:SS SIN zona horaria', 'string') }}",
+        "start": "={{ $fromAI('inicio', 'fecha y hora de inicio, formato AAAA-MM-DDTHH:MM:SS SIN zona horaria', 'string') }}",
+        "toolDescription": "Crea una reunión (evento) en el calendario. Úsala solo después de verificar disponibilidad y confirmar. IMPORTANTE: pasa inicio y fin como hora LOCAL de Chile SIN offset, formato 'AAAA-MM-DDTHH:MM:SS' (ej. si el cliente dice 10:00, usa 2026-08-07T10:00:00). NUNCA agregues -03:00 ni -04:00 (el sistema aplica la zona de Chile automáticamente)."
+      },
+      "position": [
+        1520,
+        640
+      ],
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "AkIBFXVUDXwvv1ta",
+          "name": "Header Auth account"
+        }
+      },
+      "id": "30303030-3030-4030-8030-303030303030",
+      "name": "mostrar_menu",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "jsonBody": "={{ (() => {\n  const to = $('Consolidar contexto').first().json.from;\n  const tipo = $fromAI('tipo_menu', \"owner o cliente\", 'string');\n  const botones = tipo === 'owner' ? [\n    { id: 'ventas_periodo', title: 'Ventas' },\n    { id: 'buscar_producto', title: 'Buscar producto' },\n    { id: 'agendar', title: 'Agendar reunión' }\n  ] : [\n    { id: 'ver_productos', title: 'Ver productos' },\n    { id: 'precios', title: 'Precios' },\n    { id: 'agendar', title: 'Agendar' }\n  ];\n  return JSON.stringify({\n    messaging_product: 'whatsapp', to, type: 'interactive',\n    interactive: {\n      type: 'button',\n      body: { text: tipo === 'owner' ? 'Hola 🥟 ¿Qué anda buscando? Elija una opción o escríbame directo (ej: \\\"ventas de enero\\\", \\\"top productos\\\", \\\"deuda de cliente X\\\").' : 'Hola 🥟 ¿En qué le ayudo? Elija una opción o escríbame su consulta.' },\n      action: { buttons: botones.map(b => ({ type: 'reply', reply: { id: b.id, title: b.title } })) }\n    }\n  });\n})() }}",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "toolDescription": "Muestra un MENÚ con 3 BOTONES inline en WhatsApp (sin popup). Úsala cuando el usuario pida 'menú', 'opciones', o al saludar. Parámetro tipo_menu: 'owner' (botones: Ventas, Buscar producto, Agendar) o 'cliente' (botones: Productos, Precios, Agendar). Tras enviar el menú, NO escribas más texto; el usuario tocará un botón.",
+        "url": "=https://graph.facebook.com/v21.0/{{ $('Consolidar contexto').first().json.phone_number_id }}/messages"
+      },
+      "position": [
+        1376,
+        832
+      ],
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2
+    },
+    {
+      "credentials": {
+        "postgres": {
+          "id": "wjPmZ5tTlYmg0JSR",
+          "name": "Supabase Ventas (Read-Only)"
+        }
+      },
+      "id": "22222222-2222-4222-9222-222222222222",
+      "name": "saldo_cliente",
+      "parameters": {
+        "descriptionType": "manual",
+        "operation": "executeQuery",
+        "options": {
+          "queryReplacement": "={{ $('Consolidar contexto').first().json.empresa }},{{ $fromAI('nombre', 'nombre, apellido o razón social del cliente a buscar', 'string') }}"
+        },
+        "query": "select coalesce(c.nombre_empresa, trim(c.paterno_cl||' '||coalesce(c.materno_cl,'')||' '||c.nombre_cl)) as cliente,\n       round(s.saldo_deuda) as deuda_clp\nfrom public.saldos_clientes s\njoin public.clientes c on c.rut_cl = s.cliente\nwhere s.empresa = $1\n  and s.saldo_deuda > 0\n  and (\n    lower(coalesce(c.nombre_empresa,'')) like '%'||lower($2)||'%'\n    or lower(coalesce(c.paterno_cl,'')) like '%'||lower($2)||'%'\n    or lower(coalesce(c.materno_cl,'')) like '%'||lower($2)||'%'\n    or lower(coalesce(c.nombre_cl,'')) like '%'||lower($2)||'%'\n  )\norder by s.saldo_deuda desc\nlimit 8;",
+        "toolDescription": "Consulta la DEUDA (saldo pendiente) de un cliente buscándolo por nombre o apellido. Úsala cuando el dueño pregunte cuánto le debe un cliente (ej. 'cuánto me debe Guerrero', 'deuda de Delicity'). Parámetro: nombre = nombre, apellido o razón social del cliente a buscar. Devuelve el nombre completo y la deuda en CLP. Solo para el owner."
+      },
+      "position": [
+        1264,
+        1040
+      ],
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.6
+    },
+    {
+      "credentials": {
+        "postgres": {
+          "id": "wjPmZ5tTlYmg0JSR",
+          "name": "Supabase Ventas (Read-Only)"
+        }
+      },
+      "id": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee",
+      "name": "stock_producto",
+      "parameters": {
+        "descriptionType": "manual",
+        "operation": "executeQuery",
+        "options": {
+          "queryReplacement": "={{ $('Consolidar contexto').first().json.empresa }},{{ $fromAI('busqueda', 'palabras clave del producto, ej: mariscos o pino queso', 'string') }}"
+        },
+        "query": "with q as (\n  select array_remove(string_to_array(lower(trim($2)), ' '), '') as palabras\n)\nselect distinct p.nombre, p.precio_venta\nfrom public.productos p\nleft join public.familias f on f.codigo = p.cod_familia and f.empresa = p.empresa,\n  q\nwhere p.empresa = $1\n  and p.estado_vigencia = 1\n  and lower(p.nombre) !~ '(guia|flete|emitidas|segun guias)'\n  and (\n    p.codigo = $2\n    or ( array_length(q.palabras,1) is not null\n         and not exists (\n           select 1 from unnest(q.palabras) w\n           where w not in ('empanada','empanadas','de','al','la','el','los','las','horno','frita','fritas','hoja','y','con','insumo','insumos','producto','productos')\n             and lower(p.nombre) !~ ('\\y'||w||'\\y')\n             and coalesce(lower(f.nombre),'') !~ ('\\y'||w||'\\y')\n         )\n       )\n  )\norder by p.nombre\nlimit 12;",
+        "toolDescription": "Busca productos vigentes por palabra(s) clave y devuelve nombre y precio de venta. Pasa solo las palabras clave del producto (ej. 'mariscos', 'pino queso'), SIN palabras de relleno como 'empanada', 'de', 'al horno' ni 'frita'. Úsala para consultas de precio o disponibilidad de productos."
+      },
+      "position": [
+        1328,
+        544
+      ],
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.6
+    },
+    {
+      "credentials": {
+        "postgres": {
+          "id": "wjPmZ5tTlYmg0JSR",
+          "name": "Supabase Ventas (Read-Only)"
+        }
+      },
+      "id": "21212121-2121-4121-8121-212121212121",
+      "name": "top_productos",
+      "parameters": {
+        "descriptionType": "manual",
+        "operation": "executeQuery",
+        "options": {
+          "queryReplacement": "={{ $('Consolidar contexto').first().json.empresa }},{{ $fromAI('desde', 'fecha inicio AAAA-MM-DD', 'string') }},{{ $fromAI('hasta', 'fecha fin EXCLUSIVA AAAA-MM-DD', 'string') }},{{ $fromAI('limite', 'cuántos productos, número (default 5)', 'string') }},{{ $fromAI('orden', \"monto o unidades\", 'string') }}"
+        },
+        "query": "select p.nombre,\n       round(sum(mv.total_incluido)) as monto_clp,\n       round(sum(mv.cantidad)) as unidades\nfrom public.movimientos_ventas mv\nleft join public.productos p on p.codigo = mv.codigo_producto and p.empresa = mv.empresa\nwhere mv.empresa = $1\n  and mv.fecha_documento >= $2::date\n  and mv.fecha_documento < $3::date\ngroup by p.nombre\norder by (case when $5 = 'unidades' then sum(mv.cantidad) else sum(mv.total_incluido) end) desc nulls last\nlimit $4::int;",
+        "toolDescription": "Devuelve el RANKING de productos más vendidos en un período (nombre, monto en CLP y unidades). Úsala cuando el dueño pregunte por 'productos más vendidos', 'top productos', 'qué se vende más'. Parámetros: desde y hasta (AAAA-MM-DD, hasta exclusivo), limite (cuántos, default 5), y orden ('monto' o 'unidades', default monto)."
+      },
+      "position": [
+        1088,
+        944
+      ],
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.6
+    },
+    {
+      "credentials": {
+        "postgres": {
+          "id": "wjPmZ5tTlYmg0JSR",
+          "name": "Supabase Ventas (Read-Only)"
+        }
+      },
+      "id": "20202020-2020-4020-8020-202020202020",
+      "name": "ventas_periodo",
+      "parameters": {
+        "descriptionType": "manual",
+        "operation": "executeQuery",
+        "options": {
+          "queryReplacement": "={{ $('Consolidar contexto').first().json.empresa }},{{ $fromAI('desde', 'fecha inicio del período, formato AAAA-MM-DD', 'string') }},{{ $fromAI('hasta', 'fecha fin EXCLUSIVA del período, formato AAAA-MM-DD', 'string') }}"
+        },
+        "query": "select coalesce(round(sum(total_incluido)),0) as ventas_clp,\n       count(distinct numero_documento) as documentos\nfrom public.movimientos_ventas\nwhere empresa = $1\n  and fecha_documento >= $2::date\n  and fecha_documento < $3::date;",
+        "toolDescription": "Devuelve el TOTAL de ventas (en pesos CLP) y la cantidad de documentos de un período. Úsala cuando el dueño pregunte cuánto se vendió (hoy, ayer, esta semana, este mes, un mes específico, etc.). Pasa 'desde' y 'hasta' como fechas AAAA-MM-DD (hasta es exclusivo: para 'enero' usa desde=2026-01-01 hasta=2026-02-01)."
+      },
+      "position": [
+        1136,
+        656
+      ],
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.6
+    },
+    {
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "bpCcBAeM6BGoXB2L",
+          "name": "Google Calendar account"
+        }
+      },
+      "id": "ffffffff-ffff-4fff-8fff-ffffffffffff",
+      "name": "verificar_disponibilidad",
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "mode": "list",
+          "value": "REEMPLAZAR_CALENDAR_ID"
+        },
+        "descriptionType": "manual",
+        "options": {
+          "timezone": "America/Santiago"
+        },
+        "resource": "calendar",
+        "timeMax": "={{ $fromAI('fin', 'fecha y hora de fin, formato AAAA-MM-DDTHH:MM:SS sin zona horaria', 'string') }}",
+        "timeMin": "={{ $fromAI('inicio', 'fecha y hora de inicio, formato AAAA-MM-DDTHH:MM:SS sin zona horaria', 'string') }}",
+        "toolDescription": "Verifica si un horario está disponible en el calendario antes de agendar. Entrega inicio y fin en formato de hora local SIN zona horaria: 'AAAA-MM-DDTHH:MM:SS' (ej. 2026-08-07T10:00:00). NO agregues offset (-03:00 ni -04:00)."
+      },
+      "position": [
+        1744,
+        464
+      ],
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3
+    },
+    {
+      "id": "07r05000-0000-4000-8000-000000000041",
+      "name": "¿Otros: es mensaje?",
+      "parameters": {
+        "jsCode": "const body = $('Switch tipo mensaje').first().json.body;\nconst value = body?.entry?.[0]?.changes?.[0]?.value ?? {};\nconst msg = value.messages?.[0] ?? {};\nconst metadata = value.metadata ?? {};\n// Si NO es un mensaje real del usuario (ej. statuses), no responder nada.\nif (!msg.type || !msg.from) return [];\nreturn [{ json: {\n  from: msg.from,\n  phone_number_id: metadata.phone_number_id,\n  msg_type: msg.type\n}}];"
+      },
+      "position": [
+        -240,
+        1120
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    }
+  ],
+  "settings": {
+    "binaryMode": "separate",
+    "executionOrder": "v1"
+  },
+  "sourceWorkflowId": null,
+  "tags": []
+}

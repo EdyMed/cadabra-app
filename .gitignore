@@ -1,0 +1,37 @@
+# Repo del producto "Agente WhatsApp Empresarial" (Cadabra) — lista BLANCA.
+# Solo entra lo que se nombra abajo; el resto de app/ (ERP, Gases, DTE, etc.) queda fuera.
+/*
+!/.gitignore
+!/README_REPO.md
+
+# --- Panel (Next.js) ---
+!/CRM Whatsap/
+/CRM Whatsap/_backup_*/
+/CRM Whatsap/nul
+/CRM Whatsap/tsconfig.tsbuildinfo
+/CRM Whatsap/.env.production
+
+# --- Bot n8n + SQL ---
+!/Modulo ventas/
+/Modulo ventas/*
+!/Modulo ventas/agente-whatsapp/
+!/Modulo ventas/crm-empresarial/
+# Los respaldos JSON viejos quedan solo en disco; desde ahora la historia la lleva git (n8n/prod/)
+/Modulo ventas/crm-empresarial/n8n/respaldos/**/*.json
+/Modulo ventas/crm-empresarial/n8n/respaldos/completo_*/
+
+# Volcados viejos de n8n (reemplazados por n8n/prod/, contienen tokens antiguos) y NocoDB (ya no se usa)
+/Modulo ventas/crm-empresarial/n8n/_*.json
+/Modulo ventas/crm-empresarial/n8n/_ids.txt
+/Modulo ventas/crm-empresarial/n8n/workflow_*.json
+/Modulo ventas/crm-empresarial/nocodb/
+
+# --- Nunca versionar ---
+.env
+.env.*
+!.env.example
+node_modules/
+.next/
+__pycache__/
+*.pyc
+*.log

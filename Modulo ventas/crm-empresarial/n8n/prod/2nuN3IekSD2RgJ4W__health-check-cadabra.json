@@ -1,0 +1,348 @@
+{
+  "active": true,
+  "connections": {
+    "Cada 15 min": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Check Supabase",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Check Google Calendar": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Check OpenAI",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Check Meta": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Check Panel",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Check OpenAI": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Check Meta",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Check Panel": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Evaluar",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Check Supabase": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Check Google Calendar",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Evaluar": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Avisar por WhatsApp",
+            "type": "main"
+          },
+          {
+            "index": 0,
+            "node": "Avisar por correo",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Probar ahora": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Check Supabase",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "description": null,
+  "id": "2nuN3IekSD2RgJ4W",
+  "isArchived": false,
+  "name": "Health check Cadabra",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "AkIBFXVUDXwvv1ta",
+          "name": "Header Auth account"
+        }
+      },
+      "id": "8d358a63-cb1d-4b77-ba33-925813a1bfb8",
+      "name": "Avisar por WhatsApp",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "jsonBody": "={{ JSON.stringify({ messaging_product:'whatsapp', to:'56995649108', type:'text', text:{ body: $json.texto } }) }}",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "specifyBody": "json",
+        "url": "https://graph.facebook.com/v21.0/1168256669712210/messages"
+      },
+      "position": [
+        1580,
+        0
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "dAYpvYE1zlmYmVCK",
+          "name": "Resend API"
+        }
+      },
+      "id": "37d2e557-7241-450e-b98f-bcf8bca9fe21",
+      "name": "Avisar por correo",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "jsonBody": "={{ JSON.stringify({ from:'Alertas Cadabra <contacto@cadabra.cl>', to:['contacto@cadabra.cl'], subject:$json.asunto, text:$json.texto.replace(/\\*/g,'') }) }}",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "specifyBody": "json",
+        "url": "https://api.resend.com/emails"
+      },
+      "position": [
+        1580,
+        200
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "0f5703c7-c6c5-4e41-ad81-2a718f5403d0",
+      "name": "Cada 15 min",
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 15
+            }
+          ]
+        }
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2
+    },
+    {
+      "alwaysOutputData": true,
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "bpCcBAeM6BGoXB2L",
+          "name": "Google Calendar account"
+        }
+      },
+      "id": "a8c79219-0740-4146-b35a-cf5f279e7825",
+      "name": "Check Google Calendar",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "mode": "list",
+          "value": "primary"
+        },
+        "limit": 1,
+        "operation": "getAll",
+        "options": {}
+      },
+      "position": [
+        460,
+        100
+      ],
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3
+    },
+    {
+      "alwaysOutputData": true,
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "AkIBFXVUDXwvv1ta",
+          "name": "Header Auth account"
+        }
+      },
+      "id": "f98c4cec-895f-46a9-b0ca-1ce31c0ad47a",
+      "name": "Check Meta",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "method": "GET",
+        "options": {
+          "timeout": 20000
+        },
+        "url": "https://graph.facebook.com/v21.0/1168256669712210?fields=id,quality_rating,display_phone_number"
+      },
+      "position": [
+        900,
+        100
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "alwaysOutputData": true,
+      "credentials": {
+        "openAiApi": {
+          "id": "m7BC6hEy8r3b2qLs",
+          "name": "OpenAI account"
+        }
+      },
+      "id": "4ddaa308-56a6-461e-9588-79ca4ac2faf4",
+      "name": "Check OpenAI",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "jsonBody": "{\"model\":\"gpt-4o-mini\",\"max_tokens\":1,\"messages\":[{\"role\":\"user\",\"content\":\"ok\"}]}",
+        "method": "POST",
+        "nodeCredentialType": "openAiApi",
+        "options": {
+          "timeout": 20000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "url": "https://api.openai.com/v1/chat/completions"
+      },
+      "position": [
+        680,
+        100
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "alwaysOutputData": true,
+      "id": "a5a12b39-7dc8-4e58-9530-74f890f01c99",
+      "name": "Check Panel",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "method": "GET",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "text"
+            }
+          },
+          "timeout": 20000
+        },
+        "url": "https://agente.appcadabra.cl/crm/login"
+      },
+      "position": [
+        1120,
+        100
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "BIM03WKClC8bnUc8",
+          "name": "Supabase Ventas (RW)"
+        }
+      },
+      "id": "4ce15047-af2e-493f-b87f-4021beb35002",
+      "name": "Check Supabase",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "operation": "executeQuery",
+        "options": {},
+        "query": "select 1 as ok"
+      },
+      "position": [
+        240,
+        100
+      ],
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6
+    },
+    {
+      "id": "17fc6fd6-341a-4180-8163-3c56416d7f4a",
+      "name": "Evaluar",
+      "parameters": {
+        "jsCode": "// Evalúa cada chequeo. Avisa cuando algo CAE, recuerda cada 2 h si sigue caído y avisa cuando se RECUPERA.\nconst leer = (n) => { try { return $(n).first().json || {}; } catch (e) { return { error: 'nodo no ejecutado' }; } };\nconst errTxt = (j) => {\n  const e = j.error;\n  if (!e) return '';\n  return typeof e === 'string' ? e : (e.message || e.description || JSON.stringify(e)).toString();\n};\nconst checks = [\n  { k: 'supabase', nombre: 'Supabase (base de datos del bot)', nodo: 'Check Supabase',\n    ok: (j) => !j.error && Number(j.ok) === 1,\n    ayuda: 'Revisar si el proyecto está PAUSADO en supabase.com → Resume.' },\n  { k: 'calendar', nombre: 'Google Calendar (agenda)', nodo: 'Check Google Calendar',\n    ok: (j) => !j.error,\n    ayuda: 'n8n → Credentials → \"Google Calendar account\" → Reconnect.' },\n  { k: 'openai', nombre: 'OpenAI (cerebro del bot)', nodo: 'Check OpenAI',\n    ok: (j) => !j.error && Array.isArray(j.choices),\n    ayuda: 'Revisar saldo en platform.openai.com → Billing.' },\n  { k: 'meta', nombre: 'Meta WhatsApp API (token del número)', nodo: 'Check Meta',\n    ok: (j) => !j.error && !!j.id && j.quality_rating !== 'RED',\n    ayuda: 'Revisar token/System User y calidad del número en WhatsApp Manager.' },\n  { k: 'panel', nombre: 'Panel CRM (agente.appcadabra.cl)', nodo: 'Check Panel',\n    ok: (j) => !j.error,\n    ayuda: 'Revisar el servicio crm-panel en EasyPanel.' },\n];\n\nconst s = $getWorkflowStaticData('global');\ns.estado = s.estado || {};\nconst ahora = Date.now();\nlet forzar = false;\ntry { forzar = !!$('Probar ahora').first(); } catch (e) {}\n\nconst caidos = [], recuperados = [], resumen = [];\nfor (const c of checks) {\n  const j = leer(c.nodo);\n  const ok = c.ok(j);\n  const det = ok ? '' : (errTxt(j) || (j.quality_rating === 'RED' ? 'calidad del número en ROJO' : 'respuesta inesperada')).slice(0, 200);\n  const prev = s.estado[c.k] || { fail: false };\n  resumen.push((ok ? '✅ ' : '❌ ') + c.nombre + (ok ? '' : ': ' + det));\n  if (!ok) {\n    const nuevo = !prev.fail;\n    const recordar = prev.fail && (ahora - (prev.ultimoAviso || 0) > 2 * 3600e3);\n    if (nuevo || recordar) {\n      caidos.push({ c, det, desde: nuevo ? ahora : prev.desde });\n      s.estado[c.k] = { fail: true, desde: nuevo ? ahora : prev.desde, ultimoAviso: ahora };\n    } else s.estado[c.k] = prev;\n  } else {\n    if (prev.fail) recuperados.push({ c, desde: prev.desde });\n    s.estado[c.k] = { fail: false };\n  }\n}\n\nconst hora = new Date().toLocaleString('es-CL', { timeZone: 'America/Santiago' });\nconst min = (t) => Math.round((ahora - t) / 60000);\nif (!caidos.length && !recuperados.length) {\n  if (!forzar) return [];\n  return [{ json: { asunto: 'Health check Cadabra · prueba manual', texto: '🩺 *Health check (prueba)*\\n' + resumen.join('\\n') + '\\nHora: ' + hora } }];\n}\nlet texto = '';\nif (caidos.length) texto += '🔴 *Servicio caído*\\n' + caidos.map(x => '• ' + x.c.nombre + ' (hace ' + min(x.desde) + ' min)\\n  ' + x.det + '\\n  👉 ' + x.c.ayuda).join('\\n') + '\\n';\nif (recuperados.length) texto += (texto ? '\\n' : '') + '🟢 *Recuperado*\\n' + recuperados.map(x => '• ' + x.c.nombre + ' (estuvo caído ' + min(x.desde) + ' min)').join('\\n') + '\\n';\ntexto += 'Hora: ' + hora;\nconst asunto = caidos.length ? '🔴 Cadabra: ' + caidos.map(x => x.c.nombre).join(', ') : '🟢 Cadabra: servicio recuperado';\nreturn [{ json: { texto, asunto } }];"
+      },
+      "position": [
+        1340,
+        100
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "49e941e5-07c0-483d-bc56-4461136e3539",
+      "name": "Probar ahora",
+      "parameters": {
+        "httpMethod": "POST",
+        "options": {},
+        "path": "health-check-cadabra",
+        "responseMode": "onReceived"
+      },
+      "position": [
+        0,
+        200
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "webhookId": "health-check-cadabra"
+    }
+  ],
+  "settings": {
+    "errorWorkflow": "bokdGONRGM4RnyyW",
+    "executionOrder": "v1",
+    "timezone": "America/Santiago"
+  },
+  "sourceWorkflowId": null,
+  "tags": []
+}

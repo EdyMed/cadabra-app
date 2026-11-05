@@ -1,0 +1,161 @@
+{
+  "active": true,
+  "connections": {
+    "Sumar conversación (Supabase)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "¿Cruzó el 80%?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Webhook Contador": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Sumar conversación (Supabase)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "¿Cruzó el 80%?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Avisar 80% (WhatsApp admin)",
+            "type": "main"
+          }
+        ],
+        []
+      ]
+    }
+  },
+  "description": null,
+  "id": "H0Q3kX8qW5y9xfnE",
+  "isArchived": false,
+  "name": "Contador Conversaciones",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "AkIBFXVUDXwvv1ta",
+          "name": "Header Auth account"
+        }
+      },
+      "id": "k0000000-0000-4000-8000-000000000008",
+      "name": "Avisar 80% (WhatsApp admin)",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "jsonBody": "={{ (() => { const d=$json; const txt='📊 *Aviso de consumo*\\nLa empresa ' + d.empresa + ' (plan ' + d.plan + ') llegó al ' + d.pct + '% de su límite: ' + d.usadas + '/' + d.limite + ' conversaciones este mes (' + d.mes + ').\\n\\nBuen momento para ofrecer un upgrade 🚀'; return JSON.stringify({ messaging_product:'whatsapp', to: '56995649108', type:'text', text:{ body: txt } }); })() }}",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "=https://graph.facebook.com/v21.0/1168256669712210/messages"
+      },
+      "position": [
+        1540,
+        140
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "credentials": {
+        "postgres": {
+          "id": "BIM03WKClC8bnUc8",
+          "name": "Supabase Ventas (RW)"
+        }
+      },
+      "id": "k0000000-0000-4000-8000-000000000005",
+      "name": "Sumar conversación (Supabase)",
+      "parameters": {
+        "operation": "executeQuery",
+        "options": {
+          "queryReplacement": "={{ (() => {\n  const emp = String($('Webhook Contador').first().json.body.empresa || '1');\n  const now = new Date(new Date().toLocaleString('en-US',{timeZone:'America/Santiago'}));\n  const mes = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0');\n  return [emp, mes];\n})() }}"
+        },
+        "query": "DROP TABLE IF EXISTS pg_temp._marcado;\n\nWITH base AS (\n  SELECT plan, limite FROM crm.contador_conversaciones\n  WHERE empresa = $1 ORDER BY id DESC LIMIT 1\n)\nINSERT INTO crm.contador_conversaciones (empresa, mes, plan, limite, usadas, aviso_80_enviado)\nVALUES ($1, $2, COALESCE((SELECT plan FROM base), 'Convierte'), COALESCE((SELECT limite FROM base), 1500), 1, false)\nON CONFLICT (empresa, mes) DO UPDATE SET usadas = crm.contador_conversaciones.usadas + 1;\n\nCREATE TEMP TABLE _marcado AS\nWITH m AS (\n  UPDATE crm.contador_conversaciones\n  SET aviso_80_enviado = true\n  WHERE empresa = $1 AND mes = $2\n    AND ROUND(usadas::numeric / limite * 100) >= 80\n    AND aviso_80_enviado = false\n  RETURNING id\n)\nSELECT id FROM m;\n\nSELECT c.id, c.empresa, c.mes, c.plan, c.limite, c.usadas,\n  ROUND(c.usadas::numeric / c.limite * 100) AS pct,\n  EXISTS(SELECT 1 FROM _marcado m WHERE m.id = c.id) AS avisar_80,\n  (c.usadas > c.limite) AS excedido\nFROM crm.contador_conversaciones c\nWHERE c.empresa = $1 AND c.mes = $2;"
+      },
+      "position": [
+        1100,
+        200
+      ],
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6
+    },
+    {
+      "id": "k0000000-0000-4000-8000-000000000001",
+      "name": "Webhook Contador",
+      "parameters": {
+        "httpMethod": "POST",
+        "options": {},
+        "path": "contar-conversacion",
+        "responseMode": "onReceived"
+      },
+      "position": [
+        220,
+        300
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "webhookId": "contar-conversacion-cadabra"
+    },
+    {
+      "id": "k0000000-0000-4000-8000-000000000007",
+      "name": "¿Cruzó el 80%?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "c-80",
+              "leftValue": "={{ $json.avisar_80 }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": true
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        1320,
+        200
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2
+    }
+  ],
+  "settings": {
+    "errorWorkflow": "bokdGONRGM4RnyyW",
+    "executionOrder": "v1"
+  },
+  "sourceWorkflowId": null,
+  "tags": []
+}

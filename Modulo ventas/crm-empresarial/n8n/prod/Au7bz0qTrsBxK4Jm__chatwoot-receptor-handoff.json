@@ -1,0 +1,150 @@
+{
+  "active": false,
+  "connections": {
+    "Procesar evento Chatwoot": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "¿Reenviar a WhatsApp?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Webhook Chatwoot": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Procesar evento Chatwoot",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "¿Reenviar a WhatsApp?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Enviar a WhatsApp (vendedor)",
+            "type": "main"
+          }
+        ],
+        []
+      ]
+    }
+  },
+  "description": null,
+  "id": "Au7bz0qTrsBxK4Jm",
+  "isArchived": false,
+  "name": "Chatwoot Receptor (handoff)",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "AkIBFXVUDXwvv1ta",
+          "name": "Header Auth account"
+        }
+      },
+      "id": "g0000000-0000-4000-8000-000000000004",
+      "name": "Enviar a WhatsApp (vendedor)",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "jsonBody": "={{ JSON.stringify({ messaging_product:'whatsapp', to: $json.wa, type:'text', text:{ body: $json.contenido } }) }}",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "=https://graph.facebook.com/v21.0/1168256669712210/messages"
+      },
+      "position": [
+        880,
+        220
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "g0000000-0000-4000-8000-000000000002",
+      "name": "Procesar evento Chatwoot",
+      "parameters": {
+        "jsCode": "const NOCODB='https://appcadabra-nocodb.jmyxxj.easypanel.host';\nconst TID='mcp3sx8fm259gn6';\nconst NC_TOKEN='nc_pat_1wp_6l2kWvfLo2doqbPvr-vC_rCcLutaOnYox9KB';\nconst b = $input.first().json.body || {};\nconst req = async (method, url, headers, body) => {\n  try { const opt={ method, url, headers, json:true }; if(body) opt.body=body; return await this.helpers.httpRequest(opt); }\n  catch(e){ return (e.response&&e.response.body)?e.response.body:{ __err:String(e.message||e) }; }\n};\nconst event = b.event;\nconst wa = (((b.conversation||{}).meta||{}).sender||{}).identifier         || ((b.meta||{}).sender||{}).identifier         || (b.sender||{}).identifier         || (b.contact||{}).identifier || '';\nconst NCH={ 'xc-token':NC_TOKEN, 'Content-Type':'application/json' };\nconst setBot = async (activo) => {\n  if(!wa) return;\n  const q = await req('GET', `${NOCODB}/api/v2/tables/${TID}/records?where=(contact_id,eq,${wa})&limit=1`, NCH);\n  const row = q && q.list && q.list[0];\n  if(row) await req('PATCH', `${NOCODB}/api/v2/tables/${TID}/records`, NCH, { Id: row.Id, bot_activo: activo });\n};\n// PRIORIDAD 1: mensaje de un vendedor (message_created outgoing, sin marca espejo).\n// Va PRIMERO: un mensaje del vendedor SIEMPRE toma el control, aunque el evento\n// traiga status=resolved heredado de la conversación.\nif (event==='message_created') {\n  const esOutgoing = (b.message_type==='outgoing' || b.message_type===1);\n  const esEspejo = !!(b.content_attributes && b.content_attributes.espejo);\n  const contenido = (b.content||'').trim();\n  if (esOutgoing && !esEspejo && contenido && wa) {\n    await setBot(false);\n    return [{ json:{ reenviar:true, wa, contenido } }];\n  }\n  return [{ json:{ reenviar:false, accion:'ignorado', motivo: esEspejo?'espejo':(!esOutgoing?'incoming':'sin_contenido') } }];\n}\n// PRIORIDAD 2: conversación RESUELTA (solo en conversation_updated) -> reactivar bot.\nif (event==='conversation_updated' || event==='conversation_resolved') {\n  const resuelto = (event==='conversation_resolved') || (b.status==='resolved') || (((b.conversation||{}).status)==='resolved');\n  if (resuelto) { await setBot(true); return [{ json:{ reenviar:false, accion:'bot_reactivado', wa } }]; }\n}\nreturn [{ json:{ reenviar:false, accion:'evento_ignorado', event } }];\n",
+        "options": {}
+      },
+      "position": [
+        440,
+        300
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "g0000000-0000-4000-8000-000000000001",
+      "name": "Webhook Chatwoot",
+      "parameters": {
+        "httpMethod": "POST",
+        "options": {},
+        "path": "chatwoot-eventos",
+        "responseMode": "lastNode"
+      },
+      "position": [
+        220,
+        300
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "webhookId": "chatwoot-eventos-cadabra"
+    },
+    {
+      "id": "g0000000-0000-4000-8000-000000000003",
+      "name": "¿Reenviar a WhatsApp?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "c-reenv",
+              "leftValue": "={{ $json.reenviar }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": true
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        660,
+        300
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2
+    }
+  ],
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "sourceWorkflowId": null,
+  "tags": []
+}

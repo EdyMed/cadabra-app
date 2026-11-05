@@ -1,0 +1,123 @@
+{
+  "active": true,
+  "connections": {
+    "Armar alerta": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Avisar por WhatsApp",
+            "type": "main"
+          },
+          {
+            "index": 0,
+            "node": "Avisar por correo",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Armar alerta",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "description": null,
+  "id": "bokdGONRGM4RnyyW",
+  "isArchived": false,
+  "name": "Alertas Cadabra (errores)",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "81adec30-ae84-40c7-bc73-d1146044cc89",
+      "name": "Armar alerta",
+      "parameters": {
+        "jsCode": "// Arma la alerta y evita avalanchas: el mismo error (workflow+nodo+mensaje) se avisa 1 vez cada 30 min.\nconst d = $input.first().json;\nconst ex = d.execution || {};\nconst wf = d.workflow || {};\nconst err = ex.error || (d.trigger && d.trigger.error) || {};\nconst partes = [err.description, err.message].filter(Boolean).map(String);\nconst msg = partes.length ? [...new Set(partes)].join(': ') : 'Error sin mensaje';\nconst nodo = ex.lastNodeExecuted || (err.node && err.node.name) || '(trigger)';\nconst clave = [wf.id, nodo, msg.slice(0, 80)].join('|');\n\nconst s = $getWorkflowStaticData('global');\ns.vistos = s.vistos || {};\nconst ahora = Date.now();\nfor (const k of Object.keys(s.vistos)) if (ahora - s.vistos[k].t > 6 * 3600e3) delete s.vistos[k];\nconst v = s.vistos[clave];\nif (v && ahora - v.t < 30 * 60e3) { v.omitidos = (v.omitidos || 0) + 1; return []; }\nconst omitidos = v ? (v.omitidos || 0) : 0;\ns.vistos[clave] = { t: ahora, omitidos: 0 };\n\nconst hora = new Date().toLocaleString('es-CL', { timeZone: 'America/Santiago' });\nconst texto = '🚨 *Falla en n8n*\\n'\n  + 'Workflow: ' + (wf.name || wf.id || '?') + '\\n'\n  + 'Nodo: ' + nodo + '\\n'\n  + 'Error: ' + msg.slice(0, 300) + '\\n'\n  + 'Ejecución: ' + (ex.id || '-') + ' (' + (ex.mode || '-') + ')\\n'\n  + (ex.url ? 'Ver: ' + ex.url + '\\n' : '')\n  + (omitidos ? 'Repeticiones omitidas en los últimos 30 min: ' + omitidos + '\\n' : '')\n  + 'Hora: ' + hora;\nreturn [{ json: { texto, asunto: '🚨 Falla n8n · ' + (wf.name || '') + ' · ' + nodo } }];"
+      },
+      "position": [
+        240,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "AkIBFXVUDXwvv1ta",
+          "name": "Header Auth account"
+        }
+      },
+      "id": "bd8ec518-57af-4280-8913-0ee9c5c6acf5",
+      "name": "Avisar por WhatsApp",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "jsonBody": "={{ JSON.stringify({ messaging_product:'whatsapp', to:'56995649108', type:'text', text:{ body: $json.texto } }) }}",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "specifyBody": "json",
+        "url": "https://graph.facebook.com/v21.0/1168256669712210/messages"
+      },
+      "position": [
+        500,
+        -100
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "dAYpvYE1zlmYmVCK",
+          "name": "Resend API"
+        }
+      },
+      "id": "7a2b0b88-e9ac-43fa-9068-5644f78ec570",
+      "name": "Avisar por correo",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "jsonBody": "={{ JSON.stringify({ from:'Alertas Cadabra <contacto@cadabra.cl>', to:['contacto@cadabra.cl'], subject:$json.asunto, text:$json.texto.replace(/\\*/g,'') }) }}",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "specifyBody": "json",
+        "url": "https://api.resend.com/emails"
+      },
+      "position": [
+        500,
+        100
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "cec35c3b-5d82-482f-b9a3-a27c7fdc8a94",
+      "name": "Error Trigger",
+      "parameters": {},
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1
+    }
+  ],
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Santiago"
+  },
+  "sourceWorkflowId": null,
+  "tags": []
+}

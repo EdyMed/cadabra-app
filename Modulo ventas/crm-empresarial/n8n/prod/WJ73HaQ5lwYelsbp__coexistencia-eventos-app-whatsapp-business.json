@@ -1,0 +1,94 @@
+{
+  "active": true,
+  "connections": {
+    "Parsear evento": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Guardar en Supabase",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Webhook coexistencia": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Parsear evento",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "description": null,
+  "id": "WJ73HaQ5lwYelsbp",
+  "isArchived": false,
+  "name": "Coexistencia – eventos (app WhatsApp Business)",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "credentials": {
+        "postgres": {
+          "id": "BIM03WKClC8bnUc8",
+          "name": "Supabase Ventas (RW)"
+        }
+      },
+      "id": "6792daf9-c955-4a15-a4ef-165a1980ddf2",
+      "name": "Guardar en Supabase",
+      "parameters": {
+        "operation": "executeQuery",
+        "options": {
+          "queryReplacement": "={{ [ $json.datos ] }}"
+        },
+        "query": "WITH d AS (SELECT $1::jsonb AS j),\nlin AS (\n  SELECT empresa FROM public.agente_lineas_whatsapp\n   WHERE phone_number_id = (SELECT j->>'pnid' FROM d)\n   ORDER BY activo DESC LIMIT 1),\nmsgs AS (\n  INSERT INTO public.conversation_history (empresa, phone_number, role, content, message_id, created_at, importado)\n  SELECT lin.empresa, m.tel, m.role, m.texto, m.mid, to_timestamp(m.ts), m.importado\n    FROM lin, jsonb_to_recordset((SELECT j->'mensajes' FROM d)) AS m(tel text, role text, texto text, mid text, ts double precision, importado boolean)\n  ON CONFLICT (message_id) WHERE message_id IS NOT NULL DO NOTHING\n  RETURNING 1),\npausas AS (\n  INSERT INTO public.bot_pausas (empresa, contact_id, hasta, motivo)\n  SELECT lin.empresa, p.tel, now() + interval '24 hours', 'respondió el dueño desde la app'\n    FROM lin, jsonb_array_elements_text((SELECT j->'pausar' FROM d)) AS p(tel)\n  ON CONFLICT (empresa, contact_id) DO UPDATE SET hasta = EXCLUDED.hasta, motivo = EXCLUDED.motivo, actualizado_en = now()\n  RETURNING 1),\ncadd AS (\n  INSERT INTO public.whatsapp_contactos (empresa, telefono, nombre)\n  SELECT lin.empresa, c.tel, c.nombre\n    FROM lin, jsonb_to_recordset((SELECT j->'contactos' FROM d)) AS c(tel text, nombre text, accion text)\n   WHERE c.accion = 'add'\n  ON CONFLICT (empresa, telefono) DO UPDATE SET nombre = COALESCE(EXCLUDED.nombre, public.whatsapp_contactos.nombre), actualizado_en = now()\n  RETURNING 1),\ncdel AS (\n  DELETE FROM public.whatsapp_contactos w\n   USING lin, jsonb_to_recordset((SELECT j->'contactos' FROM d)) AS c(tel text, nombre text, accion text)\n   WHERE c.accion = 'remove' AND w.empresa = lin.empresa AND w.telefono = c.tel\n  RETURNING 1),\nnota AS (\n  UPDATE public.agente_whatsapp_cuentas SET sync_mensaje = (SELECT j->>'nota' FROM d), actualizado_en = now()\n   WHERE phone_number_id = (SELECT j->>'pnid' FROM d) AND (SELECT j->>'nota' FROM d) IS NOT NULL\n  RETURNING 1),\nbaja AS (\n  UPDATE public.agente_whatsapp_cuentas\n     SET estado = 'desconectado', ultimo_error = 'Meta: ' || (SELECT j->>'baja_evento' FROM d), actualizado_en = now()\n   WHERE waba_id = (SELECT j->>'baja_waba' FROM d)\n  RETURNING phone_number_id),\nlbaja AS (\n  UPDATE public.agente_lineas_whatsapp l SET activo = false FROM baja WHERE l.phone_number_id = baja.phone_number_id\n  RETURNING 1)\nSELECT (SELECT empresa FROM lin) AS empresa,\n       (SELECT count(*) FROM msgs) AS mensajes, (SELECT count(*) FROM pausas) AS pausas,\n       (SELECT count(*) FROM cadd) AS contactos, (SELECT count(*) FROM cdel) AS contactos_borrados,\n       (SELECT count(*) FROM nota) AS notas, (SELECT count(*) FROM baja) AS bajas, (SELECT count(*) FROM lbaja) AS lineas_off;"
+      },
+      "position": [
+        480,
+        0
+      ],
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6
+    },
+    {
+      "id": "db92d086-1c09-4989-b87e-afc12d42f133",
+      "name": "Parsear evento",
+      "parameters": {
+        "jsCode": "// Normaliza los webhooks de coexistencia de Meta en listas para un solo INSERT.\nconst h = $json.headers || {};\nif (h['x-cadabra-clave'] !== '1903d8e4b6a133f6486979d9999abc3ea13fc0404477a38e') return [];\nconst body = $json.body || {};\nconst out = { pnid: null, mensajes: [], pausar: [], contactos: [], baja_waba: null, baja_evento: null, nota: null };\nconst dig = (s) => String(s || '').replace(/\\D/g, '');\nconst texto = (m) => m.text?.body ?? m.image?.caption ?? m.video?.caption ?? m.document?.caption ?? ('[' + (m.type || 'mensaje') + ']');\nfor (const e of body.entry || []) {\n  for (const ch of e.changes || []) {\n    const v = ch.value || {};\n    out.pnid = out.pnid || v.metadata?.phone_number_id || null;\n    if (ch.field === 'smb_message_echoes') {\n      // El dueño escribió desde la app: se guarda como 'vendedor' y se pausa el bot en ese chat.\n      for (const m of v.message_echoes || []) {\n        const tel = dig(m.to);\n        if (!tel) continue;\n        out.mensajes.push({ tel, role: 'vendedor', texto: texto(m), mid: m.id || null, ts: Number(m.timestamp) || Date.now() / 1000, importado: false });\n        if (!out.pausar.includes(tel)) out.pausar.push(tel);\n      }\n    } else if (ch.field === 'history') {\n      for (const hb of v.history || []) {\n        const md = hb.metadata || {};\n        out.nota = `historial: fase ${md.phase ?? '?'} · parte ${md.chunk_order ?? '?'} · ${md.progress ?? '?'}%`;\n        for (const t of hb.threads || []) {\n          const contacto = dig(t.id);\n          for (const m of t.messages || []) {\n            const desde = dig(m.from);\n            out.mensajes.push({ tel: contacto, role: desde === contacto ? 'user' : 'vendedor', texto: texto(m), mid: m.id || null, ts: Number(m.timestamp) || 0, importado: true });\n          }\n        }\n      }\n      for (const er of v.errors || []) out.nota = `historial no disponible: ${er.code} ${er.title || er.message || ''}`.trim();\n    } else if (ch.field === 'smb_app_state_sync') {\n      for (const s of v.state_sync || []) {\n        if (s.type !== 'contact') continue;\n        const tel = dig(s.contact?.phone_number);\n        if (tel) out.contactos.push({ tel, nombre: s.contact?.full_name || s.contact?.first_name || null, accion: s.action === 'remove' ? 'remove' : 'add' });\n      }\n    } else if (ch.field === 'account_update') {\n      if (['PARTNER_REMOVED', 'ACCOUNT_OFFBOARDED'].includes(v.event)) {\n        out.baja_waba = String(v.waba_info?.waba_id || e.id || '');\n        out.baja_evento = v.event;\n      }\n    }\n  }\n}\nif (!out.mensajes.length && !out.contactos.length && !out.baja_waba && !out.nota) return [];\nreturn [{ json: { datos: JSON.stringify(out) } }];\n"
+      },
+      "position": [
+        240,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "380254af-8f2d-4431-b0ed-4403a4efc26e",
+      "name": "Webhook coexistencia",
+      "parameters": {
+        "httpMethod": "POST",
+        "options": {},
+        "path": "coexistencia-eventos",
+        "responseMode": "onReceived"
+      },
+      "position": [
+        0,
+        0
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "webhookId": "0bd608d7-61a9-43f5-9cad-1fdd0e84b7ac"
+    }
+  ],
+  "settings": {
+    "errorWorkflow": "bokdGONRGM4RnyyW",
+    "executionOrder": "v1",
+    "timezone": "America/Santiago"
+  },
+  "sourceWorkflowId": null,
+  "tags": []
+}

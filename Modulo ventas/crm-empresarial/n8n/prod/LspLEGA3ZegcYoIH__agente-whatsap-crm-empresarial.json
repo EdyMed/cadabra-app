@@ -1,0 +1,2673 @@
+{
+  "active": true,
+  "connections": {
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Guardar turno",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Buffer: combinar mensajes": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "AI Agent",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Buffer: esperar 8s": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Buffer: leer timestamp",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Buffer: guardar mi marca": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Buffer: push mensaje",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Buffer: leer mensajes": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Buffer: limpiar lista",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Buffer: leer timestamp": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Buffer: ¿soy el último?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Buffer: limpiar lista": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Buffer: combinar mensajes",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Buffer: push mensaje": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Buffer: set timestamp",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Buffer: set timestamp": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Buffer: esperar 8s",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Buffer: ¿soy el último?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Buffer: leer mensajes",
+            "type": "main"
+          }
+        ],
+        []
+      ]
+    },
+    "Confirmar agenda (WhatsApp)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Contar conversación",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Consolidar contexto": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "¿Negocio configurado?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Crear evento (Calendar)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Confirmar agenda (WhatsApp)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Descargar binario": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Switch media descargada",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Detectar agenda (auto)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "¿Agendar?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Detectar interés (auto)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "¿Registrar lead?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Determinar rol": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Recuperar historial",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Enviar WhatsApp": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Contar conversación",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Extraer campos": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Resolver empresa",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Extraer media": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Obtener URL media",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Extraer texto PDF": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Normalizar documento",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "GPT-4o Vision": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Normalizar imagen",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Guarda: leer bot_activo": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Guarda: ¿bot activo?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Guarda: ¿bot activo?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Buffer: guardar mi marca",
+            "type": "main"
+          }
+        ],
+        []
+      ]
+    },
+    "Guardar turno": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "IF ¿enviar texto?",
+            "type": "main"
+          },
+          {
+            "index": 0,
+            "node": "Detectar interés (auto)",
+            "type": "main"
+          },
+          {
+            "index": 0,
+            "node": "Detectar agenda (auto)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "IF ¿enviar texto?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Enviar WhatsApp",
+            "type": "main"
+          }
+        ],
+        []
+      ]
+    },
+    "Merge empresa+msg": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Resolver rol",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Normalizar audio": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Resolver empresa",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Normalizar documento": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Resolver empresa",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Normalizar imagen": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Resolver empresa",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Obtener URL media": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Descargar binario",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "OpenAI GPT-4o": {
+      "ai_languageModel": [
+        [
+          {
+            "index": 0,
+            "node": "AI Agent",
+            "type": "ai_languageModel"
+          }
+        ]
+      ]
+    },
+    "Recuperar historial": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Consolidar contexto",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Registrar lead (auto)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "¿Alertar vendedor?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Resolver empresa": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Merge empresa+msg",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Resolver rol": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Determinar rol",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Responder 200 (media)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Extraer media",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Responder 200 (otros)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "¿Otros: es mensaje?",
+            "type": "main"
+          },
+          {
+            "index": 0,
+            "node": "¿Evento coexistencia?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Responder 200 (texto)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Extraer campos",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Switch media descargada": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Whisper transcribir",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "GPT-4o Vision",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Extraer texto PDF",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Switch tipo mensaje": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Responder 200 (texto)",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Responder 200 (media)",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Responder 200 (media)",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Responder 200 (media)",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Responder 200 (otros)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Webhook Verificación (GET)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Responder challenge Meta",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Webhook WhatsApp": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Switch tipo mensaje",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Whisper transcribir": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Normalizar audio",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "crm_actualizar_estado": {
+      "ai_tool": [
+        [
+          {
+            "index": 0,
+            "node": "AI Agent",
+            "type": "ai_tool"
+          }
+        ]
+      ]
+    },
+    "crm_guardar_lead": {
+      "ai_tool": [
+        [
+          {
+            "index": 0,
+            "node": "AI Agent",
+            "type": "ai_tool"
+          }
+        ]
+      ]
+    },
+    "mostrar_menu": {
+      "ai_tool": [
+        [
+          {
+            "index": 0,
+            "node": "AI Agent",
+            "type": "ai_tool"
+          }
+        ]
+      ]
+    },
+    "saldo_cliente": {
+      "ai_tool": [
+        [
+          {
+            "index": 0,
+            "node": "AI Agent",
+            "type": "ai_tool"
+          }
+        ]
+      ]
+    },
+    "stock_producto": {
+      "ai_tool": [
+        [
+          {
+            "index": 0,
+            "node": "AI Agent",
+            "type": "ai_tool"
+          }
+        ]
+      ]
+    },
+    "top_productos": {
+      "ai_tool": [
+        [
+          {
+            "index": 0,
+            "node": "AI Agent",
+            "type": "ai_tool"
+          }
+        ]
+      ]
+    },
+    "ventas_periodo": {
+      "ai_tool": [
+        [
+          {
+            "index": 0,
+            "node": "AI Agent",
+            "type": "ai_tool"
+          }
+        ]
+      ]
+    },
+    "¿Agendar?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Crear evento (Calendar)",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "¿Fuera de horario?",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "¿Alertar vendedor?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Alertar vendedor",
+            "type": "main"
+          }
+        ],
+        []
+      ]
+    },
+    "¿Evento coexistencia?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Reenviar a Coexistencia",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "¿Fuera de horario?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Avisar horario (WhatsApp)",
+            "type": "main"
+          }
+        ],
+        []
+      ]
+    },
+    "¿Negocio configurado?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Guarda: leer bot_activo",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "index": 0,
+            "node": "Avisar negocio pendiente (WhatsApp)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "¿Otros: es mensaje?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Enviar aviso (otros)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "¿Registrar lead?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Registrar lead (auto)",
+            "type": "main"
+          }
+        ],
+        []
+      ]
+    }
+  },
+  "description": null,
+  "id": "LspLEGA3ZegcYoIH",
+  "isArchived": false,
+  "name": "Agente Whatsap CRM Empresarial",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+      "maxTries": 3,
+      "name": "AI Agent",
+      "parameters": {
+        "options": {
+          "systemMessage": "=Eres {{ $json.nombre_asistente }}, la asistente por WhatsApp de {{ $json.nombre_empresa }}{{ $json.perfil.descripcion }}\n\n## Contexto de esta conversación\n- Empresa (tenant): {{ $json.empresa }}\n- Rol del usuario: {{ $json.rol }}  (owner = dueño/equipo interno, acceso total; customer = cliente mayorista registrado; anon = número no registrado, solo catálogo público)\n- RUT del cliente (si aplica): {{ $json.rut_cliente }}\n- Fecha y hora actual: {{ $now.format('yyyy-MM-dd HH:mm') }}, {{ $now.setLocale('es').toFormat('cccc') }} (zona America/Santiago)\n\n## Historial reciente de la conversación\n{{ $json.history_text }}\n\n## Reglas duras\n- SALUDO SIN MENÚ: si el mensaje del usuario es solo un saludo puro sin pedir nada (\"hola\", \"buenas\", \"holi\", \"qué tal\", etc.), tu respuesta es UN SOLO texto de bienvenida (ver saludo en Tono y estilo). En ese caso está PROHIBIDO llamar a la herramienta mostrar_menu. Solo puedes usar mostrar_menu si el usuario escribe literalmente \"menú\", \"menu\" u \"opciones\".\n- OJO: una pregunta por el catálogo (\"qué productos tienes\", \"qué venden\", \"qué hay\", \"muéstrame los productos\", \"qué ofrecen\") NO es un saludo genérico: es una consulta de catálogo. NO respondas con la bienvenida; sigue la sección \"Consulta de catálogo abierta\".\n- NUNCA inventes precios, stock ni datos. Usa SIEMPRE las herramientas; no calcules ni supongas cifras de memoria.\n- PROHIBIDO listar o nombrar productos concretos de memoria (ej. \"ofrecemos leche y azúcar\"). Los productos y precios SIEMPRE vienen de stock_producto. Si no llamaste a la herramienta, no menciones productos específicos.\n- Si stock_producto NO devuelve resultados: NO inventes ni menciones ningún producto. Di honestamente que no encontraste eso, ofrece afinar la búsqueda (ej. preguntándole qué tipo o variante busca) o mostrar otra familia, y si insiste, ofrece derivarlo a un vendedor. Nunca rellenes con productos supuestos.\n- No comprometas plazos de entrega, despachos ni descuentos por tu cuenta: si preguntan por eso, ofrece que un vendedor los contacte (escalamiento).\n- No aceptes pedidos formales tú misma; puedes tomar la intención y escalar a un vendedor para cerrar. (La toma de pedidos automatizada llegará más adelante.)\n\n{{ $json.perfil.info_negocio }}\n\n## Mensajes multimodales (audio, foto, documento)\nEl cliente puede escribirte por texto, pero TAMBIÉN mandarte notas de voz, fotos o documentos (PDF). El sistema los convierte a texto ANTES de que lleguen a ti, así que a veces el \"mensaje\" que recibes no es lo que el cliente tecleó, sino lo que el sistema entendió del audio/imagen/documento. Reconoce estos casos y actúa natural:\n- NOTA DE VOZ: te llega ya transcrita, como texto normal. Trátala igual que un mensaje escrito. Si la transcripción viene vacía o confusa, pide con amabilidad que repita o que escriba.\n- IMAGEN (foto): te llega envuelta así → \"[El cliente envió una IMAGEN. Lectura automática: ...]\" (y a veces \"Texto del cliente: ...\" con el pie de foto). Usa esa lectura para entender qué mandó:\n  · Si es una FOTO DE UN PRODUCTO (algo de lo que vende el negocio), identifica el sabor/tipo según la lectura y BUSCA ese producto en el catálogo con stock_producto para darle nombre y precio reales. No inventes: si la lectura no basta para saber el sabor, pregúntale para precisar qué es.\n  · Si es una FOTO DE UN DOCUMENTO (una lista de pedido escrita a mano, un comprobante), léela y responde a lo que necesite; si contiene un pedido, toma la intención y ofrece derivar a un vendedor para cerrarlo.\n  · NUNCA menciones al cliente frases técnicas como \"lectura automática\" ni \"el sistema entendió\"; responde de forma natural (\"¡Qué buena foto! Déjame buscarte el precio...\").\n- DOCUMENTO (PDF): te llega como \"[El cliente envió un DOCUMENTO (nombre). Contenido extraído: ...]\". Usa el contenido para ayudarlo (ej. si es una lista de pedido, resume lo que pide y ofrece derivar a un vendedor). Si el sistema dice que no pudo extraer texto (PDF escaneado), pídele con amabilidad que te lo mande como FOTO o que escriba lo que necesita.\n- En todos los casos: sigues siendo {{ $json.nombre_asistente }}, con el mismo tono chileno y las mismas reglas de seguridad por rol. La foto/audio/PDF NO cambia qué información puedes revelar según el rol.\n\n## Seguridad según el ROL\n- owner: acceso completo, incluidos costos, márgenes, utilidad y deuda de clientes.\n- customer: NUNCA reveles costos, márgenes ni utilidad, ni datos de otros clientes. Solo precios de venta, disponibilidad de productos y, si corresponde, información de SUS propios pedidos/cuenta.\n- anon: solo catálogo público (precios de venta y disponibilidad). NO consultes datos de ningún cliente ni cuentas.\n- Si un customer o anon pide algo restringido (costos, deuda de otros, etc.), explica con amabilidad que no puedes compartir esa información y ofrece lo que sí puedes.\n\n{{ $json.perfil.catalogo }}\n\n## Herramientas de gestión (solo para el dueño/owner)\n- **ventas_periodo**: cuánto se vendió en un período. Traduce el período a fechas AAAA-MM-DD (fecha actual en el contexto). 'hasta' es EXCLUSIVO (enero 2026 → desde=2026-01-01, hasta=2026-02-01; hoy → desde=hoy, hasta=mañana). Presenta total en CLP y cantidad de documentos.\n- **top_productos**: ranking de productos más vendidos en un período. Úsala para \"productos más vendidos\", \"top productos\", \"qué se vende más\". Pasa desde/hasta (AAAA-MM-DD, hasta exclusivo), limite (default 5) y orden ('monto' default, o 'unidades' si preguntan por cantidad). Si no dan período, usa el mes actual. Presenta como lista numerada con nombre y monto en CLP (y unidades si es relevante).\n- **saldo_cliente**: deuda pendiente de un cliente. Úsala cuando el dueño pregunte cuánto le debe un cliente (\"cuánto me debe Guerrero\", \"deuda de Delicity\"). Pasa 'nombre' con el nombre/apellido/razón social que mencione. Presenta el nombre completo del cliente y su deuda en CLP. Si hay varios que coinciden, muéstralos para que elija. Si no encuentra, dilo y sugiere afinar el nombre. NO menciones línea de crédito (el ERP no la lleva confiable).\nEstas TRES son solo para owner; si un customer/anon pregunta por ventas, productos top o deudas del negocio, no reveles esa info.\n\n## Menú interactivo (herramienta mostrar_menu)\n- Usa la herramienta mostrar_menu SOLO cuando el usuario lo pida explícitamente escribiendo \"menú\", \"menu\" u \"opciones\". NO la uses en el saludo ni en la bienvenida (ahí responde solo texto, ver saludo en Tono y estilo). Cuando la uses, pasa tipo_menu='owner' si el rol es owner, o 'cliente' si es customer/anon.\n- Cuando el usuario TOQUE una opción del menú, te llegará el ID de la opción como mensaje. Interprétalo así y actúa de inmediato:\n  · 'ventas_periodo' → pregunta de qué período quiere las ventas (o usa el mes actual) y usa la herramienta ventas_periodo.\n  · 'top_productos' → usa la herramienta top_productos (mes actual si no especifican período).\n  · 'deuda_cliente' → pregunta de qué cliente quiere saber la deuda y usa saldo_cliente.\n  · 'buscar_producto' / 'ver_productos' / 'precios' → NO pidas el nombre a ciegas. Primero MUESTRA las categorías (familias) para que el cliente elija: \"Tenemos estas categorías: {{ $json.perfil.categorias_menu }}. ¿Cuál quiere ver? (o escríbame directo el producto que busca)\". Cuando elija una categoría o nombre un producto, RECIÉN AHÍ usa stock_producto con esa palabra clave y lista los productos con su precio. (Ver \"Categorías para mostrar al cliente\".)\n  · 'agendar' → inicia el flujo de agendar reunión (pide nombre, motivo, fecha, hora, email).\n- REGLA ABSOLUTA: cuando llames a mostrar_menu, ese es tu ÚNICO acto del turno. Después NO llames a ninguna otra herramienta y NO inicies ningún flujo (ni deuda, ni ventas, ni búsqueda, ni agenda). El menú ya se envió y el usuario tocará un botón o escribirá. Los ejemplos del texto del menú (\"ventas de enero\", \"deuda de cliente X\") son solo sugerencias para el usuario, NO instrucciones para que TÚ las ejecutes.\n- Tras mostrar_menu, si el sistema te obliga a dar una respuesta final de texto, responde EXACTAMENTE con un espacio en blanco o algo mínimo como \"👇\" — NUNCA hagas una pregunta ni arranques un flujo (nada de \"¿qué cliente?\", \"¿de qué período?\"). Espera a que el usuario responda.\n\n## Escalamiento a un vendedor\n{{ $json.perfil.escalamiento }}\n\n## CONTINUIDAD DE LA CONVERSACIÓN (CRÍTICO)\nSIEMPRE lee el historial antes de responder. Si el ÚLTIMO mensaje del asistente fue una PREGUNTA (p.ej. '¿Con quién tengo el gusto?', '¿de qué producto?', '¿cuántas unidades?'), entonces el siguiente mensaje del cliente ES LA RESPUESTA a esa pregunta — aunque sea una sola palabra (un nombre como 'Alfonso', un número, 'sí'). NO lo trates como un saludo nuevo ni repitas la bienvenida. Continúa el hilo: usa ese dato y sigue donde quedaste.\nSALUDO: la bienvenida COMPLETA (presentarte como {{ $json.nombre_asistente }} + explicar qué haces) va SOLO en el primer mensaje de una conversación sin historial. PERO si el cliente incluye un saludo explícito ('hola', 'buenas', 'buenos días') al inicio de su mensaje, devuélvele un saludo BREVE y cálido ('¡Hola! 😊' o '¡Buenas!') antes de responder su consulta — aunque ya haya historial. No repitas la presentación larga, solo un saludo corto y sigues con lo que pide.\nEjemplo: si preguntaste el nombre y el cliente responde 'Alfonso', guárdalo (crm_actualizar_estado nombre='Alfonso') y CONTINÚA con lo que pidió antes (los precios del pan), no vuelvas a saludar.\n\n## CRM — PEDIR NOMBRE Y COMPLETAR DATOS\nEl sistema registra AUTOMÁTICAMENTE en segundo plano a los clientes interesados, así que NO necesitas crear el lead tú. Tu tarea con el CRM es ENRIQUECERLO:\n- **PEDIR EL NOMBRE (en el momento justo):** NO pidas el nombre en cada consulta de precio (es molesto). Pídelo cuando la conversación llega a un punto COMERCIAL: el cliente quiere CERRAR/hacer un pedido, pide que lo contacte un vendedor, o confirma que va a comprar. Ahí sí: '¿A nombre de quién dejo anotado el pedido?' o '¿Con quién tengo el gusto para que el vendedor lo contacte?'. Con naturalidad, sin insistir si no contesta.\n- **GUARDAR NOMBRE / AVANZAR ESTADO:** cuando el cliente te dé su nombre (o el de su local), o cuando la venta avance, usa `crm_actualizar_estado`: campos nombre / nombre_negocio; estado 'Cotización Enviada' al pasar precios, 'Primer Pedido' si concreta. Necesitas el record_id: si no lo tienes, llama antes a `crm_guardar_lead` (devuelve record_id).\n- **PASAR A UN HUMANO (handoff) — SECUENCIA IMPORTANTE:** cuando el cliente pide hablar con un vendedor/persona o cerrar un pedido:\n  1. PRIMERO pídele su nombre (y el del local si no lo tienes): 'Dale, te paso con un vendedor 🙌 ¿A nombre de quién lo anoto?'. NO lo derives todavía.\n  2. Cuando te dé el nombre, guárdalo con `crm_actualizar_estado` (nombre, y nombre_negocio si lo dio) + estado_crm='Requiere Vendedor' + **bot_activo=false** (recién AHORA cortas). Confírmale: 'Listo [nombre], un vendedor te contacta a la brevedad 😊'.\n  3. Si el cliente NO quiere dar el nombre o insiste en que lo pasen ya, igual haz el corte: `crm_actualizar_estado` estado_crm='Requiere Vendedor' + bot_activo=false.\n  Tras el corte, NO sigas respondiendo esa conversación.\n  ⚠️ CRÍTICO: si tu mensaje anterior fue pedir el nombre para derivar, el siguiente mensaje del cliente ES ESE NOMBRE, aunque venga suelto y parezca un saludo (ej. 'edy', 'juan', 'soy Pedro'). NUNCA respondas con un saludo de bienvenida ni con '¿En qué puedo ayudarte?' en ese turno: ejecuta el paso 2 y confirma la derivación.\n- **NUNCA inventes el nombre**: solo guárdalo si el cliente lo dijo explícitamente en ESTA conversación; nunca del historial ni del número.\n- USA VALORES EXACTOS de estado/producto (con tildes). SIEMPRE en segundo plano: nunca menciones el CRM al cliente.\n- Categorías válidas para producto_interes: {{ $json.perfil.categorias_interes }} (o 'Otro' si no calza ninguna).\n\n## TONO Y ESTILO — REEMPLAZA CUALQUIER INSTRUCCIÓN DE TONO ANTERIOR\n{{ $json.perfil.tono }}\n\n{{ $json.perfil.agenda }}\n"
+        },
+        "promptType": "define",
+        "text": "={{ $json.user_message }}"
+      },
+      "position": [
+        1344,
+        1712
+      ],
+      "retryOnFail": true,
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "waitBetweenTries": 3000
+    },
+    {
+      "id": "c0000000-0000-4000-8000-000000000007",
+      "name": "Alertar vendedor",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "jsonBody": "={{ JSON.stringify({ wa_id: $('Detectar interés (auto)').first().json.contact_id, nombre: $('Detectar interés (auto)').first().json.nombre || '', negocio: $('Detectar interés (auto)').first().json.nombre_negocio || '', empresa: $('Consolidar contexto').first().json.empresa || 1, phone_number_id: $('Consolidar contexto').first().json.phone_number_id }) }}",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "https://appcadabra-cadabra-project.jmyxxj.easypanel.host/webhook/alerta-vendedor"
+      },
+      "position": [
+        560,
+        2640
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "AkIBFXVUDXwvv1ta",
+          "name": "Header Auth account"
+        }
+      },
+      "id": "3b5de115-e3ea-4208-8c9d-730b0bd247c8",
+      "name": "Avisar horario (WhatsApp)",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "jsonBody": "={{ JSON.stringify({ messaging_product:'whatsapp', to: $json.wa, type:'text', text:{ body: $json.aviso } }) }}",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "=https://graph.facebook.com/v21.0/{{ $('Consolidar contexto').first().json.phone_number_id }}/messages"
+      },
+      "position": [
+        1088,
+        3216
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "AkIBFXVUDXwvv1ta",
+          "name": "Header Auth account"
+        }
+      },
+      "id": "2c176bbc-5411-4b70-b82a-c749e9948e21",
+      "name": "Avisar negocio pendiente (WhatsApp)",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "jsonBody": "={{ JSON.stringify({ messaging_product:'whatsapp', to: $json.from, type:'text', text:{ body: '✅ Agente configurado correctamente. Falta configurar el negocio asociado a este número (catálogo, horarios y datos de atención). Mientras tanto, el asistente no responderá consultas.' } }) }}",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "=https://graph.facebook.com/v21.0/{{ $('Consolidar contexto').first().json.phone_number_id }}/messages"
+      },
+      "position": [
+        2232,
+        452
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "d0000000-0000-4000-8000-000000000009",
+      "name": "Buffer: combinar mensajes",
+      "parameters": {
+        "jsCode": "const ctx = $('Consolidar contexto').first().json;\nlet lista = $('Buffer: leer mensajes').first().json.mensajes_lista;\nif (!Array.isArray(lista)) lista = lista ? [lista] : [];\n// Redis push tail=true => orden cronológico. Unir con salto de línea.\nconst combinado = lista.filter(Boolean).join('\\n').trim() || ctx.user_message;\nreturn [{ json: Object.assign({}, ctx, { user_message: combinado }) }];"
+      },
+      "position": [
+        2384,
+        1328
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "d0000000-0000-4000-8000-000000000004",
+      "name": "Buffer: esperar 8s",
+      "parameters": {
+        "amount": 8
+      },
+      "position": [
+        1088,
+        1328
+      ],
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "webhookId": "buffer-wait-crm"
+    },
+    {
+      "id": "d0000000-0000-4000-8000-000000000003",
+      "name": "Buffer: guardar mi marca",
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "mk",
+              "name": "mi_marca",
+              "type": "string",
+              "value": "={{ $now.toMillis() + '-' + $execution.id }}"
+            },
+            {
+              "id": "fr",
+              "name": "from_buf",
+              "type": "string",
+              "value": "={{ $('Consolidar contexto').first().json.from }}"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "position": [
+        304,
+        1328
+      ],
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4
+    },
+    {
+      "credentials": {
+        "redis": {
+          "id": "Pb4ansRdtu4Fu0yh",
+          "name": "Redis Cadabra"
+        }
+      },
+      "id": "d0000000-0000-4000-8000-000000000007",
+      "name": "Buffer: leer mensajes",
+      "parameters": {
+        "key": "={{ 'buf:' + $('Buffer: guardar mi marca').first().json.from_buf }}",
+        "keyType": "list",
+        "operation": "get",
+        "options": {},
+        "propertyName": "mensajes_lista"
+      },
+      "position": [
+        1872,
+        1328
+      ],
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1
+    },
+    {
+      "credentials": {
+        "redis": {
+          "id": "Pb4ansRdtu4Fu0yh",
+          "name": "Redis Cadabra"
+        }
+      },
+      "id": "d0000000-0000-4000-8000-000000000005",
+      "name": "Buffer: leer timestamp",
+      "parameters": {
+        "key": "={{ 'buf_ts:' + $('Buffer: guardar mi marca').first().json.from_buf }}",
+        "keyType": "string",
+        "operation": "get",
+        "options": {},
+        "propertyName": "ts_actual"
+      },
+      "position": [
+        1344,
+        1328
+      ],
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1
+    },
+    {
+      "credentials": {
+        "redis": {
+          "id": "Pb4ansRdtu4Fu0yh",
+          "name": "Redis Cadabra"
+        }
+      },
+      "id": "d0000000-0000-4000-8000-000000000008",
+      "name": "Buffer: limpiar lista",
+      "parameters": {
+        "key": "={{ 'buf:' + $('Buffer: guardar mi marca').first().json.from_buf }}",
+        "operation": "delete"
+      },
+      "position": [
+        2128,
+        1328
+      ],
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1
+    },
+    {
+      "credentials": {
+        "redis": {
+          "id": "Pb4ansRdtu4Fu0yh",
+          "name": "Redis Cadabra"
+        }
+      },
+      "id": "d0000000-0000-4000-8000-000000000001",
+      "name": "Buffer: push mensaje",
+      "parameters": {
+        "list": "={{ 'buf:' + $('Consolidar contexto').first().json.from }}",
+        "messageData": "={{ String($('Consolidar contexto').first().json.user_message || '') }}",
+        "operation": "push",
+        "tail": true
+      },
+      "position": [
+        560,
+        1328
+      ],
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1
+    },
+    {
+      "credentials": {
+        "redis": {
+          "id": "Pb4ansRdtu4Fu0yh",
+          "name": "Redis Cadabra"
+        }
+      },
+      "id": "d0000000-0000-4000-8000-000000000002",
+      "name": "Buffer: set timestamp",
+      "parameters": {
+        "expire": true,
+        "key": "={{ 'buf_ts:' + $('Buffer: guardar mi marca').first().json.from_buf }}",
+        "keyType": "string",
+        "operation": "set",
+        "value": "={{ $('Buffer: guardar mi marca').first().json.mi_marca }}"
+      },
+      "position": [
+        832,
+        1328
+      ],
+      "type": "n8n-nodes-base.redis",
+      "typeVersion": 1
+    },
+    {
+      "id": "d0000000-0000-4000-8000-000000000006",
+      "name": "Buffer: ¿soy el último?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "c-ultimo",
+              "leftValue": "={{ $json.ts_actual }}",
+              "operator": {
+                "operation": "equals",
+                "type": "string"
+              },
+              "rightValue": "={{ $('Buffer: guardar mi marca').first().json.mi_marca }}"
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 1
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        1600,
+        1328
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "AkIBFXVUDXwvv1ta",
+          "name": "Header Auth account"
+        }
+      },
+      "id": "a1000000-0000-4000-8000-000000000004",
+      "name": "Confirmar agenda (WhatsApp)",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "jsonBody": "={{ (() => { const d = $('Detectar agenda (auto)').first().json; const ok = $json && ($json.id || $json.htmlLink); const f = d.inicio.slice(0,10).split('-').reverse().join('-'); const h = d.inicio.slice(11,16); let txt; if (ok) { txt = d.mensaje_ok ? d.mensaje_ok.split('{tipo}').join(d.tipo).split('{fecha}').join(f).split('{hora}').join(h).split('{correo}').join(d.correo || '') : ('Listo ✅ Te agendé la ' + d.tipo + ' para el ' + f + ' a las ' + h + (d.lugar ? ' (' + d.lugar + ')' : '') + '.' + (d.correo ? ' Te llegó la invitación a ' + d.correo + ' 😊' : ' 😊')); } else { txt = 'Uf, no pude agendar la ' + d.tipo + ' ahora mismo 😕. Un vendedor te contactará para coordinar.'; } return JSON.stringify({ messaging_product:'whatsapp', to: d.wa, type:'text', text:{ body: txt } }); })() }}",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "=https://graph.facebook.com/v21.0/{{ $('Consolidar contexto').first().json.phone_number_id }}/messages"
+      },
+      "position": [
+        1088,
+        3008
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+      "name": "Consolidar contexto",
+      "parameters": {
+        "jsCode": "const ctx = $('Determinar rol').first().json;\nconst rows = $input.all().map(i => i.json).filter(r => r && r.role && r.content).reverse();\nconst history = rows.map(r => ({ role: r.role, content: r.content }));\nconst historyText = history.map(h => h.role + ': ' + h.content).join('\\n');\n\n// ---- Ficha del agente por empresa (agente_empresas_config.config) ----\n// Cada bloque tiene un texto por defecto genérico; la empresa 1 (Sofía) guarda en su\n// ficha el texto original de la panadería, así que su comportamiento no cambia.\nconst cfg = (ctx.config && typeof ctx.config === 'object') ? ctx.config : {};\nconst asist = ctx.nombre_asistente || 'Asistente';\nconst empresaNom = ctx.nombre_empresa || 'la empresa';\nconst t = (v, d) => (typeof v === 'string' && v.trim()) ? v.trim() : d;\nconst sub = s => String(s || '').split('{asistente}').join(asist).split('{empresa}').join(empresaNom);\nconst neg = cfg.negocio || {}, cat = cfg.catalogo || {}, tono = cfg.tono || {}, ag = cfg.agenda || {};\nconst menu = cfg.menu || {}, interes = cfg.interes || {};\nconst DIAS = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];\n\nconst descripcion = t(neg.descripcion, '')\n  ? ', ' + sub(neg.descripcion)\n  : '. Respondes consultas de productos y precios, ayudas a tus clientes y agendas citas, siempre usando las HERRAMIENTAS disponibles.';\n\nconst categorias_menu = t(cat.categorias_menu, 'las categorías de nuestro catálogo');\n\nlet catalogo = t(cat.texto, '');\nif (!catalogo) {\n  const l = ['## Catálogo — cómo atender consultas de productos',\n    '- Categorías principales del negocio: ' + categorias_menu + '.',\n    '- Si el cliente pregunta en general (\"qué venden\", \"qué productos tienes\"), menciona brevemente esas categorías y pregúntale cuál quiere ver CON PRECIO. No recites productos de memoria.',\n    '- Cuando elija una categoría o nombre un producto, usa stock_producto pasando SOLO la(s) palabra(s) clave (sin relleno como \"de\" o \"por favor\"). Si da vacío, reintenta con una palabra más general antes de decir que no hay.',\n    '- DISPONIBILIDAD: ' + t(cat.disponibilidad, 'los productos que devuelve la herramienta están disponibles; para pedidos grandes o urgentes, sugiere confirmar con un vendedor.')];\n  if (t(cat.unidad, '')) l.push('- Unidad de venta: ' + cat.unidad + '. Si no especifican, aclara la unidad.');\n  if (Array.isArray(cat.sinonimos)) cat.sinonimos.forEach(s => { if (s && s.dice && s.buscar) l.push('- Si el cliente dice \"' + s.dice + '\" → busca \"' + s.buscar + '\".'); });\n  catalogo = l.join('\\n');\n}\ncatalogo = sub(catalogo);\n\nconst escalamiento = sub(t(cfg.escalamiento, 'Ofrece derivar a un vendedor cuando: el cliente quiera cerrar un pedido, negociar precios o condiciones, haya un reclamo, o lleves 3 turnos sin resolver su necesidad.'));\n\nlet tonoTxt = t(tono.texto, '');\nif (!tonoTxt) {\n  const usted = tono.trato === 'usted';\n  tonoTxt = [\n    usted ? 'Habla cordial y respetuoso, tratando al cliente SIEMPRE de USTED (nunca de tú). IMPORTANTE: aunque los ejemplos de estas instrucciones estén escritos en tú, TÚ respondes siempre de usted (\"¿Le gustaría…?\", \"le muestro\", \"¿en qué le ayudo?\"). Cálido pero profesional.'\n          : 'Habla CERCANO Y NATURAL, tuteando al cliente (de TÚ, no de usted). Cálido pero profesional, sin sonar acartonado.',\n    '- Frases CORTAS y directas. Evita fórmulas rígidas (\"no dude en\", \"hágamelo saber\").',\n    '- Saludo/bienvenida en el primer mensaje: ' + t(tono.saludo, usted ? \"'¡Hola! 😊 Soy {asistente}, de {empresa}. ¿En qué le puedo ayudar?'\" : \"'¡Hola! 😊 Soy {asistente}. Cuéntame, ¿en qué te puedo ayudar?'\"),\n    '- Emojis con moderación (' + t(tono.emojis, '😊') + '), no en cada frase.',\n    '- Respuestas BREVES para WhatsApp: máximo 4-5 frases.',\n    '- Formatea montos en pesos chilenos: $1.234 (punto de miles, sin decimales).',\n    '- Muestra los productos con el nombre tal como viene del catálogo (stock_producto).'\n  ].join('\\n');\n}\ntonoTxt = sub(tonoTxt);\n\nconst info = [];\nif (t(neg.horario, '')) info.push('- Horario de atención: ' + neg.horario + '.');\nif (t(neg.direccion, '')) info.push('- Dirección: ' + neg.direccion + '.');\nif (t(neg.despacho, '')) info.push('- Despacho / delivery: ' + neg.despacho);\nif (t(neg.pagos, '')) info.push('- Medios de pago: ' + neg.pagos);\nif (t(neg.pedido_minimo, '')) info.push('- Pedido mínimo: ' + neg.pedido_minimo);\nif (t(neg.politicas, '')) info.push('- Políticas: ' + neg.politicas);\nif (t(neg.no_prometer, '')) info.push('- NUNCA prometas: ' + neg.no_prometer);\nif (Array.isArray(cfg.faq)) cfg.faq.forEach(f => { if (f && f.p && f.r) info.push('- Si preguntan \"' + f.p + '\" → ' + f.r); });\nconst info_negocio = info.length ? '## Información del negocio (úsala para responder; no inventes nada fuera de esto)\\n' + sub(info.join('\\n')) : '';\n\nconst categorias_interes = (Array.isArray(interes.categorias) ? interes.categorias.map(c => c && c.nombre).filter(Boolean) : []).join(', ') || 'Otro';\n\nlet agenda;\nif (ag.activa === false) {\n  agenda = '## AGENDA\\nEste negocio NO agenda citas por WhatsApp. Si el cliente quiere agendar, ofrécele que un vendedor lo contacte para coordinar. NO uses las tools de calendario.';\n} else {\n  const tipo = t(ag.tipo, 'reunión');\n  const ust = tono.trato === 'usted';\n  const pideCorreo = ag.pide_correo !== false;\n  const datos = pideCorreo ? 'fecha, hora y correo' : 'fecha y hora';\n  let horario = '';\n  const restringido = (Array.isArray(ag.dias) && ag.dias.length > 0) || !!(ag.hora_inicio && ag.hora_fin);\n  if (Array.isArray(ag.dias) && ag.dias.length) horario += 'Días disponibles: ' + ag.dias.map(d => DIAS[d]).filter(Boolean).join(', ') + '. ';\n  if (ag.hora_inicio && ag.hora_fin) horario += 'Horario: de ' + ag.hora_inicio + ' a ' + ag.hora_fin + ' hrs. ';\n  if (ag.duracion_min) horario += 'Cada ' + tipo + ' dura ' + ag.duracion_min + ' minutos. ';\n  if (ag.anticipacion_horas) horario += 'Se agenda con al menos ' + ag.anticipacion_horas + ' horas de anticipación. ';\n  if (ag.lugar) horario += 'Lugar: ' + ag.lugar + '. ';\n  agenda = [\n    '## AGENDAR ' + tipo.toUpperCase() + ' — EL SISTEMA LA CREA, TÚ SOLO PIDES LOS DATOS',\n    'El sistema agenda la ' + tipo + ' AUTOMÁTICAMENTE en segundo plano cuando tiene ' + datos + '. Tu única tarea es RECOPILAR esos datos con naturalidad.',\n    horario ? '- ' + horario.trim() + (restringido ? ' Si el cliente pide un día u hora fuera de esto, explícale con amabilidad y ofrécele otra opción dentro del horario. ANTES de rechazar, compara el día pedido con la lista de días disponibles y la hora con el horario: si calza, ESTÁ disponible y NO lo rechaces (aunque antes en la conversación hayas rechazado otro día).' : '') : '',\n    '- Para agendar solo necesitas: **' + datos + '** (el motivo es opcional). **NO pidas el nombre del local/negocio.**',\n    '- Si FALTAN datos, pídelos' + (pideCorreo ? (ust ? \" ('¿para qué fecha y hora? ¿a qué correo le envío la invitación?').\" : \" ('¿para qué fecha y hora? ¿a qué correo te envío la invitación?').\") : (ust ? \" ('¿para qué fecha y hora le acomoda?').\" : \" ('¿para qué fecha y hora te acomoda?').\")),\n    \"- **PROHIBIDO afirmar que agendaste.** Cuando el cliente da \" + datos + \", tu ÚNICA respuesta permitida es EXACTAMENTE algo como: 'Perfecto, coordino la \" + tipo + \" y \" + (ust ? 'le' : 'te') + \" llega la confirmación en un momento 😊'. NUNCA digas 'quedó agendada', 'está agendada', 'te envié la invitación', 'nos vemos ahí' ni menciones la hora como confirmada — el SISTEMA agenda y confirma él mismo justo después de tu mensaje. Si tú también confirmas, el cliente recibe DOS confirmaciones (mala experiencia). Solo di que estás coordinando, nada más.\",\n    '- NO uses las tools de calendario tú mismo; el sistema se encarga.',\n    '- Tú NO conoces la disponibilidad del calendario: NUNCA digas que un horario está ocupado o no disponible, ni propongas otra hora por tu cuenta, salvo que el día u hora pedidos estén FUERA de los días/horario indicados arriba. Si el cliente dio los datos necesarios, responde SOLO la frase de coordinación.'\n  ].filter(Boolean).join('\\n');\n}\n\nconst menuDef = {\n  texto_owner: 'Hola 👋 ¿Qué necesita? Elija una opción o escríbame directo (ej: \"ventas de enero\", \"top productos\").',\n  texto_cliente: 'Hola 👋 ¿En qué le ayudo? Elija una opción o escríbame su consulta.',\n  botones_owner: [{ id: 'ventas_periodo', title: 'Ventas' }, { id: 'buscar_producto', title: 'Buscar producto' }, { id: 'agendar', title: 'Agendar reunión' }],\n  botones_cliente: [{ id: 'ver_productos', title: 'Ver productos' }, { id: 'precios', title: 'Precios' }, { id: 'agendar', title: 'Agendar' }]\n};\nconst perfilMenu = {\n  texto_owner: t(menu.texto_owner, menuDef.texto_owner),\n  texto_cliente: t(menu.texto_cliente, menuDef.texto_cliente),\n  botones_owner: Array.isArray(menu.botones_owner) && menu.botones_owner.length ? menu.botones_owner.slice(0, 3) : menuDef.botones_owner,\n  botones_cliente: Array.isArray(menu.botones_cliente) && menu.botones_cliente.length ? menu.botones_cliente.slice(0, 3) : menuDef.botones_cliente\n};\n\nreturn [{ json: {\n  empresa: ctx.empresa,\n  nombre_empresa: ctx.nombre_empresa,\n  nombre_asistente: ctx.nombre_asistente,\n  rol: ctx.rol,\n  rut_cliente: ctx.rut_cliente,\n  from: ctx.from,\n  phone_number_id: ctx.phone_number_id,\n  user_message: ctx.user_message,\n  message_id: ctx.message_id,\n  history,\n  history_text: historyText || '(sin historial previo)',\n  config: cfg,\n  negocio_configurado: cfg.configurado === true || (cfg.configurado !== false && !!t(neg.descripcion, '')),\n  perfil: { descripcion, catalogo, categorias_menu, escalamiento, tono: tonoTxt, info_negocio, categorias_interes, agenda, menu: perfilMenu, calendar_id: String(ag.calendar_id || 'primary'), fuente_catalogo: String(((cfg.fuentes || {}).catalogo || {}).tipo || 'erp_supabase') }\n}}];"
+      },
+      "position": [
+        1872,
+        832
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "e0000000-0000-4000-8000-000000000020",
+      "name": "Contar conversación",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "jsonBody": "={{ JSON.stringify({ empresa: $('Consolidar contexto').first().json.empresa || 1, wa_id: $('Consolidar contexto').first().json.from }) }}",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "https://appcadabra-cadabra-project.jmyxxj.easypanel.host/webhook/contar-conversacion"
+      },
+      "position": [
+        1120,
+        240
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "bpCcBAeM6BGoXB2L",
+          "name": "Google Calendar account"
+        }
+      },
+      "id": "a1000000-0000-4000-8000-000000000003",
+      "name": "Crear evento (Calendar)",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "additionalFields": {
+          "attendees": "={{ $json.attendees }}",
+          "description": "={{ $json.descripcion }}",
+          "location": "={{ $json.lugar }}",
+          "sendUpdates": "all",
+          "summary": "={{ $json.titulo }}"
+        },
+        "calendar": {
+          "__rl": true,
+          "cachedResultName": "Calendario de la empresa (ficha)",
+          "mode": "list",
+          "value": "={{ $json.calendar_id }}"
+        },
+        "end": "={{ $json.fin }}",
+        "start": "={{ $json.inicio }}"
+      },
+      "position": [
+        832,
+        3008
+      ],
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "AkIBFXVUDXwvv1ta",
+          "name": "Header Auth account"
+        }
+      },
+      "id": "b1n000000-0000-4000-8000-000000000004",
+      "name": "Descargar binario",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        },
+        "url": "={{ $json.url }}"
+      },
+      "position": [
+        832,
+        432
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "a1000000-0000-4000-8000-000000000001",
+      "name": "Detectar agenda (auto)",
+      "parameters": {
+        "jsCode": "const ctx = $('Consolidar contexto').first().json;\nconst hist = ctx.history || [];\n// texto = últimos turnos del USUARIO + mensaje actual (los datos pueden venir repartidos)\nconst histUser = hist.filter(h => h.role==='user').slice(-4).map(h=>h.content).join(' \\n ');\nconst full = (histUser + ' \\n ' + (ctx.user_message||''));\n// INTENCIÓN: puede venir del historial. Pero los DATOS (hora/fecha/correo/motivo)\n// se extraen SOLO del mensaje ACTUAL (si no, agarra la hora de una reunión anterior).\nconst low = (ctx.user_message||'').toLowerCase();\nconst lowFull = full.toLowerCase();\nconst wa = ctx.from;\n// ¿hay intención de agendar? (mira historial + actual)\nconst ag = (ctx.config && ctx.config.agenda) || {};\nif (ag.activa === false) return [{ json: { agendar:false, motivo:'agenda desactivada' } }];\nconst tipoAg = String(ag.tipo || 'reunión');\nconst quiereAgendar = /(agendar|agenda|reuni[oó]n|reunirnos|c[ií]ta|juntarnos|reservar hora|hora para)/.test(lowFull) || lowFull.includes(tipoAg.toLowerCase());\nif (!quiereAgendar) return [{ json: { agendar:false, motivo:'sin intencion' } }];\n\n// --- extraer CORREO (solo del mensaje actual) ---\nconst em = (ctx.user_message||'').match(/[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}/i);\nconst correo = em ? em[0] : null;\n\n// --- extraer HORA (ej 'a las 12', '12:30', 'las 3 pm') ---\nlet hh=null, mm=0;\nlet mh = low.match(/(?:a\\s+las?\\s+|las\\s+)?(\\d{1,2})(?:[:\\.](\\d{2}))?\\s*(am|pm|hrs|horas|h)?/);\n// buscar específicamente cerca de 'las' para no agarrar el '12' de otra cosa\nlet mh2 = low.match(/(?:a\\s+las?|las)\\s+(\\d{1,2})(?:[:\\.](\\d{2}))?\\s*(am|pm)?/);\nconst use = mh2 || mh;\nif (use) { hh = parseInt(use[1]); mm = use[2]?parseInt(use[2]):0; const ap=use[3]; if(ap==='pm'&&hh<12)hh+=12; if(ap==='am'&&hh===12)hh=0; }\n\n// --- extraer FECHA ---\n// base: ahora en Chile\nconst now = new Date(new Date().toLocaleString('en-US',{timeZone:'America/Santiago'}));\nlet fecha = null;\nif (/pasado\\s+ma[ñn]ana/.test(low)) { fecha = new Date(now); fecha.setDate(fecha.getDate()+2); }\nelse if (/ma[ñn]ana/.test(low)) { fecha = new Date(now); fecha.setDate(fecha.getDate()+1); }\nelse if (/hoy/.test(low)) { fecha = new Date(now); }\nelse {\n  // días de la semana: 'el viernes', 'este lunes', 'próximo martes' → el más cercano en el futuro\n  const dias = { 'domingo':0,'lunes':1,'martes':2,'mi[eé]rcoles':3,'miercoles':3,'jueves':4,'viernes':5,'s[aá]bado':6,'sabado':6 };\n  let diaSemana = null;\n  for (const k in dias) { if (new RegExp('\\\\b'+k+'\\\\b').test(low)) { diaSemana = dias[k]; break; } }\n  if (diaSemana !== null) {\n    fecha = new Date(now);\n    let delta = (diaSemana - fecha.getDay() + 7) % 7;\n    if (delta === 0) delta = 7; // 'el viernes' cuando hoy es viernes = el próximo\n    fecha.setDate(fecha.getDate() + delta);\n  } else {\n    const dm = (ctx.user_message||'').match(/(\\d{1,2})[\\/\\-](\\d{1,2})(?:[\\/\\-](\\d{2,4}))?/);\n    if(dm){ const y=dm[3]?(dm[3].length===2?2000+parseInt(dm[3]):parseInt(dm[3])):now.getFullYear(); fecha=new Date(y, parseInt(dm[2])-1, parseInt(dm[1])); }\n  }\n}\n\n// --- MOTIVO: quitar lo ya parseado, tomar frase de motivo ---\nlet motivo = 'Reunión';\nconst mm2 = low.match(/(?:motivo|para|sobre|por)\\s+([\\wáéíóúñ ]{3,60})/);\nconst _min = new Set(['de','del','la','las','los','el','y','o','a','en','con','por','para','un','una']);\nconst cap = s => (s||'').split(/\\s+/).map((w,i) => { if(!w) return w; const l=w.toLowerCase(); if(i>0 && _min.has(l)) return l; return w.charAt(0).toUpperCase()+w.slice(1); }).join(' ');\nif (mm2) motivo = cap(mm2[1].trim());\nelse { const partes=(ctx.user_message||'').split(',').map(s=>s.trim()).filter(Boolean); const ult=partes[partes.length-1]; if(ult && !/@|\\d{1,2}[:h]|las |ma[ñn]ana|hoy/.test(ult)) motivo=cap(ult); }\n\n// ¿tenemos lo mínimo? fecha + hora + correo\nconst pideCorreo = ag.pide_correo !== false;\nconst completo = !!(fecha && hh!==null && (correo || !pideCorreo) && wa);\nif (!completo) return [{ json: { agendar:false, incompleto:true, tiene_fecha:!!fecha, tiene_hora:hh!==null, tiene_correo:!!correo } }];\n// ANTI-LOOP PRECISO: solo bloquea si en el historial YA se confirmó ESTA MISMA fecha+hora.\n// (No bloquea reuniones nuevas con otra fecha/hora, aunque el historial tenga confirmaciones viejas.)\n// Construir la etiqueta de esta reunión y buscar si ya se confirmó exactamente esa.\n\n// armar inicio/fin (1 hora) en formato local SIN zona (el nodo aplica America/Santiago)\nconst pad=n=>String(n).padStart(2,'0');\nconst y=fecha.getFullYear(), mo=pad(fecha.getMonth()+1), d=pad(fecha.getDate());\nconst inicio = `${y}-${mo}-${d}T${pad(hh)}:${pad(mm)}:00`;\n// duración y horario permitido desde la ficha de la empresa\nconst durMin = Number(ag.duracion_min) || 60;\nconst finDate = new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate(), hh, mm + durMin);\nconst fin = `${finDate.getFullYear()}-${pad(finDate.getMonth()+1)}-${pad(finDate.getDate())}T${pad(finDate.getHours())}:${pad(finDate.getMinutes())}:00`;\nconst DIAS = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];\nconst hm = s => { const m = String(s||'').match(/(\\d{1,2}):(\\d{2})/); return m ? parseInt(m[1])*60 + parseInt(m[2]) : null; };\nconst iniLim = hm(ag.hora_inicio), finLim = hm(ag.hora_fin), t0 = hh*60 + mm, t1 = t0 + durMin;\nconst diasOk = !Array.isArray(ag.dias) || !ag.dias.length || ag.dias.includes(fecha.getDay());\nconst horaOk = iniLim === null || finLim === null || (t0 >= iniLim && t1 <= finLim);\nconst antMs = (Number(ag.anticipacion_horas) || 0) * 3600000;\nconst cuando = new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate(), hh, mm);\nconst antOk = cuando.getTime() - now.getTime() >= antMs;\nif (!diasOk || !horaOk || !antOk) {\n  const dTxt = Array.isArray(ag.dias) && ag.dias.length ? ag.dias.map(x => DIAS[x]).join(', ') : 'todos los días';\n  const hTxt = (iniLim !== null && finLim !== null) ? ` de ${ag.hora_inicio} a ${ag.hora_fin} hrs` : '';\n  const aTxt = antMs ? ` y con al menos ${ag.anticipacion_horas} horas de anticipación` : '';\n  const usted = !!(ctx.config && ctx.config.tono && ctx.config.tono.trato === 'usted');\n  return [{ json: { agendar:false, fuera_horario:true, wa, aviso: `Uy, ese horario no lo tengo disponible 😕. Agendo ${dTxt}${hTxt}${aTxt}. ¿Qué otro día u hora ${usted ? 'le' : 'te'} acomoda?` } }];\n}\n// ANTI-LOOP PRECISO: bloquear solo si el bot YA confirmó ('te agendé/agendada') Y menciona\n// esta MISMA fecha en el historial. Reuniones con otra fecha SÍ se agendan.\nconst histBot = hist.filter(h=>h.role==='assistant').map(h=>(h.content||'').toLowerCase()).join(' || ');\nconst fechaStr = `${y}-${mo}-${d}`;\nconst confirmoAntes = /(te agend[ée]|reuni[oó]n .{0,30}agendada)/.test(histBot);\nconst mismaFecha = histBot.includes(fechaStr);\nif (confirmoAntes && mismaFecha) return [{ json: { agendar:false, motivo:'ya_agendada_misma_fecha' } }];\nconst correoNeg = ag.correo_negocio ? String(ag.correo_negocio).trim() : null;\nconst attendees = [correo, correoNeg].filter(Boolean);\nconst tipoCap = tipoAg.charAt(0).toUpperCase() + tipoAg.slice(1);\nconst titulo = (motivo && motivo !== 'Reunión') ? `${tipoCap}: ${motivo}` : `${tipoCap} con cliente WhatsApp +${wa}`;\nconst descripcion = `${motivo === 'Reunión' ? tipoCap : motivo}\\nCliente WhatsApp: +${wa}` + (correo ? `\\nCorreo: ${correo}` : '') + `\\nAgendado por ${ctx.nombre_asistente || 'el asistente'} (${ctx.nombre_empresa || ''})`;\nreturn [{ json: { agendar:true, wa, correo, inicio, fin, motivo, titulo, descripcion, attendees, calendar_id: String(ag.calendar_id || 'primary'), lugar: ag.lugar || '', tipo: tipoAg, mensaje_ok: ag.mensaje_confirmacion || '' } }];"
+      },
+      "position": [
+        304,
+        3008
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "c0000000-0000-4000-8000-000000000003",
+      "name": "Detectar interés (auto)",
+      "parameters": {
+        "jsCode": "const ctx = $('Consolidar contexto').first().json;\n// Analizar el mensaje ACTUAL + el historial reciente del cliente (por el buffer,\n// un turno puede ser corto como 'de pino'; el interés/producto puede estar en turnos previos).\nconst histUser = (ctx.history || []).filter(h => h.role === 'user').map(h => h.content).join(' ');\nconst msg = ((histUser + ' ' + (ctx.user_message || ''))).toLowerCase();\nconst wa = ctx.from;\n// Detectar producto por palabras clave del catálogo real\nconst cfgI = (ctx.config && ctx.config.interes) || {};\nconst cats = Array.isArray(cfgI.categorias) ? cfgI.categorias : [];\nlet producto = null;\nfor (const c of cats) { try { if (c && c.regex && new RegExp(c.regex, 'i').test(msg)) { producto = c.nombre; break; } } catch (e) { /* regex inválida en la ficha */ } }\n// Señales de interés comercial: base genérica + las del rubro (ficha)\nlet interes = /(precio|valor|cu[aá]nto|cotiza|comprar|pedido|encargo|reserva|disponib|stock)/.test(msg);\nif (!interes && cfgI.senales) { try { interes = new RegExp(cfgI.senales, 'i').test(msg); } catch (e) {} }\n// Sin categorías en la ficha, el interés comercial basta para registrarlo como 'Otro'\nif (!producto && interes && cats.length === 0) producto = 'Otro';\n// Petición de HANDOFF a humano (mira SOLO el mensaje actual, no el historial)\nconst msgActual = (ctx.user_message || '').toLowerCase();\nconst pideHumano = /(vendedor|hablar con (alguien|una persona|un humano|un ejecutivo|un asesor)|con una persona|atenci[oó]n humana|asesor|ejecutivo)/.test(msgActual);\n// ¿El ÚLTIMO mensaje del bot pidió el NOMBRE? Entonces la respuesta del cliente ES el nombre.\nconst hist = ctx.history || [];\nlet ultimoBot = '';\nfor (let i = hist.length - 1; i >= 0; i--) { if (hist[i].role === 'assistant') { ultimoBot = (hist[i].content||'').toLowerCase(); break; } }\nconst botPidioNombre = /(a nombre de qui[eé]n|con qui[eé]n tengo el gusto|nombre de la persona|c[oó]mo te llamas|tu nombre|qui[eé]n eres|a qui[eé]n anoto)/.test(ultimoBot);\n// Capturar nombre: el mensaje actual del cliente, limpio (quitar 'soy', 'me llamo', 'local', etc.)\nlet nombreCap = null, negocioCap = null;\nif (botPidioNombre) {\n  const t = (ctx.user_message || '').trim();\n  // separar posible 'nombre, local X' o 'nombre y el local es X'\n  let resto = t;\n  // 1) extraer el NEGOCIO si viene con marcador explícito ('local X', 'negocio X', 'mi local es X', 'del local X')\n  const mNeg = t.match(/(?:mi\\s+)?(?:local|negocio|tienda|restaurant\\w*|caf[eé]|almac[eé]n|sushi|kiosco|food ?truck)\\s+(?:se\\s+llama\\s+|es\\s+|:\\s*)?([\\wáéíóúñ' ]{2,40})/i);\n  if (mNeg) { negocioCap = mNeg[1].trim(); resto = t.replace(mNeg[0], '').trim(); }\n  // 2) el NOMBRE es lo que queda antes de una coma/marcador (quitar prefijos 'soy', 'me llamo')\n  resto = resto.replace(/[,;].*$/, '').trim();\n  resto = resto.replace(/^(hola\\s+)?(soy|me llamo|mi nombre es|es|soy el|soy la)\\s+/i, '').trim();\n  resto = resto.replace(/\\s+(del|de la|de|el|la)\\s*$/i, '').trim();\n  // si tras quitar el negocio no queda nombre (ej. 'local los tres cerditos'), nombre queda null\n  if (resto && resto.length >= 2 && resto.length <= 30 && !/^(local|negocio|el|la|los|las)$/i.test(resto)) nombreCap = resto;\n  // capitalizar\n  const _min = new Set(['de','del','la','las','los','el','y','o','a','en','con','por','para','un','una']);\n  const cap = s => (s||'').split(/\\s+/).map((w,i) => { if(!w) return w; const l=w.toLowerCase(); if(i>0 && _min.has(l)) return l; return w.charAt(0).toUpperCase()+w.slice(1); }).join(' ');\n  if (nombreCap) nombreCap = cap(nombreCap);\n  if (negocioCap) negocioCap = cap(negocioCap);\n}\n// ¿Estamos en un handoff pendiente? (la ficha ya está en Requiere Vendedor o el bot pidió nombre tras pedir vendedor)\nconst enHandoff = /(vendedor|pasar con|te contact|a la brevedad)/.test(ultimoBot);\n\nconst debeRegistrar = (!!producto && interes && !!wa) || (pideHumano && !!wa) || (botPidioNombre && !!nombreCap && !!wa);\nconst body = { contact_id: wa, phone: wa, origen_lead: 'whatsapp' };\nif (producto) body.producto_interes = producto;\nif (nombreCap) body.nombre = nombreCap;\nif (negocioCap) body.nombre_negocio = negocioCap;\nif (pideHumano) { body.estado_crm = 'Requiere Vendedor'; }\n// Si el bot pidió nombre en contexto de handoff y el cliente lo dio → guardar + CORTAR (bot_activo=false)\nif (botPidioNombre && nombreCap && enHandoff) { body.estado_crm = 'Requiere Vendedor'; body.bot_activo = false; }\nif (!body.estado_crm) body.estado_crm = 'En Conversación';\nreturn [{ json: Object.assign({ debeRegistrar, pideHumano, capturoNombre: !!nombreCap, corte: (botPidioNombre && nombreCap && enHandoff) }, body) }];"
+      },
+      "position": [
+        304,
+        2432
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "99999999-9999-4999-8999-999999999999",
+      "name": "Determinar rol",
+      "parameters": {
+        "jsCode": "const prev = $('Merge empresa+msg').first().json;\nconst rolRows = $input.all();\nconst rolRow = rolRows.length > 0 ? rolRows[0].json : {};\nreturn [{ json: {\n  ...prev,\n  rol: rolRow.rol ?? 'anon',\n  rut_cliente: rolRow.rut_cliente ?? null,\n  nombre_contacto: rolRow.nombre ?? null\n}}];"
+      },
+      "position": [
+        1344,
+        832
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "AkIBFXVUDXwvv1ta",
+          "name": "Header Auth account"
+        }
+      },
+      "id": "13131313-1313-4313-8313-131313131313",
+      "name": "Enviar WhatsApp",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"to\": \"{{ $('Consolidar contexto').first().json.from }}\",\n  \"type\": \"text\",\n  \"text\": { \"body\": {{ JSON.stringify($('AI Agent').first().json.output) }} }\n}",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "=https://graph.facebook.com/v21.0/{{ $('Consolidar contexto').first().json.phone_number_id }}/messages"
+      },
+      "position": [
+        832,
+        2208
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "AkIBFXVUDXwvv1ta",
+          "name": "Header Auth account"
+        }
+      },
+      "id": "07r05000-0000-4000-8000-000000000042",
+      "name": "Enviar aviso (otros)",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"to\": \"{{ $json.from }}\",\n  \"type\": \"text\",\n  \"text\": { \"body\": \"Por ahora puedo leer texto, notas de voz, fotos y PDF 🙌. Ese tipo de mensaje no lo puedo procesar; cuéntame por texto o mándame una foto y te ayudo.\" }\n}",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "=https://graph.facebook.com/v21.0/{{ $json.phone_number_id }}/messages"
+      },
+      "position": [
+        2384,
+        0
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "55555555-5555-4555-8555-555555555555",
+      "name": "Extraer campos",
+      "parameters": {
+        "jsCode": "const body = $input.first().json.body;\nconst value = body?.entry?.[0]?.changes?.[0]?.value ?? {};\nconst msg = value.messages?.[0] ?? {};\nconst metadata = value.metadata ?? {};\n\n// Texto normal O respuesta de un botón/lista interactiva.\nlet userMessage = msg.text?.body ?? '';\nif (msg.type === 'interactive') {\n  const inter = msg.interactive ?? {};\n  // El id que definimos en el menú (ej. 'ventas_mes') llega aquí; lo usamos como texto\n  userMessage = inter.button_reply?.id || inter.list_reply?.id\n             || inter.button_reply?.title || inter.list_reply?.title || '';\n}\n\nreturn [{ json: {\n  from: msg.from ?? null,\n  phone_number_id: metadata.phone_number_id ?? null,\n  user_message: userMessage,\n  message_id: msg.id ?? null,\n  timestamp: msg.timestamp ?? null\n}}];"
+      },
+      "position": [
+        304,
+        832
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "med1a000-0000-4000-8000-000000000002",
+      "name": "Extraer media",
+      "parameters": {
+        "jsCode": "const body = $input.first().json.body;\nconst value = body?.entry?.[0]?.changes?.[0]?.value ?? {};\nconst msg = value.messages?.[0] ?? {};\nconst metadata = value.metadata ?? {};\nconst type = msg.type;\nconst media = msg[type] ?? {};   // msg.audio / msg.image / msg.document\nreturn [{ json: {\n  from: msg.from ?? null,\n  phone_number_id: metadata.phone_number_id ?? null,\n  message_id: msg.id ?? null,\n  timestamp: msg.timestamp ?? null,\n  msg_type: type,\n  media_id: media.id ?? null,\n  mime_type: media.mime_type ?? null,\n  filename: media.filename ?? null,\n  caption: media.caption ?? '',      // pie de foto/documento si lo hay\n  voice: media.voice ?? false\n}}];"
+      },
+      "position": [
+        304,
+        432
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "d0c00000-0000-4000-8000-000000000030",
+      "name": "Extraer texto PDF",
+      "parameters": {
+        "operation": "pdf",
+        "options": {}
+      },
+      "position": [
+        2384,
+        432
+      ],
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1
+    },
+    {
+      "credentials": {
+        "openAiApi": {
+          "id": "m7BC6hEy8r3b2qLs",
+          "name": "OpenAI account"
+        }
+      },
+      "id": "1mg00000-0000-4000-8000-000000000020",
+      "name": "GPT-4o Vision",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "jsonBody": "={{ (() => {\n  const b64 = $binary.data.data;\n  const mime = $('Extraer media').first().json.mime_type || 'image/jpeg';\n  const caption = $('Extraer media').first().json.caption || '';\n  const instruccion = 'Eres el lector de imágenes de una panadería/pastelería mayorista chilena (empanadas, pasteles, pan, sopaipillas, insumos). Describe en español y de forma útil qué muestra esta imagen para atender al cliente. Si es un PRODUCTO de panadería, di qué producto parece (sabor/tipo de empanada, pastel, pan, etc.) para poder buscarlo en el catálogo. Si es un DOCUMENTO (lista de pedido, comprobante, factura, cotización), transcribe su texto y los ítems/cantidades. Sé conciso.' + (caption ? (' El cliente escribió junto a la imagen: \\\"' + caption + '\\\".') : '');\n  return JSON.stringify({\n    model: 'gpt-4o',\n    messages: [{ role: 'user', content: [\n      { type: 'text', text: instruccion },\n      { type: 'image_url', image_url: { url: 'data:' + mime + ';base64,' + b64 } }\n    ]}],\n    max_tokens: 500\n  });\n})() }}",
+        "method": "POST",
+        "nodeCredentialType": "openAiApi",
+        "options": {},
+        "sendBody": true,
+        "specifyBody": "json",
+        "url": "https://api.openai.com/v1/chat/completions"
+      },
+      "position": [
+        1872,
+        432
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "credentials": {
+        "postgres": {
+          "id": "BIM03WKClC8bnUc8",
+          "name": "Supabase Ventas (RW)"
+        }
+      },
+      "id": "e0000000-0000-4000-8000-000000000001",
+      "name": "Guarda: leer bot_activo",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "operation": "executeQuery",
+        "options": {
+          "queryReplacement": "={{ [ $('Consolidar contexto').first().json.from, $('Consolidar contexto').first().json.empresa || 1 ] }}"
+        },
+        "query": "SELECT l.id, l.contact_id, CASE WHEN EXISTS (SELECT 1 FROM public.bot_pausas p WHERE p.empresa = $2 AND p.contact_id = $1 AND p.hasta > now()) THEN false ELSE l.bot_activo END AS bot_activo FROM (SELECT 1) x LEFT JOIN LATERAL (SELECT * FROM crm.crm_leads WHERE contact_id = $1 AND empresa = $2 LIMIT 1) l ON true"
+      },
+      "position": [
+        304,
+        1120
+      ],
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6
+    },
+    {
+      "id": "e0000000-0000-4000-8000-000000000002",
+      "name": "Guarda: ¿bot activo?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "c-onoff",
+              "leftValue": "={{ $json.bot_activo === false ? 'OFF' : 'ON' }}",
+              "operator": {
+                "operation": "equals",
+                "type": "string"
+              },
+              "rightValue": "ON"
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 1
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        560,
+        1120
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "postgres": {
+          "id": "BIM03WKClC8bnUc8",
+          "name": "Supabase Ventas (RW)"
+        }
+      },
+      "id": "12121212-1212-4212-8212-121212121212",
+      "name": "Guardar turno",
+      "parameters": {
+        "operation": "executeQuery",
+        "options": {},
+        "query": "insert into public.conversation_history (empresa, phone_number, role, content, message_id)\nvalues\n  ({{ $('Consolidar contexto').first().json.empresa }}, '{{ $('Consolidar contexto').first().json.from }}', 'user', '{{ String($('Consolidar contexto').first().json.user_message).replace(/'/g, \"''\") }}', '{{ $('Consolidar contexto').first().json.message_id }}'),\n  ({{ $('Consolidar contexto').first().json.empresa }}, '{{ $('Consolidar contexto').first().json.from }}', 'assistant', '{{ String($('AI Agent').first().json.output).replace(/'/g, \"''\") }}', null);"
+      },
+      "position": [
+        304,
+        2208
+      ],
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6
+    },
+    {
+      "id": "ffffffff-ffff-4fff-8fff-ffffffffffff",
+      "name": "IF ¿enviar texto?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "cond-enviar-texto",
+              "leftValue": "={{ (($('AI Agent').first().json.output || '').split('👇').join('').trim().length) > 0 }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": "true"
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 1
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        560,
+        2208
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2
+    },
+    {
+      "id": "77777777-7777-4777-8777-777777777777",
+      "name": "Merge empresa+msg",
+      "parameters": {
+        "jsCode": "const empresaRow = $input.first().json;\n// El shape de mensaje (from, user_message...) viene en el item que entró a\n// \"Resolver empresa\": en texto = \"Extraer campos\"; en multimodal = \"Normalizar *\".\n// \"Resolver empresa\" preserva el input previo vía $('...'), así que lo tomamos de\n// la primera fuente disponible.\nconst srcNames = ['Extraer campos', 'Normalizar audio', 'Normalizar imagen', 'Normalizar documento'];\nlet extra = null;\nfor (const nm of srcNames) {\n  try {\n    const it = $(nm).first();\n    if (it && it.json && it.json.from) { extra = it.json; break; }\n  } catch (e) { /* nodo no ejecutado en esta rama */ }\n}\nextra = extra || {};\nreturn [{ json: {\n  empresa: empresaRow.empresa ?? null,\n  nombre_empresa: empresaRow.nombre_empresa ?? 'la empresa',\n  nombre_asistente: empresaRow.nombre_asistente ?? 'Asistente',\n  config: empresaRow.config || {},\n  from: extra.from,\n  phone_number_id: extra.phone_number_id,\n  user_message: extra.user_message,\n  message_id: extra.message_id\n}}];"
+      },
+      "position": [
+        832,
+        832
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "a0d10000-0000-4000-8000-000000000011",
+      "name": "Normalizar audio",
+      "parameters": {
+        "jsCode": "const meta = $('Extraer media').first().json;\nconst texto = ($input.first().json.text || '').trim();\nreturn [{ json: {\n  from: meta.from,\n  phone_number_id: meta.phone_number_id,\n  user_message: texto || '(nota de voz vacía)',\n  message_id: meta.message_id,\n  timestamp: meta.timestamp\n}}];"
+      },
+      "position": [
+        1600,
+        432
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "d0c00000-0000-4000-8000-000000000031",
+      "name": "Normalizar documento",
+      "parameters": {
+        "jsCode": "const meta = $('Extraer media').first().json;\nconst texto = ($input.first().json.text || '').trim();\nconst caption = (meta.caption || '').trim();\nconst nombre = meta.filename || 'documento';\nlet user_message;\nif (texto) {\n  user_message = '[El cliente envió un DOCUMENTO (' + nombre + '). Contenido extraído: ' + texto.slice(0, 4000) + ']';\n} else {\n  user_message = '[El cliente envió un DOCUMENTO (' + nombre + ') pero no pude extraer texto (puede ser un PDF escaneado o una imagen). Pídele amablemente que te lo mande como foto o que escriba lo que necesita.]';\n}\nif (caption) user_message += '\\nTexto del cliente: ' + caption;\nreturn [{ json: {\n  from: meta.from,\n  phone_number_id: meta.phone_number_id,\n  user_message,\n  message_id: meta.message_id,\n  timestamp: meta.timestamp\n}}];"
+      },
+      "position": [
+        2640,
+        432
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "1mg00000-0000-4000-8000-000000000021",
+      "name": "Normalizar imagen",
+      "parameters": {
+        "jsCode": "const meta = $('Extraer media').first().json;\nconst resp = $input.first().json;\nconst lectura = resp?.choices?.[0]?.message?.content?.trim() || '(no pude leer la imagen)';\nconst caption = (meta.caption || '').trim();\nconst user_message = '[El cliente envió una IMAGEN. Lectura automática: ' + lectura + ']' + (caption ? ('\\nTexto del cliente: ' + caption) : '');\nreturn [{ json: {\n  from: meta.from,\n  phone_number_id: meta.phone_number_id,\n  user_message,\n  message_id: meta.message_id,\n  timestamp: meta.timestamp\n}}];"
+      },
+      "position": [
+        2128,
+        432
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "AkIBFXVUDXwvv1ta",
+          "name": "Header Auth account"
+        }
+      },
+      "id": "u1r000000-0000-4000-8000-000000000003",
+      "name": "Obtener URL media",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "options": {},
+        "url": "=https://graph.facebook.com/v21.0/{{ $json.media_id }}"
+      },
+      "position": [
+        560,
+        432
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "credentials": {
+        "openAiApi": {
+          "id": "m7BC6hEy8r3b2qLs",
+          "name": "OpenAI account"
+        }
+      },
+      "id": "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+      "maxTries": 3,
+      "name": "OpenAI GPT-4o",
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "cachedResultName": "gpt-4o-mini",
+          "mode": "list",
+          "value": "gpt-4o-mini"
+        },
+        "options": {
+          "temperature": 0.3
+        }
+      },
+      "position": [
+        304,
+        1856
+      ],
+      "retryOnFail": true,
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "waitBetweenTries": 3000
+    },
+    {
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "BIM03WKClC8bnUc8",
+          "name": "Supabase Ventas (RW)"
+        }
+      },
+      "id": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+      "name": "Recuperar historial",
+      "parameters": {
+        "operation": "executeQuery",
+        "options": {
+          "queryReplacement": "={{ $json.empresa }},{{ $json.from }}"
+        },
+        "query": "select role, content\nfrom public.conversation_history\nwhere empresa = $1 and phone_number = $2\norder by created_at desc\nlimit 10;"
+      },
+      "position": [
+        1600,
+        832
+      ],
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6
+    },
+    {
+      "id": "69bf9599-1f6e-4236-9c56-a2c02820af60",
+      "name": "Reenviar a Coexistencia",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Cadabra-Clave",
+              "value": "1903d8e4b6a133f6486979d9999abc3ea13fc0404477a38e"
+            }
+          ]
+        },
+        "jsonBody": "={{ JSON.stringify($json.body) }}",
+        "method": "POST",
+        "options": {
+          "timeout": 20000
+        },
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "https://appcadabra-cadabra-project.jmyxxj.easypanel.host/webhook/coexistencia-eventos"
+      },
+      "position": [
+        2384,
+        -224
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "id": "c0000000-0000-4000-8000-000000000005",
+      "name": "Registrar lead (auto)",
+      "parameters": {
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "jsonBody": "={{ (() => { const b = { contact_id: $json.contact_id, phone: $json.phone, producto_interes: $json.producto_interes, estado_crm: $json.estado_crm, origen_lead: $json.origen_lead, nombre: $json.nombre, nombre_negocio: $json.nombre_negocio, empresa: $('Consolidar contexto').first().json.empresa || 1 }; if ($json.bot_activo === false) b.bot_activo = false; Object.keys(b).forEach(k => (b[k] === undefined || b[k] === null || b[k] === '') && delete b[k]); return JSON.stringify(b); })() }}",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "https://appcadabra-cadabra-project.jmyxxj.easypanel.host/webhook/crm-upsert"
+      },
+      "position": [
+        832,
+        2432
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "credentials": {
+        "postgres": {
+          "id": "BIM03WKClC8bnUc8",
+          "name": "Supabase Ventas (RW)"
+        }
+      },
+      "id": "66666666-6666-4666-8666-666666666666",
+      "name": "Resolver empresa",
+      "parameters": {
+        "operation": "executeQuery",
+        "options": {
+          "queryReplacement": "={{ $json.phone_number_id }}"
+        },
+        "query": "select l.empresa, l.nombre_empresa, l.nombre_asistente,\n       coalesce(c.config, '{}'::jsonb) as config\nfrom public.agente_lineas_whatsapp l\nleft join public.agente_empresas_config c on c.empresa = l.empresa\nwhere l.phone_number_id = $1 and l.activo = true\nlimit 1;"
+      },
+      "position": [
+        560,
+        832
+      ],
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6
+    },
+    {
+      "alwaysOutputData": true,
+      "credentials": {
+        "postgres": {
+          "id": "BIM03WKClC8bnUc8",
+          "name": "Supabase Ventas (RW)"
+        }
+      },
+      "id": "88888888-8888-4888-8888-888888888888",
+      "name": "Resolver rol",
+      "parameters": {
+        "operation": "executeQuery",
+        "options": {
+          "queryReplacement": "={{ $json.empresa }},{{ $json.from }}"
+        },
+        "query": "select rol, rut_cliente, nombre\nfrom public.agente_contactos\nwhere empresa = $1 and phone_number = $2 and activo = true\nlimit 1;"
+      },
+      "position": [
+        1088,
+        832
+      ],
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6
+    },
+    {
+      "id": "07r00000-0000-4000-8000-000000000006",
+      "name": "Responder 200 (media)",
+      "parameters": {
+        "options": {
+          "responseCode": 200
+        },
+        "respondWith": "text",
+        "responseBody": "OK"
+      },
+      "position": [
+        1600,
+        0
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1
+    },
+    {
+      "id": "07r05000-0000-4000-8000-000000000040",
+      "name": "Responder 200 (otros)",
+      "parameters": {
+        "options": {
+          "responseCode": 200
+        },
+        "respondWith": "text",
+        "responseBody": "OK"
+      },
+      "position": [
+        1872,
+        0
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1
+    },
+    {
+      "id": "33333333-3333-4333-8333-333333333333",
+      "name": "Responder 200 (texto)",
+      "parameters": {
+        "options": {
+          "responseCode": 200
+        },
+        "respondWith": "text",
+        "responseBody": "OK"
+      },
+      "position": [
+        1344,
+        0
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1
+    },
+    {
+      "id": "1b1b1b1b-1b1b-4b1b-8b1b-1b1b1b1b1b1b",
+      "name": "Responder challenge Meta",
+      "parameters": {
+        "options": {
+          "responseCode": 200
+        },
+        "respondWith": "text",
+        "responseBody": "={{ $json.query['hub.challenge'] }}"
+      },
+      "position": [
+        560,
+        0
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1
+    },
+    {
+      "id": "5w1tch00-0000-4000-8000-000000000005",
+      "name": "Switch media descargada",
+      "parameters": {
+        "options": {},
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Extraer media').first().json.msg_type }}",
+                    "operator": {
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "audio"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                }
+              },
+              "outputKey": "audio",
+              "renameOutput": true
+            },
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Extraer media').first().json.msg_type }}",
+                    "operator": {
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "image"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                }
+              },
+              "outputKey": "image",
+              "renameOutput": true
+            },
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Extraer media').first().json.msg_type }}",
+                    "operator": {
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "document"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "loose",
+                  "version": 2
+                }
+              },
+              "outputKey": "document",
+              "renameOutput": true
+            }
+          ]
+        }
+      },
+      "position": [
+        1088,
+        432
+      ],
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2
+    },
+    {
+      "id": "5w1tch00-0000-4000-8000-000000000001",
+      "name": "Switch tipo mensaje",
+      "parameters": {
+        "options": {
+          "fallbackOutput": "extra"
+        },
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "97920127-b3de-4a95-ab95-12a2eece7a9d",
+                    "leftValue": "={{ $json.body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0]?.type }}",
+                    "operator": {
+                      "operation": "regex",
+                      "type": "string"
+                    },
+                    "rightValue": "text|interactive"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                }
+              },
+              "outputKey": "texto",
+              "renameOutput": true
+            },
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "b1e8e7c2-a169-4946-9ee5-6916a610c5a8",
+                    "leftValue": "={{ $json.body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0]?.type }}",
+                    "operator": {
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "audio"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                }
+              },
+              "outputKey": "audio",
+              "renameOutput": true
+            },
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "cfa34f48-0509-4b71-b22a-3af421722390",
+                    "leftValue": "={{ $json.body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0]?.type }}",
+                    "operator": {
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "image"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                }
+              },
+              "outputKey": "image",
+              "renameOutput": true
+            },
+            {
+              "conditions": {
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "id": "0aa9c5c9-c109-47c1-87f0-170a316f3a77",
+                    "leftValue": "={{ $json.body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0]?.type }}",
+                    "operator": {
+                      "operation": "equals",
+                      "type": "string"
+                    },
+                    "rightValue": "document"
+                  }
+                ],
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                }
+              },
+              "outputKey": "document",
+              "renameOutput": true
+            }
+          ]
+        }
+      },
+      "position": [
+        1088,
+        0
+      ],
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2
+    },
+    {
+      "id": "1c1c1c1c-1c1c-4c1c-8c1c-1c1c1c1c1c1c",
+      "name": "Webhook Verificación (GET)",
+      "parameters": {
+        "options": {},
+        "path": "whatsapp-agent",
+        "responseMode": "responseNode"
+      },
+      "position": [
+        304,
+        0
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "webhookId": "whatsapp-agent-verify"
+    },
+    {
+      "id": "11111111-1111-4111-8111-111111111111",
+      "name": "Webhook WhatsApp",
+      "parameters": {
+        "httpMethod": "POST",
+        "options": {},
+        "path": "whatsapp-agent",
+        "responseMode": "responseNode"
+      },
+      "position": [
+        832,
+        0
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "webhookId": "whatsapp-agent-cadabra"
+    },
+    {
+      "credentials": {
+        "openAiApi": {
+          "id": "m7BC6hEy8r3b2qLs",
+          "name": "OpenAI account"
+        }
+      },
+      "id": "a0d10000-0000-4000-8000-000000000010",
+      "maxTries": 3,
+      "name": "Whisper transcribir",
+      "parameters": {
+        "operation": "transcribe",
+        "options": {
+          "language": "es"
+        },
+        "resource": "audio"
+      },
+      "position": [
+        1344,
+        432
+      ],
+      "retryOnFail": true,
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "waitBetweenTries": 3000
+    },
+    {
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "bpCcBAeM6BGoXB2L",
+          "name": "Google Calendar account"
+        }
+      },
+      "id": "10101010-1010-4010-8010-101010101010",
+      "name": "crear_reunion",
+      "parameters": {
+        "additionalFields": {
+          "attendees": "={{ [$fromAI('email_invitado', 'correo electrónico del invitado a la reunión', 'string')] }}",
+          "description": "={{ $fromAI('descripcion', 'motivo o detalle de la reunión', 'string') }}",
+          "sendUpdates": "all",
+          "summary": "={{ $fromAI('titulo', 'título de la reunión', 'string') }}"
+        },
+        "calendar": {
+          "__rl": true,
+          "cachedResultName": "Calendario de la empresa (ficha)",
+          "mode": "list",
+          "value": "={{ $('Consolidar contexto').first().json.perfil.calendar_id }}"
+        },
+        "descriptionType": "manual",
+        "end": "={{ $fromAI('fin', 'fecha y hora de fin, formato AAAA-MM-DDTHH:MM:SS SIN zona horaria', 'string') }}",
+        "start": "={{ $fromAI('inicio', 'fecha y hora de inicio, formato AAAA-MM-DDTHH:MM:SS SIN zona horaria', 'string') }}",
+        "toolDescription": "Crea una reunión (evento) en el calendario. Úsala solo después de verificar disponibilidad y confirmar. IMPORTANTE: pasa inicio y fin como hora LOCAL de Chile SIN offset, formato 'AAAA-MM-DDTHH:MM:SS' (ej. si el cliente dice 10:00, usa 2026-08-07T10:00:00). NUNCA agregues -03:00 ni -04:00 (el sistema aplica la zona de Chile automáticamente)."
+      },
+      "position": [
+        2128,
+        1856
+      ],
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3
+    },
+    {
+      "credentials": {
+        "postgres": {
+          "id": "BIM03WKClC8bnUc8",
+          "name": "Supabase Ventas (RW)"
+        }
+      },
+      "id": "c0000000-0000-4000-8000-000000000002",
+      "name": "crm_actualizar_estado",
+      "parameters": {
+        "operation": "executeQuery",
+        "options": {},
+        "query": "{{ (() => {\n  const campos = {\n    nombre: $fromAI('nombre', 'nombre de la persona de contacto', 'string'),\n    nombre_negocio: $fromAI('nombre_negocio', 'nombre del local/negocio', 'string'),\n    estado_crm: $fromAI('estado_crm', 'nuevo estado del embudo, valor exacto', 'string'),\n    vendedor_asignado: $fromAI('vendedor_asignado', 'Vendedor 1 / Vendedor 2', 'string'),\n    condicion_pago: $fromAI('condicion_pago', 'Efectivo/Cheque/Crédito 7d', 'string'),\n    estado_agendamiento: $fromAI('estado_agendamiento', 'Pendiente/Confirmado/Cancelado', 'string'),\n    bot_activo: $fromAI('bot_activo', 'true o false: pon false SOLO para pasar la conversación a un humano/vendedor', 'boolean'),\n  };\n  const sets = []; const vals = [];\n  for (const [k, v] of Object.entries(campos)) { if (v !== undefined && v !== null && v !== '') { vals.push(v); sets.push(`${k} = $${vals.length}`); } }\n  vals.push($fromAI('record_id', 'Id numérico del lead (de crm_guardar_lead)', 'number'));\n  return `UPDATE crm.crm_leads SET ${sets.join(', ')} WHERE id = $${vals.length} RETURNING id`;\n})() }}"
+      },
+      "position": [
+        2640,
+        1856
+      ],
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.6
+    },
+    {
+      "id": "c0000000-0000-4000-8000-000000000001",
+      "name": "crm_guardar_lead",
+      "parameters": {
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "jsonBody": "={{ (() => {\n  const wa = $('Consolidar contexto').first().json.from;\n  const body = {\n    contact_id: wa,\n    phone: wa,\n    nombre: $fromAI('nombre', 'nombre de la persona SOLO si lo dijo en la conversación', 'string') || undefined,\n    nombre_negocio: $fromAI('nombre_negocio', 'nombre del local/negocio', 'string') || undefined,\n    producto_interes: $fromAI('producto_interes', 'categoría de interés del negocio (ver instrucciones) u Otro', 'string') || undefined,\n    estado_crm: $fromAI('estado_crm', 'estado del embudo, valor exacto con tildes', 'string') || 'En Conversación',\n    comuna: $fromAI('comuna', 'comuna del cliente', 'string') || undefined,\n    origen_lead: 'whatsapp',\n    empresa: $('Consolidar contexto').first().json.empresa || 1\n  };\n  Object.keys(body).forEach(k => body[k] === undefined && delete body[k]);\n  return JSON.stringify(body);\n})() }}",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "toolDescription": "Registra o actualiza al LEAD/cliente en el CRM sin duplicar (busca por su número). Úsala al conversar con un cliente con interés real. Clasifica producto_interes (una de las categorías válidas del negocio indicadas en tus instrucciones, u Otro) y estado_crm con VALOR EXACTO con tildes (Nuevo Lead, En Conversación, Cotización Enviada, Primer Pedido, Cliente Activo, Cliente Recurrente, Sin Respuesta, Requiere Vendedor, Inactivo). El contact_id/phone se toman solos del contexto. Devuelve record_id (úsalo en crm_actualizar_estado).",
+        "url": "https://appcadabra-cadabra-project.jmyxxj.easypanel.host/webhook/crm-upsert"
+      },
+      "position": [
+        2384,
+        1856
+      ],
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "AkIBFXVUDXwvv1ta",
+          "name": "Header Auth account"
+        }
+      },
+      "id": "30303030-3030-4030-8030-303030303030",
+      "name": "mostrar_menu",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "jsonBody": "={{ (() => {\n  const to = $('Consolidar contexto').first().json.from;\n  const m = $('Consolidar contexto').first().json.perfil.menu;\n  const tipo = $fromAI('tipo_menu', \"owner o cliente\", 'string');\n  const botones = tipo === 'owner' ? m.botones_owner : m.botones_cliente;\n  return JSON.stringify({\n    messaging_product: 'whatsapp', to, type: 'interactive',\n    interactive: {\n      type: 'button',\n      body: { text: tipo === 'owner' ? m.texto_owner : m.texto_cliente },\n      action: { buttons: botones.map(b => ({ type: 'reply', reply: { id: b.id, title: String(b.title).slice(0, 20) } })) }\n    }\n  });\n})() }}",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "toolDescription": "Muestra un MENÚ con 3 BOTONES inline en WhatsApp (sin popup). Úsala cuando el usuario pida 'menú', 'opciones', o al saludar. Parámetro tipo_menu: 'owner' (botones: Ventas, Buscar producto, Agendar) o 'cliente' (botones: Productos, Precios, Agendar). Tras enviar el menú, NO escribas más texto; el usuario tocará un botón.",
+        "url": "=https://graph.facebook.com/v21.0/{{ $('Consolidar contexto').first().json.phone_number_id }}/messages"
+      },
+      "position": [
+        1600,
+        1856
+      ],
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.2
+    },
+    {
+      "credentials": {
+        "postgres": {
+          "id": "wjPmZ5tTlYmg0JSR",
+          "name": "Supabase Ventas (Read-Only)"
+        }
+      },
+      "id": "22222222-2222-4222-9222-222222222222",
+      "name": "saldo_cliente",
+      "parameters": {
+        "descriptionType": "manual",
+        "operation": "executeQuery",
+        "options": {
+          "queryReplacement": "={{ $('Consolidar contexto').first().json.empresa }},{{ $fromAI('nombre', 'nombre, apellido o razón social del cliente a buscar', 'string') }}"
+        },
+        "query": "select coalesce(c.nombre_empresa, trim(c.paterno_cl||' '||coalesce(c.materno_cl,'')||' '||c.nombre_cl)) as cliente,\n       round(s.saldo_deuda) as deuda_clp\nfrom public.saldos_clientes s\njoin public.clientes c on c.rut_cl = s.cliente\nwhere s.empresa = $1\n  and s.saldo_deuda > 0\n  and (\n    lower(coalesce(c.nombre_empresa,'')) like '%'||lower($2)||'%'\n    or lower(coalesce(c.paterno_cl,'')) like '%'||lower($2)||'%'\n    or lower(coalesce(c.materno_cl,'')) like '%'||lower($2)||'%'\n    or lower(coalesce(c.nombre_cl,'')) like '%'||lower($2)||'%'\n  )\norder by s.saldo_deuda desc\nlimit 8;",
+        "toolDescription": "Consulta la DEUDA (saldo pendiente) de un cliente buscándolo por nombre o apellido. Úsala cuando el dueño pregunte cuánto le debe un cliente (ej. 'cuánto me debe Guerrero', 'deuda de Delicity'). Parámetro: nombre = nombre, apellido o razón social del cliente a buscar. Devuelve el nombre completo y la deuda en CLP. Solo para el owner."
+      },
+      "position": [
+        1344,
+        1856
+      ],
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.6
+    },
+    {
+      "credentials": {
+        "postgres": {
+          "id": "wjPmZ5tTlYmg0JSR",
+          "name": "Supabase Ventas (Read-Only)"
+        }
+      },
+      "id": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee",
+      "name": "stock_producto",
+      "parameters": {
+        "descriptionType": "manual",
+        "operation": "executeQuery",
+        "options": {
+          "queryReplacement": "={{ $('Consolidar contexto').first().json.empresa }},{{ $fromAI('busqueda', 'palabras clave del producto, ej: mariscos o pino queso', 'string') }},{{ $('Consolidar contexto').first().json.perfil.fuente_catalogo }}"
+        },
+        "query": "with q as (\n  select array_remove(string_to_array(lower(trim($2)), ' '), '') as palabras\n)\nselect distinct p.nombre, p.precio_venta, null::text as unidad\nfrom public.productos p\nleft join public.familias f on f.codigo = p.cod_familia and f.empresa = p.empresa,\n  q\nwhere $3 = 'erp_supabase'\n  and p.empresa = $1\n  and p.estado_vigencia = 1\n  and lower(p.nombre) !~ '(guia|flete|emitidas|segun guias)'\n  and (\n    p.codigo = $2\n    or ( array_length(q.palabras,1) is not null\n         and not exists (\n           select 1 from unnest(q.palabras) w\n           where w not in ('empanada','empanadas','de','al','la','el','los','las','horno','frita','fritas','hoja','y','con','insumo','insumos','producto','productos')\n             and lower(p.nombre) !~ ('\\y'||w||'\\y')\n             and coalesce(lower(f.nombre),'') !~ ('\\y'||w||'\\y')\n         )\n       )\n  )\nunion all\nselect c.nombre || case when c.disponible then '' else ' (agotado)' end, c.precio, c.unidad\nfrom public.catalogo_productos c, q\nwhere $3 <> 'erp_supabase'\n  and c.empresa = $1\n  and (\n    lower(c.codigo) = lower($2)\n    or ( array_length(q.palabras,1) is not null\n         and not exists (\n           select 1 from unnest(q.palabras) w\n           where w not in ('de','al','la','el','los','las','y','con','producto','productos')\n             and lower(c.nombre || ' ' || coalesce(c.categoria,'') || ' ' || coalesce(c.descripcion,'')) !~ ('\\y'||w||'\\y')\n         )\n       )\n  )\norder by 1\nlimit 12;",
+        "toolDescription": "Busca productos vigentes por palabra(s) clave y devuelve nombre y precio de venta. Pasa solo las palabras clave del producto (ej. 'mariscos', 'pino queso'), SIN palabras de relleno como 'empanada', 'de', 'al horno' ni 'frita'. Úsala para consultas de precio o disponibilidad de productos."
+      },
+      "position": [
+        560,
+        1856
+      ],
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.6
+    },
+    {
+      "credentials": {
+        "postgres": {
+          "id": "wjPmZ5tTlYmg0JSR",
+          "name": "Supabase Ventas (Read-Only)"
+        }
+      },
+      "id": "21212121-2121-4121-8121-212121212121",
+      "name": "top_productos",
+      "parameters": {
+        "descriptionType": "manual",
+        "operation": "executeQuery",
+        "options": {
+          "queryReplacement": "={{ $('Consolidar contexto').first().json.empresa }},{{ $fromAI('desde', 'fecha inicio AAAA-MM-DD', 'string') }},{{ $fromAI('hasta', 'fecha fin EXCLUSIVA AAAA-MM-DD', 'string') }},{{ $fromAI('limite', 'cuántos productos, número (default 5)', 'string') }},{{ $fromAI('orden', \"monto o unidades\", 'string') }}"
+        },
+        "query": "select p.nombre,\n       round(sum(mv.total_incluido)) as monto_clp,\n       round(sum(mv.cantidad)) as unidades\nfrom public.movimientos_ventas mv\nleft join public.productos p on p.codigo = mv.codigo_producto and p.empresa = mv.empresa\nwhere mv.empresa = $1\n  and mv.fecha_documento >= $2::date\n  and mv.fecha_documento < $3::date\ngroup by p.nombre\norder by (case when $5 = 'unidades' then sum(mv.cantidad) else sum(mv.total_incluido) end) desc nulls last\nlimit $4::int;",
+        "toolDescription": "Devuelve el RANKING de productos más vendidos en un período (nombre, monto en CLP y unidades). Úsala cuando el dueño pregunte por 'productos más vendidos', 'top productos', 'qué se vende más'. Parámetros: desde y hasta (AAAA-MM-DD, hasta exclusivo), limite (cuántos, default 5), y orden ('monto' o 'unidades', default monto)."
+      },
+      "position": [
+        1088,
+        1856
+      ],
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.6
+    },
+    {
+      "credentials": {
+        "postgres": {
+          "id": "wjPmZ5tTlYmg0JSR",
+          "name": "Supabase Ventas (Read-Only)"
+        }
+      },
+      "id": "20202020-2020-4020-8020-202020202020",
+      "name": "ventas_periodo",
+      "parameters": {
+        "descriptionType": "manual",
+        "operation": "executeQuery",
+        "options": {
+          "queryReplacement": "={{ $('Consolidar contexto').first().json.empresa }},{{ $fromAI('desde', 'fecha inicio del período, formato AAAA-MM-DD', 'string') }},{{ $fromAI('hasta', 'fecha fin EXCLUSIVA del período, formato AAAA-MM-DD', 'string') }}"
+        },
+        "query": "select coalesce(round(sum(total_incluido)),0) as ventas_clp,\n       count(distinct numero_documento) as documentos\nfrom public.movimientos_ventas\nwhere empresa = $1\n  and fecha_documento >= $2::date\n  and fecha_documento < $3::date;",
+        "toolDescription": "Devuelve el TOTAL de ventas (en pesos CLP) y la cantidad de documentos de un período. Úsala cuando el dueño pregunte cuánto se vendió (hoy, ayer, esta semana, este mes, un mes específico, etc.). Pasa 'desde' y 'hasta' como fechas AAAA-MM-DD (hasta es exclusivo: para 'enero' usa desde=2026-01-01 hasta=2026-02-01)."
+      },
+      "position": [
+        832,
+        1856
+      ],
+      "type": "n8n-nodes-base.postgresTool",
+      "typeVersion": 2.6
+    },
+    {
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "bpCcBAeM6BGoXB2L",
+          "name": "Google Calendar account"
+        }
+      },
+      "id": "ffffffff-ffff-4fff-8fff-ffffffffffff",
+      "name": "verificar_disponibilidad",
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "cachedResultName": "Calendario de la empresa (ficha)",
+          "mode": "list",
+          "value": "={{ $('Consolidar contexto').first().json.perfil.calendar_id }}"
+        },
+        "descriptionType": "manual",
+        "options": {
+          "timezone": "America/Santiago"
+        },
+        "resource": "calendar",
+        "timeMax": "={{ $fromAI('fin', 'fecha y hora de fin, formato AAAA-MM-DDTHH:MM:SS sin zona horaria', 'string') }}",
+        "timeMin": "={{ $fromAI('inicio', 'fecha y hora de inicio, formato AAAA-MM-DDTHH:MM:SS sin zona horaria', 'string') }}",
+        "toolDescription": "Verifica si un horario está disponible en el calendario antes de agendar. Entrega inicio y fin en formato de hora local SIN zona horaria: 'AAAA-MM-DDTHH:MM:SS' (ej. 2026-08-07T10:00:00). NO agregues offset (-03:00 ni -04:00)."
+      },
+      "position": [
+        1872,
+        1856
+      ],
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3
+    },
+    {
+      "id": "a1000000-0000-4000-8000-000000000002",
+      "name": "¿Agendar?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "c-ag",
+              "leftValue": "={{ $json.agendar }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": true
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 1
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        560,
+        3008
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2
+    },
+    {
+      "id": "c0000000-0000-4000-8000-000000000006",
+      "name": "¿Alertar vendedor?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "c-alerta",
+              "leftValue": "={{ $('Detectar interés (auto)').first().json.corte }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": true
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 1
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        304,
+        2640
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2
+    },
+    {
+      "id": "c34af115-c33f-4ba3-beaf-04834aad520c",
+      "name": "¿Evento coexistencia?",
+      "parameters": {
+        "jsCode": "// Eventos de coexistencia (app WhatsApp Business): se reenvían al workflow \"Coexistencia – eventos\".\nconst body = $('Switch tipo mensaje').first().json.body;\nconst campos = ['smb_message_echoes', 'history', 'smb_app_state_sync', 'account_update'];\nconst field = body?.entry?.[0]?.changes?.[0]?.field;\nreturn campos.includes(field) ? [{ json: { body } }] : [];"
+      },
+      "position": [
+        2128,
+        -224
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "15bdcda0-4d4a-4bbf-820a-06ed1c202cb0",
+      "name": "¿Fuera de horario?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "c-fh",
+              "leftValue": "={{ $json.fuera_horario }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": true
+            },
+            {
+              "id": "c-coord",
+              "leftValue": "={{ String($('AI Agent').first().json.output || '') }}",
+              "operator": {
+                "operation": "contains",
+                "type": "string"
+              },
+              "rightValue": "coordin"
+            }
+          ],
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 1
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        832,
+        3216
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2
+    },
+    {
+      "id": "460fa707-f864-460b-aae7-3a521ddfc552",
+      "name": "¿Negocio configurado?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "c-negocio",
+              "leftValue": "={{ $json.negocio_configurado }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": true
+            }
+          ],
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 1
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        1992,
+        612
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2
+    },
+    {
+      "id": "07r05000-0000-4000-8000-000000000041",
+      "name": "¿Otros: es mensaje?",
+      "parameters": {
+        "jsCode": "const body = $('Switch tipo mensaje').first().json.body;\nconst value = body?.entry?.[0]?.changes?.[0]?.value ?? {};\nconst msg = value.messages?.[0] ?? {};\nconst metadata = value.metadata ?? {};\n// Si NO es un mensaje real del usuario (ej. statuses), no responder nada.\nif (!msg.type || !msg.from) return [];\nreturn [{ json: {\n  from: msg.from,\n  phone_number_id: metadata.phone_number_id,\n  msg_type: msg.type\n}}];"
+      },
+      "position": [
+        2128,
+        0
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "c0000000-0000-4000-8000-000000000004",
+      "name": "¿Registrar lead?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "c-reg",
+              "leftValue": "={{ $json.debeRegistrar }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": true
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 1
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        560,
+        2432
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2
+    },
+    {
+      "id": "sticky-portada-4000-8000-00000000000",
+      "name": "📋 PORTADA",
+      "parameters": {
+        "color": 4,
+        "content": "# 🤖 Agente Whatsap CRM Empresarial\n\n**Flujo:** Entrada → Contexto → Guarda → Buffer → Agente IA → Respuesta → CRM → Humano → Agenda\n\nCRM WhatsApp para panadería mayorista. Cada banda de color es una sección funcional (ver notas).\n\n🔵 Canales  🟣 IA/Multimedia  🟢 CRM  🟠 Lógica  🟡 Agenda  🔴 Humano",
+        "height": 220,
+        "width": 640
+      },
+      "position": [
+        192,
+        -320
+      ],
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1
+    },
+    {
+      "id": "sticky-0-0000-4000-8000-000000000000",
+      "name": "📌 1 · ENTRADA / CANALES",
+      "parameters": {
+        "color": 4,
+        "content": "## 1 · ENTRADA / CANALES\n\nWebhooks de Meta (WhatsApp), verificación, switch por tipo de mensaje y ACK 200 (<5s anti-duplicados).",
+        "height": 260,
+        "width": 2460
+      },
+      "position": [
+        192,
+        -128
+      ],
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1
+    },
+    {
+      "id": "sticky-10-0000-4000-8000-00000000000",
+      "name": "📌 11 · AGENDAMIENTO (Google Calendar)",
+      "parameters": {
+        "content": "## 11 · AGENDAMIENTO (Google Calendar)\n\nDetecta intención + extrae fecha/hora/correo/motivo, crea el evento real en Calendar y confirma por WhatsApp.",
+        "height": 260,
+        "width": 1160
+      },
+      "position": [
+        192,
+        2880
+      ],
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1
+    },
+    {
+      "id": "sticky-1-0000-4000-8000-000000000000",
+      "name": "📌 2 · PROCESAMIENTO MULTIMEDIA",
+      "parameters": {
+        "color": 6,
+        "content": "## 2 · PROCESAMIENTO MULTIMEDIA\n\nDescarga y convierte a texto: audio (Whisper), imagen (GPT-4o Vision), PDF (Extract). Converge al contexto.",
+        "height": 460,
+        "width": 2720
+      },
+      "position": [
+        192,
+        304
+      ],
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1
+    },
+    {
+      "id": "sticky-2-0000-4000-8000-000000000000",
+      "name": "📌 3 · IDENTIFICACIÓN & CONTEXTO",
+      "parameters": {
+        "color": 5,
+        "content": "## 3 · IDENTIFICACIÓN & CONTEXTO\n\nExtrae campos, resuelve empresa/rol (tenant), recupera historial y consolida el contexto para el agente.",
+        "height": 260,
+        "width": 1940
+      },
+      "position": [
+        192,
+        704
+      ],
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1
+    },
+    {
+      "id": "sticky-3-0000-4000-8000-000000000000",
+      "name": "📌 4 · GUARDA BOT ON/OFF",
+      "parameters": {
+        "color": 2,
+        "content": "## 4 · GUARDA BOT ON/OFF\n\nLee bot_activo del CRM. Si el vendedor tomó la conversación (OFF), el bot NO responde.",
+        "height": 260,
+        "width": 640
+      },
+      "position": [
+        192,
+        992
+      ],
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1
+    },
+    {
+      "id": "sticky-4-0000-4000-8000-000000000000",
+      "name": "📌 5 · BUFFER DE MENSAJES (Redis, 8s)",
+      "parameters": {
+        "color": 2,
+        "content": "## 5 · BUFFER DE MENSAJES (Redis, 8s)\n\nAgrupa mensajes seguidos del cliente en uno solo (debounce). Solo el último llega al agente.",
+        "height": 460,
+        "width": 2460
+      },
+      "position": [
+        192,
+        1200
+      ],
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1
+    },
+    {
+      "id": "sticky-5-0000-4000-8000-000000000000",
+      "name": "📌 6 · AGENTE IA (Sofía)",
+      "parameters": {
+        "color": 6,
+        "content": "## 6 · AGENTE IA (Sofía)\n\nAI Agent + GPT-4o + tools (stock, ventas, menú, calendario, CRM). Memoria por historial.",
+        "height": 460,
+        "width": 2980
+      },
+      "position": [
+        192,
+        1584
+      ],
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1
+    },
+    {
+      "id": "sticky-6-0000-4000-8000-000000000000",
+      "name": "📌 7 · RESPUESTA AL CLIENTE",
+      "parameters": {
+        "color": 4,
+        "content": "## 7 · RESPUESTA AL CLIENTE\n\nGuarda el turno, filtra si hay texto y envía la respuesta por WhatsApp (Meta).",
+        "height": 260,
+        "width": 900
+      },
+      "position": [
+        192,
+        2080
+      ],
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1
+    },
+    {
+      "id": "sticky-7-0000-4000-8000-000000000000",
+      "name": "📌 8 · CRM / LEADS (automático)",
+      "parameters": {
+        "color": 5,
+        "content": "## 8 · CRM / LEADS (automático)\n\nDetecta interés y producto, registra/actualiza el lead en Supabase (vía webhook upsert). No depende del agente.",
+        "height": 260,
+        "width": 900
+      },
+      "position": [
+        192,
+        2304
+      ],
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1
+    },
+    {
+      "id": "sticky-8-0000-4000-8000-000000000000",
+      "name": "📌 9 · DERIVACIÓN A HUMANO",
+      "parameters": {
+        "color": 3,
+        "content": "## 9 · DERIVACIÓN A HUMANO\n\nSi el lead pide vendedor: alerta al vendedor (WhatsApp) y la conversación queda en el CRM Cadabra para que la tome.",
+        "height": 260,
+        "width": 640
+      },
+      "position": [
+        192,
+        2512
+      ],
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1
+    }
+  ],
+  "settings": {
+    "binaryMode": "separate",
+    "errorWorkflow": "bokdGONRGM4RnyyW",
+    "executionOrder": "v1",
+    "timezone": "America/Santiago"
+  },
+  "sourceWorkflowId": null,
+  "tags": []
+}

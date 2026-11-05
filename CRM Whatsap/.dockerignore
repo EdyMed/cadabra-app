@@ -1,0 +1,12 @@
+node_modules
+.next
+.git
+# .env.production SÍ entra: lleva solo las 2 claves públicas de Supabase, que
+# Next debe hornear en el bundle del navegador al compilar. Los secretos
+# (service role, contraseñas de Postgres) van por Entorno en EasyPanel.
+.env.local
+.env*.local
+_backup_*
+sql
+README.md
+tsconfig.tsbuildinfo

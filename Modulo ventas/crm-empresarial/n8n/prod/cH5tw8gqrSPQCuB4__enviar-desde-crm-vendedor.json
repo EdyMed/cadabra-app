@@ -1,0 +1,197 @@
+{
+  "active": true,
+  "connections": {
+    "Enviar a WhatsApp": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Guardar mensaje",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Guardar mensaje": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Responder OK",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Resolver linea": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Enviar a WhatsApp",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Validar token": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Resolver linea",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Webhook CRM": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Validar token",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "description": null,
+  "id": "cH5tw8gqrSPQCuB4",
+  "isArchived": false,
+  "name": "Enviar desde CRM (vendedor)",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "AkIBFXVUDXwvv1ta",
+          "name": "Header Auth account"
+        }
+      },
+      "id": "a1000000-0000-4000-8000-000000000003",
+      "name": "Enviar a WhatsApp",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "jsonBody": "={\n  \"messaging_product\": \"whatsapp\",\n  \"to\": \"{{ $('Webhook CRM').first().json.body.phone }}\",\n  \"type\": \"text\",\n  \"text\": { \"body\": {{ JSON.stringify($('Webhook CRM').first().json.body.texto) }} }\n}",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "=https://graph.facebook.com/v21.0/{{ $json.phone_number_id }}/messages"
+      },
+      "position": [
+        240,
+        300
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "credentials": {
+        "postgres": {
+          "id": "BIM03WKClC8bnUc8",
+          "name": "Supabase Ventas (RW)"
+        }
+      },
+      "id": "a1000000-0000-4000-8000-000000000004",
+      "name": "Guardar mensaje",
+      "parameters": {
+        "operation": "executeQuery",
+        "options": {},
+        "query": "insert into public.conversation_history (empresa, phone_number, role, content, message_id)\nvalues ({{ $('Webhook CRM').first().json.body.empresa }}, '{{ $('Webhook CRM').first().json.body.phone }}', 'vendedor', '{{ String($('Webhook CRM').first().json.body.texto).replace(/'/g, \"''\") }}', '{{ $json.messages ? $json.messages[0].id : \"\" }}');"
+      },
+      "position": [
+        460,
+        300
+      ],
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5
+    },
+    {
+      "credentials": {
+        "postgres": {
+          "id": "BIM03WKClC8bnUc8",
+          "name": "Supabase Ventas (RW)"
+        }
+      },
+      "id": "a1000000-0000-4000-8000-000000000002",
+      "name": "Resolver linea",
+      "parameters": {
+        "operation": "executeQuery",
+        "options": {
+          "queryReplacement": "={{ $json.body.empresa }}"
+        },
+        "query": "select phone_number_id\nfrom public.agente_lineas_whatsapp\nwhere empresa = $1 and activo = true\nlimit 1;"
+      },
+      "position": [
+        20,
+        300
+      ],
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5
+    },
+    {
+      "id": "a1000000-0000-4000-8000-000000000005",
+      "name": "Responder OK",
+      "parameters": {
+        "options": {},
+        "respondWith": "json",
+        "responseBody": "={\"ok\": true}"
+      },
+      "position": [
+        680,
+        300
+      ],
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1
+    },
+    {
+      "id": "a1000000-0000-4000-8000-000000000006",
+      "name": "Validar token",
+      "parameters": {
+        "jsCode": "const TOKEN = '7EVLafmX0VF0rdMHiciLcvFhZ-p7VXS0';\nconst h = $input.first().json.headers || {};\nconst auth = String(h.authorization || h.Authorization || '');\nif (auth !== 'Bearer ' + TOKEN) {\n  throw new Error('No autorizado: token inválido o ausente');\n}\nreturn $input.all();"
+      },
+      "position": [
+        -90,
+        300
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "a1000000-0000-4000-8000-000000000001",
+      "name": "Webhook CRM",
+      "parameters": {
+        "httpMethod": "POST",
+        "options": {},
+        "path": "crm-enviar",
+        "responseMode": "responseNode"
+      },
+      "position": [
+        -200,
+        300
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "webhookId": "crm-enviar-vendedor"
+    }
+  ],
+  "settings": {
+    "errorWorkflow": "bokdGONRGM4RnyyW",
+    "executionOrder": "v1"
+  },
+  "sourceWorkflowId": null,
+  "tags": []
+}

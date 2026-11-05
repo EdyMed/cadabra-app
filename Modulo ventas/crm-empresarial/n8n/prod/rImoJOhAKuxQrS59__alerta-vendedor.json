@@ -1,0 +1,165 @@
+{
+  "active": true,
+  "connections": {
+    "Armar items por vendedor": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Avisar al vendedor (WhatsApp)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Leer vendedores activos": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Armar items por vendedor",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Reabrir+etiquetar CRM": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Leer vendedores activos",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Webhook Alerta": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Reabrir+etiquetar CRM",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "description": null,
+  "id": "rImoJOhAKuxQrS59",
+  "isArchived": false,
+  "name": "Alerta Vendedor",
+  "nodeGroups": [],
+  "nodes": [
+    {
+      "id": "armar-items-vendedor-code",
+      "name": "Armar items por vendedor",
+      "parameters": {
+        "jsCode": "const prev = $('Reabrir+etiquetar CRM').first().json;\nconst vends = $input.all().map(i => String(i.json.whatsapp || '').replace(/[^0-9]/g,'')).filter(Boolean);\nif (vends.length === 0) return [{ json: { sin_vendedores: true, convId: prev.convId } }];\nreturn vends.map(v => ({ json: { convId: prev.convId, texto: prev.texto, vendedor: v } }));"
+      },
+      "position": [
+        800,
+        304
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "AkIBFXVUDXwvv1ta",
+          "name": "Header Auth account"
+        }
+      },
+      "id": "h0000000-0000-4000-8000-000000000003",
+      "name": "Avisar al vendedor (WhatsApp)",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "jsonBody": "={{ JSON.stringify({ messaging_product:'whatsapp', to: $json.vendedor, type:'text', text:{ body: $json.texto } }) }}",
+        "method": "POST",
+        "options": {},
+        "sendBody": true,
+        "sendHeaders": true,
+        "specifyBody": "json",
+        "url": "=https://graph.facebook.com/v21.0/{{ $('Webhook Alerta').first().json.body.phone_number_id || '1168256669712210' }}/messages"
+      },
+      "position": [
+        1040,
+        304
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "credentials": {
+        "postgres": {
+          "id": "BIM03WKClC8bnUc8",
+          "name": "Supabase Ventas (RW)"
+        }
+      },
+      "id": "leer-vendedores-activos-pg",
+      "name": "Leer vendedores activos",
+      "parameters": {
+        "operation": "executeQuery",
+        "options": {
+          "queryReplacement": "={{ [ $('Webhook Alerta').first().json.body.empresa || 1 ] }}"
+        },
+        "query": "SELECT whatsapp FROM crm.vendedores WHERE activo = true AND empresa = $1"
+      },
+      "position": [
+        592,
+        192
+      ],
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6
+    },
+    {
+      "id": "h0000000-0000-4000-8000-000000000002",
+      "name": "Reabrir+etiquetar CRM",
+      "parameters": {
+        "jsCode": "// La bandeja vive en el CRM propio; ya no se avisa a Chatwoot.\nconst b = $input.first().json.body || {};\nconst wa = String(b.wa_id || '').replace(/[^0-9]/g, '');\nconst nombre = b.nombre || '';\nconst negocio = b.negocio || '';\nconst convId = null;\n\nlet quien = nombre ? nombre : 'un cliente';\nif (negocio) quien += ' de ' + negocio;\nconst texto = '🔔 *Lead pide atención*\\n' + quien + ' quiere hablar con un vendedor.\\n\\n👉 Responder ahora: https://wa.me/' + wa + '\\n👉 Ver en el CRM: https://agente.appcadabra.cl/crm/conversaciones';\n\n// Un solo item: el nodo Postgres siguiente lee los vendedores.\nreturn [{ json: { convId, texto, wa } }];"
+      },
+      "position": [
+        448,
+        304
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "h0000000-0000-4000-8000-000000000001",
+      "name": "Webhook Alerta",
+      "parameters": {
+        "httpMethod": "POST",
+        "options": {},
+        "path": "alerta-vendedor",
+        "responseMode": "lastNode"
+      },
+      "position": [
+        224,
+        304
+      ],
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "webhookId": "alerta-vendedor-cadabra"
+    }
+  ],
+  "settings": {
+    "binaryMode": "separate",
+    "errorWorkflow": "bokdGONRGM4RnyyW",
+    "executionOrder": "v1"
+  },
+  "sourceWorkflowId": null,
+  "tags": []
+}
