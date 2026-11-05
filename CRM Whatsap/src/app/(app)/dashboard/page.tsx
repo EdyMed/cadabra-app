@@ -110,26 +110,8 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
         </div>
       </header>
 
-      {/* Resumen del mes: lo que hizo el agente (sigue al selector de mes) */}
-      <div className="flex items-baseline gap-2.5 mb-2.5">
-        <h2 className="text-[13px] font-semibold text-tinta">Resumen de {mesTxt.toLowerCase()}</h2>
-        <span className="text-tinta-3 text-[12px]">Lo que tu agente hizo por tu negocio</span>
-      </div>
-      {valor ? (
-        <ValorAgente v={valor} prev={valorPrev} r={resumen} esMesActual={esMesActual} />
-      ) : (
-        <p className="text-tinta-3 text-[12px]">No fue posible calcular el resumen del mes.</p>
-      )}
-
-      {/* Consumo del plan del mes elegido — visible en los 3 planes */}
-      <div className="mt-3">
-        <Panel title="Consumo de tu plan" sub={`Mensajes que envió el agente en ${mesTxt.toLowerCase()}`}>
-          <GaugeConsumo consumo={consumo} />
-        </Panel>
-      </div>
-
       {/* Estado de hoy: foto actual del CRM (no depende del mes elegido) */}
-      <div className="flex items-baseline gap-2.5 mt-6 mb-2.5">
+      <div className="flex items-baseline gap-2.5 mb-2.5">
         <h2 className="text-[13px] font-semibold text-tinta">Estado de hoy</h2>
         <span className="text-tinta-3 text-[12px]">Cómo está tu CRM en este momento</span>
       </div>
@@ -159,6 +141,18 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
           />
         </div>
       </section>
+
+      {/* Resumen del mes: lo que hizo el agente (sigue al selector de mes) */}
+      <div className="flex items-baseline gap-2.5 mt-6 mb-2.5">
+        <h2 className="text-[13px] font-semibold text-tinta">Resumen de {mesTxt.toLowerCase()}</h2>
+        <span className="text-tinta-3 text-[12px]">Lo que tu agente hizo por tu negocio</span>
+      </div>
+      {valor ? (
+        <ValorAgente v={valor} prev={valorPrev} r={resumen} esMesActual={esMesActual} />
+      ) : (
+        <p className="text-tinta-3 text-[12px]">No fue posible calcular el resumen del mes.</p>
+      )}
+
 
       {dashboardCompleto && (
         <>
@@ -246,6 +240,12 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
           </div>
         </>
       )}
+      {/* Consumo del plan del mes elegido — visible en los 3 planes */}
+      <div className="mt-6">
+        <Panel title="Consumo de tu plan" sub={`Mensajes que envió el agente en ${mesTxt.toLowerCase()}`}>
+          <GaugeConsumo consumo={consumo} />
+        </Panel>
+      </div>
     </main>
   );
 }
