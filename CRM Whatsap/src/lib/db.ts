@@ -20,8 +20,11 @@ function makePool() {
     user: process.env.NOCODB_PG_USER,
     password: process.env.NOCODB_PG_PASSWORD,
     ssl,
-    max: 5,
-    idleTimeoutMillis: 30000,
+    // 10 conexiones: el dashboard lanza ~12 consultas en paralelo. Conexiones vivas 5 min
+    // para no pagar el handshake TLS con Supabase (EE. UU.) en cada clic.
+    max: 10,
+    idleTimeoutMillis: 300000,
+    keepAlive: true,
   });
 }
 
@@ -49,7 +52,8 @@ function makeWritePool() {
     password: process.env.CRM_RW_PG_PASSWORD,
     ssl,
     max: 3,
-    idleTimeoutMillis: 30000,
+    idleTimeoutMillis: 120000,
+    keepAlive: true,
   });
 }
 
@@ -77,7 +81,8 @@ function makeVendedoresPool() {
     password: process.env.VEND_PG_PASSWORD,
     ssl,
     max: 3,
-    idleTimeoutMillis: 30000,
+    idleTimeoutMillis: 120000,
+    keepAlive: true,
   });
 }
 
@@ -106,7 +111,8 @@ function makeEmpresaPool() {
     password: process.env.EMPRESA_PG_PASSWORD,
     ssl,
     max: 3,
-    idleTimeoutMillis: 30000,
+    idleTimeoutMillis: 120000,
+    keepAlive: true,
   });
 }
 
@@ -138,7 +144,8 @@ function makeAdminPool() {
     password: process.env.ADMIN_PG_PASSWORD,
     ssl,
     max: 3,
-    idleTimeoutMillis: 30000,
+    idleTimeoutMillis: 120000,
+    keepAlive: true,
   });
 }
 
@@ -181,7 +188,8 @@ function makeWhatsappPool() {
     password: process.env.WA_PG_PASSWORD,
     ssl,
     max: 3,
-    idleTimeoutMillis: 30000,
+    idleTimeoutMillis: 120000,
+    keepAlive: true,
   });
 }
 

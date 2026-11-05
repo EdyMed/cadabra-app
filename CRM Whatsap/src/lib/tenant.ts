@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { createClient } from "@/lib/supabase/server";
 
 export type Tenant = {
@@ -13,8 +14,11 @@ export type Tenant = {
  * Resuelve la empresa del usuario autenticado.
  * Lee la sesión de Supabase y consulta la tabla de mapeo `dashboard_usuarios`
  * (auth_user_id -> empresa, nombre_empresa). Devuelve null si no hay sesión o mapeo.
+ *
+ * Envuelta en React cache(): dentro de una misma petición el layout y la página
+ * comparten el resultado (antes cada uno hacía su propio getUser + consulta a Supabase).
  */
-export async function getTenant(): Promise<Tenant | null> {
+export const getTenant = cache(async (): Promise<Tenant | null> => {
   const supabase = createClient();
   const {
     data: { user },
@@ -38,4 +42,4 @@ export async function getTenant(): Promise<Tenant | null> {
     isAdmin: data.is_admin === true,
     plan: data.plan,
   };
-}
+});
