@@ -154,6 +154,13 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
       )}
 
 
+      {/* Consumo del plan del mes elegido — visible en los 3 planes */}
+      <div className="mt-3">
+        <Panel title="Consumo de tu plan" sub={`Mensajes que envió el agente en ${mesTxt.toLowerCase()}`}>
+          <GaugeConsumo consumo={consumo} />
+        </Panel>
+      </div>
+
       {dashboardCompleto && (
         <>
           {/* Actividad + Embudo */}
@@ -240,12 +247,6 @@ export default async function DashboardPage({ searchParams }: { searchParams: { 
           </div>
         </>
       )}
-      {/* Consumo del plan del mes elegido — visible en los 3 planes */}
-      <div className="mt-6">
-        <Panel title="Consumo de tu plan" sub={`Mensajes que envió el agente en ${mesTxt.toLowerCase()}`}>
-          <GaugeConsumo consumo={consumo} />
-        </Panel>
-      </div>
     </main>
   );
 }
