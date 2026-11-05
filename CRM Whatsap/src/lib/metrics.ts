@@ -343,6 +343,36 @@ export async function getConsumoPlan(empresa: number): Promise<ConsumoPlan | nul
   return { plan: r.plan, usadas: r.usadas, limite: r.limite, pct };
 }
 
+// Métricas de valor del agente en el mes en curso (hora Chile). Las calcula la función
+// crm.metricas_valor (sql/10_metricas_valor.sql), la misma que usará el informe mensual.
+export type ValorAgente = {
+  conversaciones: number;
+  resueltas_ia: number;
+  con_humano: number;
+  fuera_horario: number;
+  horas_liberadas: number;
+  minutos_por_conversacion: number;
+  respuesta_mediana_seg: number | null;
+  respuesta_bajo_1min_pct: number | null;
+  respuestas_medidas: number;
+  derivaciones: number;
+  derivaciones_tomadas: number;
+  toma_vendedor_mediana_min: number | null;
+  medicion_desde: string | null;
+  horario: { dias: number[]; inicio: string; fin: string };
+};
+
+export async function getValorAgente(empresa: number): Promise<ValorAgente | null> {
+  const rows = await q<{ m: ValorAgente }>(
+    `SELECT crm.metricas_valor(
+        $1,
+        date_trunc('month', now() AT TIME ZONE 'America/Santiago') AT TIME ZONE 'America/Santiago',
+        now()) AS m`,
+    [empresa]
+  );
+  return rows[0]?.m ?? null;
+}
+
 export async function getActividad(empresa: number): Promise<ActividadRow[]> {
   // Leads creados por día en los últimos 7 días.
   const rows = await q<{ dia: string; cantidad: number }>(

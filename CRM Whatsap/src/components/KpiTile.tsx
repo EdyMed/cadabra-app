@@ -5,6 +5,9 @@ const ICONOS: Record<string, React.ReactNode> = {
   oportunidad: <><path d="M10 3.5v2M10 14.5v2M16.5 10h-2M5.5 10h-2" /><circle cx="10" cy="10" r="3.2" /></>,
   cotizacion: <><path d="M6 3.5h6l3 3v10H6z" /><path d="M11.5 3.5V7H15M8 10.5h4M8 13h4" /></>,
   atencion: <><path d="M10 3.5 17 16H3z" /><path d="M10 8.5v3M10 13.5h.01" /></>,
+  reloj: <><circle cx="10" cy="10" r="6.5" /><path d="M10 6.5V10l2.5 1.5" /></>,
+  luna: <path d="M15.5 12.2A6.5 6.5 0 0 1 7.8 4.5a6.5 6.5 0 1 0 7.7 7.7Z" />,
+  horas: <><path d="M6 3.5h8M6 16.5h8" /><path d="M7 3.5c0 3.5 6 3.5 6 6.5s-6 3-6 6.5M13 3.5c0 2-1.5 3-3 4" /></>,
 };
 
 function Icono({ tipo }: { tipo: string }) {

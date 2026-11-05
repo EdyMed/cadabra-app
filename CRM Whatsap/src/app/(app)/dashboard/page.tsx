@@ -9,7 +9,9 @@ import {
   getCotizacionesSinCierre,
   getClientesFrios,
   getConsumoPlan,
+  getValorAgente,
 } from "@/lib/metrics";
+import ValorAgente from "@/components/ValorAgente";
 import { puedeVer } from "@/lib/plan";
 import KpiTile from "@/components/KpiTile";
 import Panel from "@/components/Panel";
@@ -37,9 +39,11 @@ export default async function DashboardPage() {
   // el plan lo incluye, para no gastar queries de más en Conversa.
   const dashboardCompleto = puedeVer(tenant, "dashboard_completo");
 
-  const [kpis, consumo, embudo, vendedores, actividad, atencion, cotizaciones, frios] = await Promise.all([
+  const [kpis, consumo, valor, embudo, vendedores, actividad, atencion, cotizaciones, frios] = await Promise.all([
     getKpis(tenant.empresa),
     getConsumoPlan(tenant.empresa),
+    // Si la función SQL fallara, el resto del dashboard sigue cargando.
+    getValorAgente(tenant.empresa).catch(() => null),
     dashboardCompleto ? getEmbudo(tenant.empresa) : Promise.resolve([]),
     dashboardCompleto ? getVendedores(tenant.empresa) : Promise.resolve([]),
     dashboardCompleto ? getActividad(tenant.empresa) : Promise.resolve([]),
@@ -130,6 +134,17 @@ export default async function DashboardPage() {
           />
         </div>
       </section>
+
+      {/* Valor del agente — visible en los 3 planes */}
+      {valor && (
+        <>
+          <div className="flex items-baseline gap-2.5 mt-5 mb-2.5">
+            <h2 className="text-[13px] font-semibold text-tinta">Valor de tu agente este mes</h2>
+            <span className="text-tinta-3 text-[12px]">Lo que el agente hizo por tu negocio</span>
+          </div>
+          <ValorAgente v={valor} />
+        </>
+      )}
 
       {/* Consumo del plan — visible en los 3 planes */}
       <div className="mt-3">
