@@ -1480,7 +1480,7 @@
       "parameters": {
         "operation": "executeQuery",
         "options": {},
-        "query": "insert into public.conversation_history (empresa, phone_number, role, content, message_id)\nvalues\n  ({{ $('Consolidar contexto').first().json.empresa }}, '{{ $('Consolidar contexto').first().json.from }}', 'user', '{{ String($('Consolidar contexto').first().json.user_message).replace(/'/g, \"''\") }}', '{{ $('Consolidar contexto').first().json.message_id }}'),\n  ({{ $('Consolidar contexto').first().json.empresa }}, '{{ $('Consolidar contexto').first().json.from }}', 'assistant', '{{ String($('AI Agent').first().json.output).replace(/'/g, \"''\") }}', null);"
+        "query": "insert into public.conversation_history (empresa, phone_number, role, content, message_id, recibido_at)\nvalues\n  ({{ $('Consolidar contexto').first().json.empresa }}, '{{ $('Consolidar contexto').first().json.from }}', 'user', '{{ String($('Consolidar contexto').first().json.user_message).replace(/'/g, \"''\") }}', '{{ $('Consolidar contexto').first().json.message_id }}', {{ (() => { const t = $('Webhook WhatsApp').first().json.body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0]?.timestamp; return t ? 'to_timestamp(' + Number(t) + ')' : 'null'; })() }}),\n  ({{ $('Consolidar contexto').first().json.empresa }}, '{{ $('Consolidar contexto').first().json.from }}', 'assistant', '{{ String($('AI Agent').first().json.output).replace(/'/g, \"''\") }}', null, null);"
       },
       "position": [
         304,
