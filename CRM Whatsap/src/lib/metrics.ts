@@ -168,6 +168,8 @@ export type LeadRow = {
   estado_crm: string;
   vendedor_asignado: string;
   condicion_pago: string;
+  score: number | null;
+  score_resumen: string | null;
 };
 
 // Todos los leads de la empresa (para la tabla de Clientes).
@@ -181,7 +183,9 @@ export async function getLeads(empresa: number): Promise<LeadRow[]> {
         COALESCE(NULLIF(producto_interes,''),'—') AS producto_interes,
         COALESCE(NULLIF(estado_crm,''),'—') AS estado_crm,
         COALESCE(NULLIF(vendedor_asignado,''),'Sin asignar') AS vendedor_asignado,
-        COALESCE(NULLIF(condicion_pago,''),'—') AS condicion_pago
+        COALESCE(NULLIF(condicion_pago,''),'—') AS condicion_pago,
+        score,
+        score_detalle->>'resumen' AS score_resumen
        FROM ${tbl("crm_leads")}
       WHERE empresa = $1
       ORDER BY updated_at DESC NULLS LAST, id DESC`,
@@ -198,6 +202,8 @@ export type OportunidadRow = {
   estado_crm: string;
   vendedor_asignado: string;
   updated_at: string;
+  score: number | null;
+  score_resumen: string | null;
 };
 
 // Leads agrupables por estado del embudo (para el tablero de Oportunidades).
@@ -211,7 +217,9 @@ export async function getOportunidades(empresa: number): Promise<OportunidadRow[
         COALESCE(NULLIF(producto_interes,''),'—') AS producto_interes,
         COALESCE(NULLIF(estado_crm,''),'Nuevo Lead') AS estado_crm,
         COALESCE(NULLIF(vendedor_asignado,''),'Sin asignar') AS vendedor_asignado,
-        COALESCE(updated_at::text, created_at::text) AS updated_at
+        COALESCE(updated_at::text, created_at::text) AS updated_at,
+        score,
+        score_detalle->>'resumen' AS score_resumen
        FROM ${tbl("crm_leads")}
       WHERE empresa = $1
       ORDER BY updated_at DESC NULLS LAST, id DESC`,

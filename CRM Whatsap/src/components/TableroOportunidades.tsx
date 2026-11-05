@@ -3,6 +3,7 @@
 import { useMemo, useState, useTransition } from "react";
 import type { OportunidadRow } from "@/lib/metrics";
 import { apiUrl } from "@/lib/api";
+import Temperatura from "@/components/Temperatura";
 
 // Progresión del embudo: azul (entra) → cyan (avanza) → verde (cierra).
 // Los estados que piden acción usan los semánticos de alerta.
@@ -71,6 +72,8 @@ export default function TableroOportunidades({
       const col = porEstado.get(l.estado_crm) ?? porEstado.get("Nuevo Lead")!;
       col.push(l);
     }
+    // Dentro de cada etapa, los más calientes arriba (sin puntaje al final, conservando su orden).
+    porEstado.forEach((col) => col.sort((a, b) => (b.score ?? -1) - (a.score ?? -1)));
     return estadosOrden.map((estado) => ({ estado, leads: porEstado.get(estado) ?? [] }));
   }, [filtrados, estadosOrden]);
 
@@ -190,11 +193,14 @@ export default function TableroOportunidades({
                       border: "1px solid var(--linea)",
                       opacity: dragId === l.id ? 0.35 : 1,
                     }}
-                    title={l.producto_interes}
+                    title={l.score_resumen ?? l.producto_interes}
                   >
-                    <p className="font-medium text-[12.5px] text-tinta truncate leading-snug">
-                      {l.nombre_negocio}
-                    </p>
+                    <div className="flex items-start gap-1.5">
+                      <p className="font-medium text-[12.5px] text-tinta truncate leading-snug flex-1 min-w-0">
+                        {l.nombre_negocio}
+                      </p>
+                      {l.score != null && <Temperatura score={l.score} resumen={l.score_resumen} compacto />}
+                    </div>
                     <div className="flex items-center gap-1.5 mt-1.5">
                       <span
                         className="w-[15px] h-[15px] rounded-[4px] grid place-items-center font-semibold text-[8px] flex-shrink-0"

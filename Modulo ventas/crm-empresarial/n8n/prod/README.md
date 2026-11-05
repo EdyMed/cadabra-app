@@ -10,7 +10,7 @@ Generado por `../exportar_n8n.py`. No editar a mano: los cambios se hacen en n8n
 | ⚪ | `Au7bz0qTrsBxK4Jm` | Chatwoot Receptor (handoff) | 4 |
 | 🟢 | `H0Q3kX8qW5y9xfnE` | Contador Conversaciones | 4 |
 | ⚪ | `Jm9jJ9IXsHFJVJXT` | Agente CRM + Buffer (TEST) | 52 |
-| 🟢 | `LspLEGA3ZegcYoIH` | Agente Whatsap CRM Empresarial | 83 |
+| 🟢 | `LspLEGA3ZegcYoIH` | Agente Whatsap CRM Empresarial | 88 |
 | 🟢 | `WJ73HaQ5lwYelsbp` | Coexistencia – eventos (app WhatsApp Business) | 3 |
 | 🟢 | `aiV5ye7IxY1DGFrK` | CRM Upsert (Supabase) | 7 |
 | 🟢 | `bokdGONRGM4RnyyW` | Alertas Cadabra (errores) | 6 |

@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import type { LeadRow } from "@/lib/metrics";
+import Temperatura, { nivelTemperatura } from "@/components/Temperatura";
 
 const ESTADO_COLOR: Record<string, { bg: string; fg: string }> = {
   "Nuevo Lead": { bg: "var(--info-bg)", fg: "var(--info)" },
@@ -19,19 +20,24 @@ export default function TablaClientes({ leads }: { leads: LeadRow[] }) {
   const [q, setQ] = useState("");
   const [estado, setEstado] = useState("");
   const [vendedor, setVendedor] = useState("");
+  const [temp, setTemp] = useState("");
+  const [orden, setOrden] = useState<"recientes" | "calientes">("recientes");
 
   const estados = useMemo(() => Array.from(new Set(leads.map((l) => l.estado_crm))).sort(), [leads]);
   const vendedores = useMemo(() => Array.from(new Set(leads.map((l) => l.vendedor_asignado))).sort(), [leads]);
 
   const filtrados = useMemo(() => {
     const t = q.toLowerCase().trim();
-    return leads.filter((l) => {
+    const res = leads.filter((l) => {
       const okQ = !t || l.nombre_negocio.toLowerCase().includes(t) || l.nombre.toLowerCase().includes(t) || l.phone.includes(t);
       const okE = !estado || l.estado_crm === estado;
       const okV = !vendedor || l.vendedor_asignado === vendedor;
-      return okQ && okE && okV;
+      const okT = !temp || nivelTemperatura(l.score) === temp;
+      return okQ && okE && okV && okT;
     });
-  }, [leads, q, estado, vendedor]);
+    // "Más calientes": puntaje desc, sin puntaje al final. "Recientes" respeta el orden de la consulta.
+    return orden === "calientes" ? [...res].sort((a, b) => (b.score ?? -1) - (a.score ?? -1)) : res;
+  }, [leads, q, estado, vendedor, temp, orden]);
 
   const selectCls = "campo w-auto cursor-pointer";
 
@@ -58,6 +64,17 @@ export default function TablaClientes({ leads }: { leads: LeadRow[] }) {
             <option key={v} value={v}>{v}</option>
           ))}
         </select>
+        <select id="f-temp" value={temp} onChange={(e) => setTemp(e.target.value)} className={selectCls}>
+          <option value="">Toda temperatura</option>
+          <option value="caliente">🔥 Calientes</option>
+          <option value="tibio">Tibios</option>
+          <option value="frio">Fríos</option>
+          <option value="sin">Sin puntaje</option>
+        </select>
+        <select id="f-orden" value={orden} onChange={(e) => setOrden(e.target.value as "recientes" | "calientes")} className={selectCls}>
+          <option value="recientes">Más recientes</option>
+          <option value="calientes">Más calientes primero</option>
+        </select>
         <span className="text-[11.5px] text-tinta-3 tnum whitespace-nowrap">
           {filtrados.length} de {leads.length}
         </span>
@@ -72,6 +89,7 @@ export default function TablaClientes({ leads }: { leads: LeadRow[] }) {
               <th>Contacto</th>
               <th>Comuna</th>
               <th>Producto</th>
+              <th title="Puntaje de interés calculado por la IA con lo que el cliente escribió">Temperatura</th>
               <th>Estado</th>
               <th>Vendedor</th>
               <th>Pago</th>
@@ -89,6 +107,7 @@ export default function TablaClientes({ leads }: { leads: LeadRow[] }) {
                   <td className="tnum">{l.phone}</td>
                   <td>{l.comuna}</td>
                   <td>{l.producto_interes}</td>
+                  <td><Temperatura score={l.score} resumen={l.score_resumen} /></td>
                   <td>
                     <span className="pildora" style={{ background: c.bg, color: c.fg }}>
                       {l.estado_crm}
@@ -101,7 +120,7 @@ export default function TablaClientes({ leads }: { leads: LeadRow[] }) {
             })}
             {filtrados.length === 0 && (
               <tr>
-                <td colSpan={7} className="py-8 text-center text-tinta-3">
+                <td colSpan={8} className="py-8 text-center text-tinta-3">
                   No hay leads que coincidan con tu búsqueda.
                 </td>
               </tr>

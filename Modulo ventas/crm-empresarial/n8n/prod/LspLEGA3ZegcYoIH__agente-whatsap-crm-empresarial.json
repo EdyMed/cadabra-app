@@ -284,6 +284,11 @@
             "index": 0,
             "node": "Detectar agenda (auto)",
             "type": "main"
+          },
+          {
+            "index": 0,
+            "node": "Score: ¿aplica?",
+            "type": "main"
           }
         ]
       ]
@@ -446,6 +451,51 @@
             "type": "main"
           }
         ]
+      ]
+    },
+    "Score: calcular": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Score: guardar",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Score: clasificar (IA)": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Score: calcular",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Score: preparar": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Score: clasificar (IA)",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Score: ¿aplica?": {
+      "main": [
+        [
+          {
+            "index": 0,
+            "node": "Score: preparar",
+            "type": "main"
+          }
+        ],
+        []
       ]
     },
     "Switch media descargada": {
@@ -1822,6 +1872,116 @@
       ],
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1
+    },
+    {
+      "id": "392fe160-84fe-46a7-8dc0-8e56d0efa7cd",
+      "name": "Score: calcular",
+      "parameters": {
+        "jsCode": "// Puntaje con pesos fijos + SQL de guardado (valores saneados: números con Number(), textos con '' escapado).\nlet d;\ntry { d = JSON.parse($json.choices[0].message.content); } catch (e) { return []; }\nconst PI = { compra: 40, cotizacion: 35, agendar: 30, consulta_producto: 20, soporte_postventa: 5 };\nconst puntos = {\n  intencion: PI[d.intencion] || 0,\n  categoria: d.categoria ? 10 : 0,\n  cantidad: d.cantidad ? 15 : 0,\n  negocio: d.es_negocio ? 15 : 0,\n  urgencia: d.urgencia === 'alta' ? 15 : d.urgencia === 'media' ? 8 : 0,\n  pide_humano: d.pide_humano ? 5 : 0,\n};\nconst score = Math.min(100, Object.values(puntos).reduce((a, b) => a + b, 0));\nconst registrar = ['compra', 'cotizacion', 'consulta_producto', 'agendar'].includes(d.intencion) && !!(d.categoria || d.cantidad);\n\nconst ctx = $('Consolidar contexto').first().json;\nconst emp = Number(ctx.empresa);\nconst cid = Number(String(ctx.from || '').replace(/[^0-9]/g, ''));\nif (!emp || !cid) return [];\nconst esc = (s) => String(s).replace(/'/g, \"''\");\nconst det = esc(JSON.stringify({ ...d, puntos, modelo: 'gpt-4o-mini' }));\nconst prod = d.categoria ? \"'\" + esc(String(d.categoria).slice(0, 60)) + \"'\" : 'null';\nconst viejo = \"crm.crm_leads.score is null or crm.crm_leads.score_at < now() - interval '14 days'\";\nconst sql = `insert into crm.crm_leads (empresa, contact_id, phone, producto_interes, estado_crm, origen_lead, bot_activo, score, score_detalle, score_at)\nselect ${emp}, ${cid}, ${cid}, ${prod}, 'Nuevo Lead', 'WhatsApp (IA)', true, ${score}, '${det}'::jsonb, now()\nwhere ${registrar} or exists (select 1 from crm.crm_leads where empresa = ${emp} and contact_id = ${cid})\non conflict (empresa, contact_id) do update set\n  score = case when ${viejo} then excluded.score else greatest(crm.crm_leads.score, excluded.score) end,\n  score_detalle = case when ${viejo} or excluded.score >= crm.crm_leads.score then excluded.score_detalle else crm.crm_leads.score_detalle end,\n  score_at = now(),\n  producto_interes = coalesce(crm.crm_leads.producto_interes, excluded.producto_interes)\nreturning id, score;`;\nreturn [{ json: { score, registrar, puntos, clasificacion: d, sql } }];"
+      },
+      "position": [
+        1024,
+        3476
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "credentials": {
+        "openAiApi": {
+          "id": "m7BC6hEy8r3b2qLs",
+          "name": "OpenAI account"
+        }
+      },
+      "id": "0c40033e-5ca5-4807-ab71-aa4dd6767cbf",
+      "name": "Score: clasificar (IA)",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "authentication": "predefinedCredentialType",
+        "jsonBody": "={{ JSON.stringify($json.body) }}",
+        "method": "POST",
+        "nodeCredentialType": "openAiApi",
+        "options": {
+          "timeout": 20000
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "url": "https://api.openai.com/v1/chat/completions"
+      },
+      "position": [
+        784,
+        3476
+      ],
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2
+    },
+    {
+      "credentials": {
+        "postgres": {
+          "id": "BIM03WKClC8bnUc8",
+          "name": "Supabase Ventas (RW)"
+        }
+      },
+      "id": "55f7a584-3387-4475-bc39-006b6ed375f2",
+      "name": "Score: guardar",
+      "onError": "continueRegularOutput",
+      "parameters": {
+        "operation": "executeQuery",
+        "options": {},
+        "query": "={{ $json.sql }}"
+      },
+      "position": [
+        1264,
+        3476
+      ],
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6
+    },
+    {
+      "id": "94c9ccc4-3aa1-4fb0-855b-986b5a4d0125",
+      "name": "Score: preparar",
+      "parameters": {
+        "jsCode": "// Arma la petición al clasificador con los últimos mensajes del cliente y las categorías de la ficha.\nconst ctx = $('Consolidar contexto').first().json;\nconst cfg = ctx.config || {};\nconst cats = (((cfg.interes || {}).categorias) || []).map(c => c && c.nombre).filter(Boolean);\nconst previos = (ctx.history || []).filter(h => h.role === 'user').slice(-5).map(h => '- ' + String(h.content).slice(0, 400));\nconst actual = String(ctx.user_message || '').slice(0, 1500);\nconst negocio = String((cfg.negocio || {}).descripcion || ctx.nombre_empresa || '').slice(0, 400);\n\nconst categoria = cats.length\n  ? { anyOf: [{ type: 'string', enum: cats }, { type: 'null' }] }\n  : { type: ['string', 'null'] };\nconst schema = {\n  type: 'object', additionalProperties: false,\n  required: ['intencion', 'categoria', 'cantidad', 'es_negocio', 'urgencia', 'pide_humano', 'resumen'],\n  properties: {\n    intencion: { type: 'string', enum: ['compra', 'cotizacion', 'agendar', 'consulta_producto', 'soporte_postventa', 'reclamo', 'saludo_o_charla', 'otro'] },\n    categoria,\n    cantidad: { type: ['string', 'null'], description: 'Cantidad o volumen mencionado (ej. \"200 unidades\", \"3 docenas\"), o null' },\n    es_negocio: { type: 'boolean', description: 'true si el cliente compra para un negocio (local, restaurant, empresa, almacén, etc.)' },\n    urgencia: { type: 'string', enum: ['alta', 'media', 'baja', 'sin_dato'] },\n    pide_humano: { type: 'boolean' },\n    resumen: { type: 'string', description: 'Qué busca el cliente, en máximo 15 palabras, en español' },\n  },\n};\nconst sys = 'Clasificas a clientes que escriben por WhatsApp a un negocio, para priorizar el seguimiento comercial. '\n  + 'Negocio: ' + negocio + '. '\n  + (cats.length ? 'Categorías de producto válidas: ' + cats.join(', ') + '. ' : '')\n  + 'Considera TODO lo que el cliente ha dicho (mensajes previos + actual), no solo el último. '\n  + 'intencion: compra = quiere comprar/hacer un pedido; cotizacion = pide precios para comprar o una cotización; agendar = quiere reunión/visita/cita; '\n  + 'consulta_producto = pregunta por productos sin intención clara de compra; saludo_o_charla = saludo, gracias o charla sin consulta. '\n  + 'urgencia: alta si dice hoy/mañana/urgente/esta semana; media si da un plazo cercano; baja si dice más adelante; si no dice nada, sin_dato. '\n  + 'No inventes datos: si algo no se menciona, usa null/false/sin_dato.';\nconst user = (previos.length ? 'Mensajes anteriores del cliente:\\n' + previos.join('\\n') + '\\n\\n' : '') + 'Mensaje actual:\\n' + actual;\nreturn [{ json: { body: {\n  model: 'gpt-4o-mini', temperature: 0, max_tokens: 250,\n  response_format: { type: 'json_schema', json_schema: { name: 'lead', strict: true, schema } },\n  messages: [{ role: 'system', content: sys }, { role: 'user', content: user }],\n} } }];"
+      },
+      "position": [
+        544,
+        3476
+      ],
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2
+    },
+    {
+      "id": "f22ba0cd-28ee-4d8e-8ea2-76246fdc4c4c",
+      "name": "Score: ¿aplica?",
+      "parameters": {
+        "conditions": {
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "sa",
+              "leftValue": "={{ $('Consolidar contexto').first().json.rol !== 'owner' }}",
+              "operator": {
+                "operation": "true",
+                "singleValue": true,
+                "type": "boolean"
+              },
+              "rightValue": true
+            }
+          ],
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose"
+          }
+        },
+        "options": {}
+      },
+      "position": [
+        304,
+        3476
+      ],
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2
     },
     {
       "id": "5w1tch00-0000-4000-8000-000000000005",
