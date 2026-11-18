@@ -6,7 +6,8 @@ import { randomInt } from "node:crypto";
 // Embedded Signup: el cliente conecta SU cuenta de WhatsApp Business desde el
 // panel. Meta devuelve un código (canjeable una sola vez por un token del
 // negocio) y los IDs de la WABA y del número que eligió. Aquí se completa la
-// conexión y se deja todo listo para que n8n reciba y envíe sus mensajes.
+// conexión, se registra la línea en la plataforma (motor de código) y, si no se
+// puede, queda en n8n.
 
 export type CuentaWhatsapp = {
   empresa: number;
@@ -244,6 +245,45 @@ export async function conectarCuenta(params: {
     cliente.release();
   }
 
+  // 6) Plataforma Cadabra: registra la línea y, si va al motor de código, le pone su
+  //    webhook propio en Meta. Si no se puede, la línea sigue en n8n (que responde igual).
+  if (phoneNumberId) {
+    const nota = await registrarEnPlataforma(empresa, nombreEmpresa, phoneNumberId);
+    if (nota) avisos.push(nota);
+  }
+
   const cuenta = await getCuentaWhatsapp(empresa);
   return { cuenta: cuenta!, avisos };
+}
+
+// POST /v1/lineas de la plataforma (app/cadabra-ai-platform/src/cadabra/administration/lineas.py).
+// Sin PLATAFORMA_ADMIN_CLAVE no hace nada: la línea queda en n8n como antes.
+// Devuelve un aviso solo si algo no salió como se esperaba.
+async function registrarEnPlataforma(
+  empresa: number,
+  nombreEmpresa: string,
+  phoneNumberId: string
+): Promise<string | null> {
+  const clave = process.env.PLATAFORMA_ADMIN_CLAVE;
+  if (!clave) return null;
+  const base = (process.env.PLATAFORMA_URL || "https://plataforma.appcadabra.cl").replace(/\/+$/, "");
+  try {
+    const res = await fetch(`${base}/v1/lineas`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Cadabra-Admin": clave },
+      body: JSON.stringify({ empresa, phone_number_id: phoneNumberId, nombre_empresa: nombreEmpresa }),
+      cache: "no-store",
+      signal: AbortSignal.timeout(25_000),
+    });
+    const data = await res.json().catch(() => null);
+    if (!res.ok) {
+      console.error("[plataforma] alta de línea rechazada", res.status, data);
+      return `La línea quedó atendida por el motor anterior (la plataforma respondió ${res.status}).`;
+    }
+    console.info("[plataforma] alta de línea", data);
+    return data?.aviso ? `La línea quedó atendida por el motor anterior: ${data.aviso}` : null;
+  } catch (e) {
+    console.error("[plataforma] no se pudo registrar la línea", e);
+    return "La línea quedó atendida por el motor anterior (no se pudo contactar a la plataforma).";
+  }
 }
