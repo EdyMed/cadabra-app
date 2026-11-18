@@ -17,7 +17,7 @@ begin;
 do $$
 begin
   if not exists (select 1 from pg_roles where rolname = 'nocodb_crm') then
-    create role nocodb_crm login password 'Crm.Nocodb.2026';
+    create role nocodb_crm login password 'CAMBIAR_CLAVE';
   end if;
 end $$;
 

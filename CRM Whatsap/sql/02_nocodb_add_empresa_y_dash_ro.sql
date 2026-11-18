@@ -15,7 +15,7 @@ ALTER TABLE p14vch8or5d3r3s.crm_leads
 DO $$
 BEGIN
   IF NOT EXISTS (SELECT 1 FROM pg_roles WHERE rolname = 'dash_ro') THEN
-    CREATE ROLE dash_ro LOGIN PASSWORD 'motoco2026';
+    CREATE ROLE dash_ro LOGIN PASSWORD 'CAMBIAR_CLAVE';
   END IF;
 END$$;
 
