@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { ConversacionRow, MensajeRow } from "@/lib/metrics";
 import { apiUrl } from "@/lib/api";
 
@@ -51,6 +51,18 @@ export default function PanelConversaciones({
   // que se guarda aquí lo que el vendedor acaba de cambiar.
   const [botLocal, setBotLocal] = useState<Record<string, boolean>>({});
 
+  // Scroll del chat: al abrir una conversación (o enviar) se baja al último mensaje. Cuando llega uno nuevo
+  // por el sondeo, solo se baja si el vendedor ya estaba abajo (no lo saca de lo que está leyendo más arriba).
+  const chat = useRef<HTMLDivElement>(null);
+  const irAlFinal = useRef(true);
+  const estabaAbajo = useRef(true);
+  useLayoutEffect(() => {
+    const el = chat.current;
+    if (!el || cargando) return;
+    if (irAlFinal.current || estabaAbajo.current) el.scrollTop = el.scrollHeight;
+    irAlFinal.current = false;
+  }, [mensajes, cargando]);
+
   const filtradas = useMemo(() => {
     const t = q.toLowerCase().trim();
     if (!t) return conversaciones;
@@ -75,6 +87,7 @@ export default function PanelConversaciones({
     : false;
 
   async function abrir(phone: string) {
+    irAlFinal.current = true;
     setSeleccionado(phone);
     setCargando(true);
     try {
@@ -299,7 +312,14 @@ export default function PanelConversaciones({
           </div>
         )}
 
-        <div className="flex-1 overflow-y-auto p-4 flex flex-col gap-2">
+        <div
+          ref={chat}
+          onScroll={(e) => {
+            const el = e.currentTarget;
+            estabaAbajo.current = el.scrollHeight - el.scrollTop - el.clientHeight < 80;
+          }}
+          className="flex-1 overflow-y-auto p-4 flex flex-col gap-2"
+        >
           {cargando && (
             <div className="flex flex-col gap-2.5">
               <div className="esqueleto h-[38px] w-[45%]" />
