@@ -5,6 +5,9 @@ import { writePool } from "@/lib/db";
 // Enciende o apaga el bot para UNA conversación (crm_leads.bot_activo).
 // El bot se apaga solo cuando el cliente pide un vendedor; esta ruta es la
 // única forma de volver a encenderlo sin entrar a la base de datos.
+// Si el contacto aún no es lead (p. ej. viene del historial importado por coexistencia) y se APAGA el bot,
+// se crea el lead con el bot apagado: así el dueño puede responderle desde el panel.
+// Requiere sql/12_panel_crea_leads.sql (GRANT INSERT acotado para dashboard_rw).
 export async function PATCH(req: NextRequest) {
   const tenant = await getTenant();
   if (!tenant) {
@@ -44,7 +47,25 @@ export async function PATCH(req: NextRequest) {
   }
 
   if (res.rowCount === 0) {
-    return NextResponse.json({ error: "No existe un lead con ese teléfono" }, { status: 404 });
+    // Encender el bot de un contacto sin lead no cambia nada: el bot ya lo atiende.
+    if (activo) return NextResponse.json({ ok: true, bot_activo: true });
+    try {
+      res = await writePool.query(
+        `INSERT INTO crm.crm_leads (empresa, contact_id, phone, estado_crm, origen_lead, bot_activo)
+         VALUES ($1, $2, $2, 'En Conversación', 'whatsapp', false)
+         RETURNING id, bot_activo`,
+        [tenant.empresa, phone]
+      );
+    } catch (e) {
+      const code = (e as { code?: string })?.code;
+      if (code === "42501") {
+        return NextResponse.json(
+          { error: "Este contacto aún no es lead y la base no permite crearlo. Falta ejecutar sql/12_panel_crea_leads.sql." },
+          { status: 500 }
+        );
+      }
+      throw e;
+    }
   }
 
   // Coexistencia: reactivar desde el panel también levanta la pausa de 24 h que se

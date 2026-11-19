@@ -33,8 +33,10 @@ function iniciales(texto: string) {
 
 export default function PanelConversaciones({
   conversaciones: inicial,
+  asistente,
 }: {
   conversaciones: ConversacionRow[];
+  asistente: string;
 }) {
   // La lista llega del servidor al cargar, pero el sondeo la refresca: así el
   // punto de "espera vendedor" se apaga solo cuando alguien responde.
@@ -250,7 +252,7 @@ export default function PanelConversaciones({
                   </span>
                 </div>
                 <p className="text-[11.5px] text-tinta-3 truncate">
-                  {c.ultimo_rol === "user" ? "" : "Sofía: "}
+                  {c.ultimo_rol === "user" ? "" : c.ultimo_rol === "vendedor" ? "Tu equipo: " : `${asistente}: `}
                   {truncar(c.ultimo_mensaje, 52)}
                 </p>
               </button>
@@ -345,7 +347,7 @@ export default function PanelConversaciones({
                     className="text-[10px] mt-1 tnum"
                     style={{ color: delCliente ? "var(--tinta-3)" : "var(--verde)" }}
                   >
-                    {delCliente ? "" : m.role === "vendedor" ? "Tu equipo · " : "Sofía · "}
+                    {delCliente ? "" : m.role === "vendedor" ? "Tu equipo · " : `${asistente} · `}
                     {formatHora(m.created_at)}
                   </p>
                 </div>
