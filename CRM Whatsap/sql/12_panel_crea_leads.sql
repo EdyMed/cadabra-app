@@ -10,5 +10,9 @@
 -- ============================================================================
 grant insert (empresa, contact_id, phone, estado_crm, origen_lead, bot_activo) on crm.crm_leads to dashboard_rw;
 
+-- crm_leads tiene RLS: además del GRANT hace falta la política de INSERT (dashboard_rw ya tenía SELECT y UPDATE
+-- con 'true'; la empresa la filtra la ruta del panel con tenant.empresa, igual que en el UPDATE).
+create policy dashboard_rw_insert_leads on crm.crm_leads for insert to dashboard_rw with check (true);
+
 -- Verificación (debe dar true):
 -- select has_table_privilege('dashboard_rw', 'crm.crm_leads', 'INSERT');
