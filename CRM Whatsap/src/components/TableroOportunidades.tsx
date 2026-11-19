@@ -34,6 +34,7 @@ export default function TableroOportunidades({
   const [leads, setLeads] = useState(leadsIniciales);
   const [etapas, setEtapas] = useState(etapasIniciales);
   const [editando, setEditando] = useState(false);
+  const [verOcultas, setVerOcultas] = useState(false);
   const [vendedor, setVendedor] = useState("");
   const [q, setQ] = useState("");
   const [dragId, setDragId] = useState<number | null>(null);
@@ -64,11 +65,12 @@ export default function TableroOportunidades({
     }
     // Dentro de cada etapa, los más calientes arriba (sin puntaje al final, conservando su orden).
     porEstado.forEach((col) => col.sort((a, b) => (b.score ?? -1) - (a.score ?? -1)));
-    // Una etapa oculta igual se muestra si tiene leads (el agente o n8n pueden dejarlos ahí).
-    return etapas
-      .map((etapa) => ({ etapa, estado: etapa.nombre, leads: porEstado.get(etapa.nombre) ?? [] }))
-      .filter(({ etapa, leads: col }) => !etapa.oculta || col.length > 0);
+    return etapas.map((etapa) => ({ etapa, estado: etapa.nombre, leads: porEstado.get(etapa.nombre) ?? [] }));
   }, [filtrados, etapas]);
+
+  // Las ocultas no se muestran; si tienen leads (los puede dejar el agente o n8n), un botón permite verlas.
+  const enOcultas = columnas.filter((c) => c.etapa.oculta).reduce((n, c) => n + c.leads.length, 0);
+  const visibles = columnas.filter((c) => !c.etapa.oculta || (verOcultas && c.leads.length > 0));
 
   function etapasGuardadas(nuevas: Etapa[], renombres: Map<string, string>) {
     setEtapas(nuevas);
@@ -131,6 +133,16 @@ export default function TableroOportunidades({
         <button type="button" onClick={() => setEditando(true)} className="btn-secundario text-[12.5px]">
           Etapas
         </button>
+        {enOcultas > 0 && (
+          <button
+            type="button"
+            onClick={() => setVerOcultas((v) => !v)}
+            className={`btn-secundario text-[12.5px]${verOcultas ? " activo" : ""}`}
+            title="Leads que están en etapas que ocultaste"
+          >
+            {verOcultas ? "Esconder ocultas" : `Ver ocultas (${enOcultas})`}
+          </button>
+        )}
         {error && (
           <span
             className="text-[12.5px] ml-auto px-2.5 py-1 rounded-[7px]"
@@ -142,7 +154,7 @@ export default function TableroOportunidades({
       </div>
 
       <div className="flex gap-3.5 overflow-x-auto pb-2 items-start">
-        {columnas.map(({ etapa, estado, leads: col }) => (
+        {visibles.map(({ etapa, estado, leads: col }) => (
           <section key={estado} className="flex-shrink-0 w-[224px]">
             {/* La etapa se marca con una línea de color arriba, no con una caja
                 que envuelva las tarjetas (evita card dentro de card). */}
