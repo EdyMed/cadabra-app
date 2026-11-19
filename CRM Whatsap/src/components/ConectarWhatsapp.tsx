@@ -4,12 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import { apiUrl } from "@/lib/api";
 import type { CuentaWhatsapp } from "@/lib/conexionWhatsapp";
 
-// Botón "Conectar WhatsApp" (Embedded Signup de Meta, versión 5). Abre la ventana
-// oficial de Meta, donde el cliente elige o crea su cuenta y conecta su número:
-//   - un número NUEVO (sin WhatsApp): lo verifica por SMS o llamada;
-//   - el número que YA usa en la app WhatsApp Business: escanea un QR desde la app y
+// Conectar WhatsApp (Embedded Signup de Meta, versión 5). El cliente elige antes cómo:
+//   - "nuevo": un número sin WhatsApp; Meta lo verifica por SMS o llamada (flujo normal);
+//   - "app": el número que YA usa en la app WhatsApp Business; escanea un QR desde la app y
 //     queda en COEXISTENCIA (sigue usando su app y además atiende el agente).
-// En v5 la coexistencia viene activada por defecto. Meta entrega dos cosas:
+// La coexistencia se pide con featureType solo en el modo "app": con featureType el flujo de Meta
+// puede quedar SOLO para coexistencia y no permitir números nuevos. Meta entrega dos cosas:
 //   - el código de autorización, en el callback de FB.login (vive 30 s)
 //   - los IDs de la cuenta y del número, por postMessage desde facebook.com
 // Cuando llegan ambas se envían al servidor para completar la conexión.
@@ -17,6 +17,14 @@ import type { CuentaWhatsapp } from "@/lib/conexionWhatsapp";
 const APP_ID = process.env.NEXT_PUBLIC_META_APP_ID ?? "";
 const CONFIG_ID = process.env.NEXT_PUBLIC_META_ES_CONFIG_ID ?? "";
 const VERSION = "v23.0";
+
+type Modo = "nuevo" | "app";
+
+// extras del Embedded Signup según el modo (ver comentario de arriba).
+const EXTRAS: Record<Modo, Record<string, unknown>> = {
+  nuevo: { setup: {}, version: "v5" },
+  app: { setup: {}, featureType: "whatsapp_business_app_onboarding", sessionInfoVersion: "3", version: "v5" },
+};
 
 type Sesion = { waba_id: string; phone_number_id?: string; business_id?: string; is_on_biz_app?: boolean };
 
@@ -58,6 +66,7 @@ function formatoFecha(f: string) {
 export default function ConectarWhatsapp({ cuenta: inicial }: { cuenta: CuentaWhatsapp | null }) {
   const [cuenta, setCuenta] = useState(inicial);
   const [estado, setEstado] = useState<"idle" | "abriendo" | "conectando">("idle");
+  const [modo, setModo] = useState<Modo | null>(null);   // con qué botón se abrió Meta
   const [error, setError] = useState<string | null>(null);
   const [avisos, setAvisos] = useState<string[]>([]);
   const codigo = useRef<string | null>(null);
@@ -119,9 +128,10 @@ export default function ConectarWhatsapp({ cuenta: inicial }: { cuenta: CuentaWh
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  async function conectar() {
+  async function conectar(m: Modo) {
     setError(null);
     setAvisos([]);
+    setModo(m);
     setEstado("abriendo");
     try {
       await cargarSdk();
@@ -144,14 +154,7 @@ export default function ConectarWhatsapp({ cuenta: inicial }: { cuenta: CuentaWh
         config_id: CONFIG_ID,
         response_type: "code",
         override_default_response_type: true,
-        // Coexistencia (número de la app WhatsApp Business por QR): hay que pedirla explícito con
-        // featureType. Sin él, Meta solo ofrece número nuevo por SMS (visto en vivo 2026-11-18).
-        extras: {
-          setup: {},
-          featureType: "whatsapp_business_app_onboarding",
-          sessionInfoVersion: "3",
-          version: "v5",
-        },
+        extras: EXTRAS[m],
       }
     );
   }
@@ -164,8 +167,8 @@ export default function ConectarWhatsapp({ cuenta: inicial }: { cuenta: CuentaWh
         <div>
           <h2 className="font-semibold text-[12.5px] text-tinta">WhatsApp</h2>
           <p className="text-[12px] text-tinta-2 mt-0.5">
-            Conecta un número nuevo, o el que ya usas en la app WhatsApp Business (escaneando un QR):
-            sigues usando tu app y además atiende tu agente.
+            Conecta un número nuevo para tu agente, o el que ya usas en la app WhatsApp Business
+            (escaneando un QR): sigues usando tu app y además atiende tu agente.
           </p>
         </div>
         {cuenta?.estado === "conectado" && (
@@ -217,20 +220,26 @@ export default function ConectarWhatsapp({ cuenta: inicial }: { cuenta: CuentaWh
         </p>
       )}
 
-      <div className="mt-3.5 flex items-center gap-3">
-        <button onClick={conectar} disabled={ocupado || !configurado} className={cuenta ? "btn-secundario" : "btn-primario"}>
-          {estado === "abriendo"
-            ? "Abriendo Meta…"
-            : estado === "conectando"
-              ? "Conectando…"
-              : cuenta
-                ? "Cambiar número"
-                : "Conectar WhatsApp"}
+      <div className="mt-3.5 flex flex-wrap items-center gap-2.5">
+        <button onClick={() => conectar("nuevo")} disabled={ocupado || !configurado}
+          className={cuenta ? "btn-secundario" : "btn-primario"}>
+          {ocupado && modo === "nuevo"
+            ? (estado === "abriendo" ? "Abriendo Meta…" : "Conectando…")
+            : cuenta ? "Cambiar a un número nuevo" : "Conectar un número nuevo"}
+        </button>
+        <button onClick={() => conectar("app")} disabled={ocupado || !configurado} className="btn-secundario">
+          {ocupado && modo === "app"
+            ? (estado === "abriendo" ? "Abriendo Meta…" : "Conectando…")
+            : "Ya uso WhatsApp Business en mi celular"}
         </button>
         {!configurado && (
           <span className="text-[11.5px] text-tinta-3">Falta configurar la app de Meta en el servidor.</span>
         )}
       </div>
+      <p className="mt-2 text-[11.5px] text-tinta-3">
+        Con tu número de la app WhatsApp Business: ten la app actualizada en el celular; Meta te mostrará un QR para
+        escanearlo desde la app. Si Meta no te ofrece esa opción, conecta un número nuevo.
+      </p>
     </div>
   );
 }
