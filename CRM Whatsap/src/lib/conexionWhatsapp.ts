@@ -48,6 +48,23 @@ export async function getCuentaWhatsapp(empresa: number): Promise<CuentaWhatsapp
   };
 }
 
+// Número que el agente atiende hoy para la empresa (agente_lineas_whatsapp activo). Puede existir sin fila en
+// agente_whatsapp_cuentas: p. ej. Sofía, cuya línea se configuró a mano antes del Embedded Signup.
+export type LineaActiva = { phoneNumberId: string; numero: string | null };
+
+export async function getLineaActiva(empresa: number): Promise<LineaActiva | null> {
+  const res = await whatsappPool.query(
+    `SELECT phone_number_id, whatsapp_display FROM public.agente_lineas_whatsapp
+      WHERE empresa = $1 AND activo ORDER BY updated_at DESC NULLS LAST LIMIT 1`,
+    [empresa]
+  );
+  const r = res.rows[0];
+  if (!r) return null;
+  const d = String(r.whatsapp_display ?? "").replace(/\D/g, "");
+  const numero = /^569\d{8}$/.test(d) ? `+56 9 ${d.slice(3, 7)} ${d.slice(7)}` : d ? `+${d}` : null;
+  return { phoneNumberId: r.phone_number_id, numero };
+}
+
 // Token del negocio (descifrado) para llamar a la Graph API sobre SU WABA.
 export async function getTokenCuenta(empresa: number): Promise<{ wabaId: string; token: string } | null> {
   const res = await whatsappPool.query(
