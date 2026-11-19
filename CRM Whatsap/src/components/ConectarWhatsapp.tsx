@@ -144,8 +144,14 @@ export default function ConectarWhatsapp({ cuenta: inicial }: { cuenta: CuentaWh
         config_id: CONFIG_ID,
         response_type: "code",
         override_default_response_type: true,
-        // v5: la coexistencia (número de la app WhatsApp Business) viene activada por defecto.
-        extras: { setup: {}, version: "v5" },
+        // Coexistencia (número de la app WhatsApp Business por QR): hay que pedirla explícito con
+        // featureType. Sin él, Meta solo ofrece número nuevo por SMS (visto en vivo 2026-11-18).
+        extras: {
+          setup: {},
+          featureType: "whatsapp_business_app_onboarding",
+          sessionInfoVersion: "3",
+          version: "v5",
+        },
       }
     );
   }
