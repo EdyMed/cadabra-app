@@ -4,20 +4,8 @@ import { useMemo, useState, useTransition } from "react";
 import type { OportunidadRow } from "@/lib/metrics";
 import { apiUrl } from "@/lib/api";
 import Temperatura from "@/components/Temperatura";
-
-// Progresión del embudo: azul (entra) → cyan (avanza) → verde (cierra).
-// Los estados que piden acción usan los semánticos de alerta.
-const COLOR_ESTADO: Record<string, string> = {
-  "Nuevo Lead": "#3de0c8",
-  "En Conversación": "#4fb8b2",
-  "Cotización Enviada": "#42d6d0",
-  "Primer Pedido": "#6fa88c",
-  "Cliente Activo": "#6fa88c",
-  "Cliente Recurrente": "#9b7bb8",
-  "Requiere Vendedor": "#c76d78",
-  "Sin Respuesta": "#c6a24a",
-  "Inactivo": "#555e68",
-};
+import EditorEtapas from "@/components/EditorEtapas";
+import { colorEtapa, type Etapa } from "@/lib/etapasComun";
 
 const COLOR_VENDEDOR: Record<string, string> = {
   "Vendedor 1": "#4fb8b2",
@@ -38,12 +26,14 @@ function iniciales(nombre: string) {
 
 export default function TableroOportunidades({
   leads: leadsIniciales,
-  estadosOrden,
+  etapas: etapasIniciales,
 }: {
   leads: OportunidadRow[];
-  estadosOrden: string[];
+  etapas: Etapa[];
 }) {
   const [leads, setLeads] = useState(leadsIniciales);
+  const [etapas, setEtapas] = useState(etapasIniciales);
+  const [editando, setEditando] = useState(false);
   const [vendedor, setVendedor] = useState("");
   const [q, setQ] = useState("");
   const [dragId, setDragId] = useState<number | null>(null);
@@ -67,15 +57,26 @@ export default function TableroOportunidades({
 
   const columnas = useMemo(() => {
     const porEstado = new Map<string, OportunidadRow[]>();
-    for (const estado of estadosOrden) porEstado.set(estado, []);
+    for (const e of etapas) porEstado.set(e.nombre, []);
     for (const l of filtrados) {
       const col = porEstado.get(l.estado_crm) ?? porEstado.get("Nuevo Lead")!;
       col.push(l);
     }
     // Dentro de cada etapa, los más calientes arriba (sin puntaje al final, conservando su orden).
     porEstado.forEach((col) => col.sort((a, b) => (b.score ?? -1) - (a.score ?? -1)));
-    return estadosOrden.map((estado) => ({ estado, leads: porEstado.get(estado) ?? [] }));
-  }, [filtrados, estadosOrden]);
+    // Una etapa oculta igual se muestra si tiene leads (el agente o n8n pueden dejarlos ahí).
+    return etapas
+      .map((etapa) => ({ etapa, estado: etapa.nombre, leads: porEstado.get(etapa.nombre) ?? [] }))
+      .filter(({ etapa, leads: col }) => !etapa.oculta || col.length > 0);
+  }, [filtrados, etapas]);
+
+  function etapasGuardadas(nuevas: Etapa[], renombres: Map<string, string>) {
+    setEtapas(nuevas);
+    if (renombres.size) {
+      setLeads((prev) => prev.map((l) => (renombres.has(l.estado_crm) ? { ...l, estado_crm: renombres.get(l.estado_crm)! } : l)));
+    }
+    setEditando(false);
+  }
 
   async function moverLead(id: number, nuevoEstado: string) {
     const anterior = leads;
@@ -127,6 +128,9 @@ export default function TableroOportunidades({
         <span className="text-[12.5px] text-tinta-3 tnum">
           {filtrados.length} de {leads.length}
         </span>
+        <button type="button" onClick={() => setEditando(true)} className="btn-secundario text-[12.5px]">
+          Etapas
+        </button>
         {error && (
           <span
             className="text-[12.5px] ml-auto px-2.5 py-1 rounded-[7px]"
@@ -138,13 +142,13 @@ export default function TableroOportunidades({
       </div>
 
       <div className="flex gap-3.5 overflow-x-auto pb-2 items-start">
-        {columnas.map(({ estado, leads: col }) => (
+        {columnas.map(({ etapa, estado, leads: col }) => (
           <section key={estado} className="flex-shrink-0 w-[224px]">
             {/* La etapa se marca con una línea de color arriba, no con una caja
                 que envuelva las tarjetas (evita card dentro de card). */}
             <div
               className="h-[2px] rounded-full mb-2"
-              style={{ background: COLOR_ESTADO[estado] ?? "var(--linea-fuerte)" }}
+              style={{ background: colorEtapa(etapa) }}
             />
             <div className="flex items-center gap-2 px-0.5 mb-2">
               <h3
@@ -160,6 +164,7 @@ export default function TableroOportunidades({
               >
                 {estado}
               </h3>
+              {etapa.oculta && <span className="text-[11px] text-tinta-3">oculta</span>}
               <span className="ml-auto text-[12px] font-semibold text-tinta-3 tnum">{col.length}</span>
             </div>
 
@@ -224,8 +229,11 @@ export default function TableroOportunidades({
       </div>
 
       <p className="mt-3 text-[12px] text-tinta-3">
-        Arrastra las tarjetas entre columnas para mover un lead de etapa.
+        Arrastra las tarjetas entre columnas para mover un lead de etapa. Con «Etapas» puedes ocultar las que no
+        uses o crear las tuyas.
       </p>
+
+      {editando && <EditorEtapas etapas={etapas} onGuardado={etapasGuardadas} onClose={() => setEditando(false)} />}
     </div>
   );
 }

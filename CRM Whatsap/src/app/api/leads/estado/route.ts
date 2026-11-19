@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getTenant } from "@/lib/tenant";
 import { writePool } from "@/lib/db";
-import { ESTADOS_ORDEN } from "@/lib/metrics";
+import { getEtapas } from "@/lib/etapas";
 import { puedeVer } from "@/lib/plan";
 
 // Actualiza estado_crm de un lead (drag-and-drop del tablero de Oportunidades).
 // El rol dashboard_rw solo tiene GRANT UPDATE(estado_crm) sobre crm.crm_leads
 // (verificado: no puede INSERT/DELETE ni tocar otras columnas) — esta ruta es
-// defensa en profundidad adicional: valida el estado contra la lista permitida
+// defensa en profundidad adicional: valida el estado contra las etapas de la empresa
 // y filtra por la empresa del tenant autenticado.
 export async function PATCH(req: NextRequest) {
   const tenant = await getTenant();
@@ -25,7 +25,9 @@ export async function PATCH(req: NextRequest) {
   if (!Number.isInteger(id) || id <= 0) {
     return NextResponse.json({ error: "id inválido" }, { status: 400 });
   }
-  if (!ESTADOS_ORDEN.includes(estado)) {
+  // Fijas + propias de la empresa (incluidas las ocultas: el agente puede dejar leads ahí).
+  const etapas = await getEtapas(tenant.empresa);
+  if (!etapas.some((e) => e.nombre === estado)) {
     return NextResponse.json({ error: "estado inválido" }, { status: 400 });
   }
 

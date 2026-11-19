@@ -201,7 +201,11 @@ export async function guardarFicha(empresa: number, nombreEmpresa: string, nombr
     `INSERT INTO public.agente_empresas_config (empresa, nombre_asistente, config, actualizado_en)
      VALUES ($1, $2, $3::jsonb, now())
      ON CONFLICT (empresa) DO UPDATE SET nombre_asistente = EXCLUDED.nombre_asistente,
-       config = EXCLUDED.config, actualizado_en = now()`,
+       -- Las etapas del tablero las edita el cliente en Oportunidades (lib/etapas.ts): la ficha no las pisa.
+       config = CASE WHEN agente_empresas_config.config ? 'etapas'
+                     THEN EXCLUDED.config || jsonb_build_object('etapas', agente_empresas_config.config->'etapas')
+                     ELSE EXCLUDED.config - 'etapas' END,
+       actualizado_en = now()`,
     [empresa, nombre, JSON.stringify(ficha)]
   );
   // n8n lee el nombre desde la línea de WhatsApp: se mantiene sincronizado.

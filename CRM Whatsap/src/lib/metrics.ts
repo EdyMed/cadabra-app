@@ -1,4 +1,5 @@
 import { q, tbl } from "@/lib/db";
+import { FIJAS } from "@/lib/etapasComun";
 
 // Todas las consultas filtran por `empresa` (aislamiento multi-tenant).
 // Fuente: crm_leads y contador_conversaciones en el Postgres de NocoDB.
@@ -18,17 +19,8 @@ export type EmbudoRow = { estado: string; cantidad: number };
 export type VendedorRow = { vendedor: string; leads: number; cotizaciones: number };
 export type ActividadRow = { dia: string; cantidad: number };
 
-export const ESTADOS_ORDEN = [
-  "Nuevo Lead",
-  "En Conversación",
-  "Cotización Enviada",
-  "Primer Pedido",
-  "Cliente Activo",
-  "Cliente Recurrente",
-  "Requiere Vendedor",
-  "Sin Respuesta",
-  "Inactivo",
-];
+// Las 9 etapas fijas del embudo (las propias de cada cliente: lib/etapas.ts).
+export const ESTADOS_ORDEN = FIJAS;
 
 export async function getKpis(empresa: number): Promise<Kpis> {
   // Conversaciones del mes actual y del anterior (para la comparación del resumen)
@@ -56,10 +48,12 @@ export async function getKpis(empresa: number): Promise<Kpis> {
         COUNT(*) FILTER (WHERE bot_activo = false OR estado_crm = 'Requiere Vendedor')::int AS derivadas,
         COUNT(*) FILTER (WHERE estado_crm = 'Cotización Enviada')::int AS cotizaciones,
         COUNT(*) FILTER (WHERE estado_agendamiento IS NOT NULL AND estado_agendamiento <> '')::int AS citas,
-        COUNT(*) FILTER (WHERE estado_crm IN ('Nuevo Lead','En Conversación','Cotización Enviada'))::int AS oportunidades
+        -- Etapas propias del cliente (fuera de las 9 fijas) cuentan como oportunidad en proceso.
+        COUNT(*) FILTER (WHERE estado_crm IN ('Nuevo Lead','En Conversación','Cotización Enviada')
+                            OR estado_crm <> ALL($2::text[]))::int AS oportunidades
        FROM ${tbl("crm_leads")}
       WHERE empresa = $1`,
-    [empresa]
+    [empresa, ESTADOS_ORDEN]
   );
   const r = rows[0] ?? { total: 0, resueltas: 0, derivadas: 0, cotizaciones: 0, citas: 0, oportunidades: 0 };
 
@@ -84,8 +78,9 @@ export async function getEmbudo(empresa: number): Promise<EmbudoRow[]> {
     [empresa]
   );
   const map = new Map(rows.map((r) => [r.estado_crm, r.cantidad]));
-  // Orden fijo del embudo; incluye estados con 0.
-  return ESTADOS_ORDEN.filter((e) => map.has(e)).map((e) => ({
+  // Orden fijo del embudo y, al final, las etapas propias del cliente que tengan leads.
+  const propias = Array.from(map.keys()).filter((e) => e && !ESTADOS_ORDEN.includes(e)).sort();
+  return [...ESTADOS_ORDEN.filter((e) => map.has(e)), ...propias].map((e) => ({
     estado: e,
     cantidad: map.get(e) ?? 0,
   }));
